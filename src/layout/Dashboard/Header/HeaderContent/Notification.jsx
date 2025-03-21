@@ -98,7 +98,7 @@ export default function Notification() {
             <Paper sx={(theme) => ({ boxShadow: theme.customShadows.z1, width: '100%', minWidth: 285, maxWidth: { xs: 285, md: 420 } })}>
               <ClickAwayListener onClickAway={handleClose}>
                 <MainCard
-                  title="Notification"
+                  title="اعلانات"
                   elevation={0}
                   border={false}
                   content={false}
@@ -133,7 +133,7 @@ export default function Notification() {
                       selected={read > 0}
                       secondaryAction={
                         <Typography variant="caption" noWrap>
-                          3:00 AM
+                          3:00 بامداد
                         </Typography>
                       }
                     >
@@ -145,14 +145,14 @@ export default function Notification() {
                       <ListItemText
                         primary={
                           <Typography variant="h6">
-                            It&apos;s{' '}
+                            بروزرسانی{' '}
                             <Typography component="span" variant="subtitle1">
-                              Cristina danny&apos;s
-                            </Typography>{' '}
-                            birthday today.
+                              قم
+                            </Typography>
+                            در دسترس است{' '}
                           </Typography>
                         }
-                        secondary="2 min ago"
+                        secondary="2 دقیقه پیش"
                       />
                     </ListItem>
                     <ListItem
@@ -160,7 +160,7 @@ export default function Notification() {
                       divider
                       secondaryAction={
                         <Typography variant="caption" noWrap>
-                          6:00 AM
+                          4:00 عصر
                         </Typography>
                       }
                     >
@@ -173,12 +173,12 @@ export default function Notification() {
                         primary={
                           <Typography variant="h6">
                             <Typography component="span" variant="subtitle1">
-                              Aida Burg
+                              کاربر شماره(400434)
                             </Typography>{' '}
-                            commented your post.
+                            درخواستی دارد.{' '}
                           </Typography>
                         }
-                        secondary="5 August"
+                        secondary="5 مهر"
                       />
                     </ListItem>
                     <ListItem
@@ -187,7 +187,7 @@ export default function Notification() {
                       selected={read > 0}
                       secondaryAction={
                         <Typography variant="caption" noWrap>
-                          2:45 PM
+                          2:45 بامداد
                         </Typography>
                       }
                     >
@@ -199,13 +199,13 @@ export default function Notification() {
                       <ListItemText
                         primary={
                           <Typography variant="h6">
-                            Your Profile is Complete &nbsp;
+                            خطا در
                             <Typography component="span" variant="subtitle1">
-                              60%
+                              شیراز
                             </Typography>{' '}
                           </Typography>
                         }
-                        secondary="7 hours ago"
+                        secondary="7 ساعت پیش"
                       />
                     </ListItem>
                     <ListItem
@@ -213,7 +213,7 @@ export default function Notification() {
                       divider
                       secondaryAction={
                         <Typography variant="caption" noWrap>
-                          9:10 PM
+                          9:10 شب
                         </Typography>
                       }
                     >
@@ -224,22 +224,19 @@ export default function Notification() {
                         primary={
                           <Typography variant="h6">
                             <Typography component="span" variant="subtitle1">
-                              Cristina Danny
+                              کیارش مهری
                             </Typography>{' '}
-                            invited to join{' '}
-                            <Typography component="span" variant="subtitle1">
-                              Meeting.
-                            </Typography>
+                            درخواستی دارد.{' '}
                           </Typography>
                         }
-                        secondary="Daily scrum meeting time"
+                        secondary="زمان خاصی در نظر گرفته نشده است."
                       />
                     </ListItem>
                     <ListItemButton sx={{ textAlign: 'center', py: `${12}px !important` }}>
                       <ListItemText
                         primary={
                           <Typography variant="h6" color="primary">
-                            View All
+                            دیدن همه
                           </Typography>
                         }
                       />

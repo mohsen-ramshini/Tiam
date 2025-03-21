@@ -90,7 +90,7 @@ export default function Profile() {
         <Stack direction="row" sx={{ gap: 1.25, alignItems: 'center', p: 0.5 }}>
           <Avatar alt="profile user" src={avatar1} size="sm" />
           <Typography variant="subtitle1" sx={{ textTransform: 'capitalize' }}>
-            John Doe
+            سیاوش رحیم خانی
           </Typography>
         </Stack>
       </ButtonBase>
@@ -123,9 +123,9 @@ export default function Profile() {
                         <Stack direction="row" sx={{ gap: 1.25, alignItems: 'center' }}>
                           <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
                           <Stack>
-                            <Typography variant="h6">John Doe</Typography>
+                            <Typography variant="h6">سیاوش</Typography>
                             <Typography variant="body2" color="text.secondary">
-                              UI/UX Designer
+                              مدیر پروژه
                             </Typography>
                           </Stack>
                         </Stack>
@@ -155,7 +155,7 @@ export default function Profile() {
                           }
                         }}
                         icon={<UserOutlined />}
-                        label="Profile"
+                        label="پروفایل"
                         {...a11yProps(0)}
                       />
                       <Tab
@@ -171,7 +171,7 @@ export default function Profile() {
                           }
                         }}
                         icon={<SettingOutlined />}
-                        label="Setting"
+                        label="تنظیمات"
                         {...a11yProps(1)}
                       />
                     </Tabs>

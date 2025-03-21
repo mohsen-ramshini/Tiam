@@ -36,34 +36,34 @@ export default function SettingTab() {
           <ListItemIcon>
             <QuestionCircleOutlined />
           </ListItemIcon>
-          <ListItemText primary="Support" />
+          <ListItemText primary="پشتیبانی" />
         </ListItemButton>
       </Link>
       <ListItemButton selected={selectedIndex === 1} onClick={(event) => handleListItemClick(event, 1)}>
         <ListItemIcon>
           <UserOutlined />
         </ListItemIcon>
-        <ListItemText primary="Account Settings" />
+        <ListItemText primary="تنظیمات حساب" />
       </ListItemButton>
       <ListItemButton selected={selectedIndex === 2} onClick={(event) => handleListItemClick(event, 2)}>
         <ListItemIcon>
           <LockOutlined />
         </ListItemIcon>
-        <ListItemText primary="Privacy Center" />
+        <ListItemText primary="حریم خصوصی" />
       </ListItemButton>
       <Link underline="none" style={{ color: 'inherit' }} target="_blank" href="https://codedthemes.support-hub.io/">
         <ListItemButton selected={selectedIndex === 3} onClick={(event) => handleListItemClick(event, 3)}>
           <ListItemIcon>
             <CommentOutlined />
           </ListItemIcon>
-          <ListItemText primary="Feedback" />
+          <ListItemText primary="بازخورد" />
         </ListItemButton>
       </Link>
       <ListItemButton selected={selectedIndex === 4} onClick={(event) => handleListItemClick(event, 4)}>
         <ListItemIcon>
           <UnorderedListOutlined />
         </ListItemIcon>
-        <ListItemText primary="History" />
+        <ListItemText primary="تاریخچه" />
       </ListItemButton>
     </List>
   );

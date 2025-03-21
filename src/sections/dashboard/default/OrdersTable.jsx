@@ -22,16 +22,16 @@ function createData(tracking_no, name, fat, carbs, protein) {
 }
 
 const rows = [
-  createData(84564564, 'Camera Lens', 40, 2, 40570),
-  createData(98764564, 'Laptop', 300, 0, 180139),
-  createData(98756325, 'Mobile', 355, 1, 90989),
-  createData(98652366, 'Handset', 50, 1, 10239),
-  createData(13286564, 'Computer Accessories', 100, 1, 83348),
-  createData(86739658, 'TV', 99, 0, 410780),
-  createData(13256498, 'Keyboard', 125, 2, 70999),
-  createData(98753263, 'Mouse', 89, 2, 10570),
-  createData(98753275, 'Desktop', 185, 1, 98063),
-  createData(98753291, 'Chair', 100, 0, 14001)
+  createData('84.64.64.1', 'تهران', 4, 2, 40570),
+  createData('98.64.56.4', 'شیراز', 3, 0, 180139),
+  createData('84.64.64.1', 'ساری', 5, 1, 90989),
+  createData('98.64.56.4', 'اهواز', 5, 1, 10239),
+  createData('84.64.64.1', 'گیلان', 1, 1, 83348),
+  createData('98.64.56.4', 'بندرعباس', 9, 0, 410780),
+  createData('84.64.64.1', 'قم', 1, 2, 70999),
+  createData('98.64.56.4', 'سیستان و بلوچستان', 8, 2, 10570),
+  createData('84.64.64.1', 'مشهد', 1, 1, 98063),
+  createData('98.64.56.4', 'تبریز', 3, 0, 14001)
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -65,32 +65,32 @@ const headCells = [
     id: 'tracking_no',
     align: 'left',
     disablePadding: false,
-    label: 'Tracking No.'
+    label: 'ip'
   },
   {
     id: 'name',
     align: 'left',
     disablePadding: true,
-    label: 'Product Name'
+    label: ' شهر'
   },
   {
     id: 'fat',
     align: 'right',
     disablePadding: false,
-    label: 'Total Order'
+    label: 'منطقه'
   },
   {
     id: 'carbs',
     align: 'left',
     disablePadding: false,
 
-    label: 'Status'
+    label: 'وضعیت'
   },
   {
     id: 'protein',
     align: 'right',
     disablePadding: false,
-    label: 'Total Amount'
+    label: 'تعداد بازدید'
   }
 ];
 

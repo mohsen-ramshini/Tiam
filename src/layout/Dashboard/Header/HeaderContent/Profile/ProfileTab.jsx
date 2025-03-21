@@ -22,32 +22,32 @@ export default function ProfileTab() {
         <ListItemIcon>
           <EditOutlined />
         </ListItemIcon>
-        <ListItemText primary="Edit Profile" />
+        <ListItemText primary="ویرایش پروفایل" />
       </ListItemButton>
       <ListItemButton>
         <ListItemIcon>
           <UserOutlined />
         </ListItemIcon>
-        <ListItemText primary="View Profile" />
+        <ListItemText primary="نمایش پروفایل" />
       </ListItemButton>
 
       <ListItemButton>
         <ListItemIcon>
           <ProfileOutlined />
         </ListItemIcon>
-        <ListItemText primary="Social Profile" />
+        <ListItemText primary=" پروفایل عمومی" />
       </ListItemButton>
       <ListItemButton>
         <ListItemIcon>
           <WalletOutlined />
         </ListItemIcon>
-        <ListItemText primary="Billing" />
+        <ListItemText primary="وضعیت و آمار" />
       </ListItemButton>
       <ListItemButton>
         <ListItemIcon>
           <LogoutOutlined />
         </ListItemIcon>
-        <ListItemText primary="Logout" />
+        <ListItemText primary="خروج" />
       </ListItemButton>
     </List>
   );
