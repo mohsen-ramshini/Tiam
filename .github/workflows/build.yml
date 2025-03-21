@@ -1,0 +1,35 @@
+name: Build Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t ghcr.io/tiam-monitoringsystem/frontend .
+          docker push ghcr.io/tiam-monitoringsystem/frontend
+  deploy:
+    needs: build-frontend
+    uses: Tiam-MonitoringSystem/core/.github/workflows/deploy.yml@main
+    secrets: inherit
