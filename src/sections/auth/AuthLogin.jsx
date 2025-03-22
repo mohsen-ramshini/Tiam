@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
@@ -27,12 +27,12 @@ import AnimateButton from 'components/@extended/AnimateButton';
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined';
 
-// ============================|| JWT - LOGIN ||============================ //
+// ============================|| JWT - LOGIN (FA) ||============================ //
 
 export default function AuthLogin({ isDemo = false }) {
   const [checked, setChecked] = React.useState(false);
-
   const [showPassword, setShowPassword] = React.useState(false);
+
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -45,24 +45,24 @@ export default function AuthLogin({ isDemo = false }) {
     <>
       <Formik
         initialValues={{
-          email: 'info@codedthemes.com',
-          password: '123456',
+          email: '',
+          password: '',
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+          email: Yup.string().email('ایمیل باید معتبر باشد').max(255).required('ایمیل ضروری است'),
           password: Yup.string()
-            .required('Password is required')
-            .test('no-leading-trailing-whitespace', 'Password cannot start or end with spaces', (value) => value === value.trim())
-            .max(10, 'Password must be less than 10 characters')
+            .required('رمز عبور ضروری است')
+            .test('no-leading-trailing-whitespace', 'رمز عبور نباید با فاصله شروع یا تمام شود', (value) => value === value.trim())
+            .max(10, 'رمز عبور باید کمتر از ۱۰ کاراکتر باشد')
         })}
       >
         {({ errors, handleBlur, handleChange, touched, values }) => (
           <form noValidate>
-            <Grid container spacing={3}>
-              <Grid size={12}>
+            <Grid container spacing={3} sx={{ direction: 'rtl' }}>
+              <Grid item xs={12}>
                 <Stack sx={{ gap: 1 }}>
-                  <InputLabel htmlFor="email-login">Email Address</InputLabel>
+                  <InputLabel htmlFor="email-login">ایمیل</InputLabel>
                   <OutlinedInput
                     id="email-login"
                     type="email"
@@ -70,7 +70,7 @@ export default function AuthLogin({ isDemo = false }) {
                     name="email"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    placeholder="Enter email address"
+                    placeholder="ایمیل خود را وارد کنید"
                     fullWidth
                     error={Boolean(touched.email && errors.email)}
                   />
@@ -81,13 +81,13 @@ export default function AuthLogin({ isDemo = false }) {
                   </FormHelperText>
                 )}
               </Grid>
-              <Grid size={12}>
+              <Grid item xs={12}>
                 <Stack sx={{ gap: 1 }}>
-                  <InputLabel htmlFor="password-login">Password</InputLabel>
+                  <InputLabel htmlFor="password-login">رمز عبور</InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.password && errors.password)}
-                    id="-password-login"
+                    id="password-login"
                     type={showPassword ? 'text' : 'password'}
                     value={values.password}
                     name="password"
@@ -106,7 +106,7 @@ export default function AuthLogin({ isDemo = false }) {
                         </IconButton>
                       </InputAdornment>
                     }
-                    placeholder="Enter password"
+                    placeholder="رمز عبور خود را وارد کنید"
                   />
                 </Stack>
                 {touched.password && errors.password && (
@@ -115,8 +115,8 @@ export default function AuthLogin({ isDemo = false }) {
                   </FormHelperText>
                 )}
               </Grid>
-              <Grid sx={{ mt: -1 }} size={12}>
-                <Stack direction="row" sx={{ gap: 2, alignItems: 'baseline', justifyContent: 'space-between' }}>
+              <Grid item xs={12} sx={{ mt: -1 }}>
+                <Stack direction="row" sx={{ gap: 2, alignItems: 'center', justifyContent: 'space-between' }}>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -127,17 +127,17 @@ export default function AuthLogin({ isDemo = false }) {
                         size="small"
                       />
                     }
-                    label={<Typography variant="h6">Keep me sign in</Typography>}
+                    label={<Typography variant="h6">مرا به خاطر بسپار</Typography>}
                   />
                   <Link variant="h6" component={RouterLink} to="#" color="text.primary">
-                    Forgot Password?
+                    رمز عبور را فراموش کرده‌اید؟
                   </Link>
                 </Stack>
               </Grid>
-              <Grid size={12}>
+              <Grid item xs={12}>
                 <AnimateButton>
                   <Button fullWidth size="large" variant="contained" color="primary">
-                    Login
+                    ورود
                   </Button>
                 </AnimateButton>
               </Grid>

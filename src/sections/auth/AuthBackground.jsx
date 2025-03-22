@@ -10,6 +10,7 @@ export default function AuthBackground() {
   return (
     <Box
       sx={{
+        background: "url('/assets/images/auth/background.jpg')",
         position: 'absolute',
         filter: 'blur(18px)',
         zIndex: -1,

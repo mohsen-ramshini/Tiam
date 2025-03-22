@@ -24,13 +24,13 @@ export default function ThemeCustomization({ children }) {
   // Create RTL cache
   const cacheRtl = createCache({
     key: 'muirtl',
-    stylisPlugins: [prefixer, rtlPlugin],
+    stylisPlugins: [prefixer, rtlPlugin]
   });
 
   const theme = Palette('light', 'default');
 
-  // تغییر فونت به یک فونت فارسی مناسب برای RTL
-  const themeTypography = Typography(`'Vazirmatn', 'Public Sans', sans-serif`);
+  const themeTypography = Typography(`'IRANSans', sans-serif`);
+
   const themeCustomShadows = useMemo(() => CustomShadows(theme), [theme]);
 
   const themeOptions = useMemo(

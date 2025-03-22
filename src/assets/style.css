@@ -1,3 +1,22 @@
 * {
   -webkit-tap-highlight-color: transparent;
 }
+@font-face {
+  font-family: 'IRANSans';
+  src:
+    url('/assets/fonts/IRANSans.woff2') format('woff2'),
+    url('/assets/fonts/IRANSans.woff') format('woff'),
+    url('/assets/fonts/IRANSans.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IRANSans';
+  src:
+    url('/assets/fonts/IRANSans-Bold.woff2') format('woff2'),
+    url('/assets/fonts/IRANSans-Bold.woff') format('woff'),
+    url('/assets/fonts/IRANSans-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
