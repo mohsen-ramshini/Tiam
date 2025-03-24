@@ -11,25 +11,25 @@ const icons = {
 
 const pages = {
   id: 'authentication',
-  title: 'Authentication',
+  title: 'ورود',
   type: 'group',
   children: [
     {
       id: 'login1',
-      title: 'Login',
+      title: 'ورود به حساب کاربری',
       type: 'item',
       url: '/login',
       icon: icons.LoginOutlined,
       target: true
     },
-    {
-      id: 'register1',
-      title: 'Register',
-      type: 'item',
-      url: '/register',
-      icon: icons.ProfileOutlined,
-      target: true
-    }
+    // {
+    //   id: 'register1',
+    //   title: 'ساخت حساب کاربری',
+    //   type: 'item',
+    //   url: '/register',
+    //   icon: icons.ProfileOutlined,
+    //   target: true
+    // }
   ]
 };
 

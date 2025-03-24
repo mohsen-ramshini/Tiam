@@ -22,16 +22,16 @@ function createData(tracking_no, name, fat, carbs, protein) {
 }
 
 const rows = [
-  createData('84.64.64.1', 'تهران', 4, 2, 40570),
-  createData('98.64.56.4', 'شیراز', 3, 0, 180139),
-  createData('84.64.64.1', 'ساری', 5, 1, 90989),
-  createData('98.64.56.4', 'اهواز', 5, 1, 10239),
-  createData('84.64.64.1', 'گیلان', 1, 1, 83348),
-  createData('98.64.56.4', 'بندرعباس', 9, 0, 410780),
-  createData('84.64.64.1', 'قم', 1, 2, 70999),
-  createData('98.64.56.4', 'سیستان و بلوچستان', 8, 2, 10570),
-  createData('84.64.64.1', 'مشهد', 1, 1, 98063),
-  createData('98.64.56.4', 'تبریز', 3, 0, 14001)
+  createData('77','1404/01/01', 'تهران', 4, 2, 40570),
+  createData('98','1404/01/01', 'شیراز', 3, 0, 180139),
+  createData('8','1404/01/01', 'ساری', 5, 1, 90989),
+  createData('56','1404/01/01', 'اهواز', 5, 1, 10239),
+  createData('64','1404/01/01', 'گیلان', 1, 1, 83348),
+  createData('4','1404/01/01', 'بندرعباس', 9, 0, 410780),
+  createData('6','1404/01/01', 'قم', 1, 2, 70999),
+  createData('86','1404/01/01', 'سیستان و بلوچستان', 8, 2, 10570),
+  createData('644','1404/01/01', 'مشهد', 1, 1, 98063),
+  createData('5','1404/01/01', 'تبریز', 3, 0, 14001)
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -65,19 +65,19 @@ const headCells = [
     id: 'tracking_no',
     align: 'left',
     disablePadding: false,
-    label: 'ip'
+    label: 'شناسه'
+  },
+  {
+    id: 'tracking_no',
+    align: 'left',
+    disablePadding: false,
+    label: 'تاریخ ایجاد'
   },
   {
     id: 'name',
     align: 'left',
     disablePadding: true,
     label: ' شهر'
-  },
-  {
-    id: 'fat',
-    align: 'right',
-    disablePadding: false,
-    label: 'منطقه'
   },
   {
     id: 'carbs',
@@ -88,7 +88,7 @@ const headCells = [
   },
   {
     id: 'protein',
-    align: 'right',
+    align: 'left',
     disablePadding: false,
     label: 'تعداد بازدید'
   }
@@ -122,19 +122,19 @@ function OrderStatus({ status }) {
   switch (status) {
     case 0:
       color = 'warning';
-      title = 'Pending';
+      title = 'هشدار';
       break;
     case 1:
       color = 'success';
-      title = 'Approved';
+      title = 'فعال';
       break;
     case 2:
       color = 'error';
-      title = 'Rejected';
+      title = 'خطا';
       break;
     default:
       color = 'primary';
-      title = 'None';
+      title = 'غیرفعال';
   }
 
   return (
@@ -181,12 +181,12 @@ export default function OrderTable() {
                     <Link color="secondary">{row.tracking_no}</Link>
                   </TableCell>
                   <TableCell>{row.name}</TableCell>
-                  <TableCell align="right">{row.fat}</TableCell>
+                  <TableCell align="left">{row.fat}</TableCell>
                   <TableCell>
                     <OrderStatus status={row.carbs} />
                   </TableCell>
-                  <TableCell align="right">
-                    <NumericFormat value={row.protein} displayType="text" thousandSeparator prefix="$" />
+                  <TableCell align="left">
+                    <NumericFormat value={row.protein} displayType="text" thousandSeparator prefix="" />
                   </TableCell>
                 </TableRow>
               );
