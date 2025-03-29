@@ -16,6 +16,9 @@ import { NumericFormat } from 'react-number-format';
 
 // project imports
 import Dot from 'components/@extended/Dot';
+import { useFetchRecords } from '/src/hooks/api/useFetchRecords';
+import { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
 
 function createData(tracking_no, name, fat, carbs, protein) {
   return { tracking_no, name, fat, carbs, protein };
@@ -97,6 +100,17 @@ const headCells = [
 // ==============================|| ORDER TABLE - HEADER ||============================== //
 
 function OrderTableHead({ order, orderBy }) {
+  const [accessToken, setAccessToken] = useState(Cookies.get('access_token') || null);
+  const { data: records, refetch: refetchRecords } = useFetchRecords(accessToken);
+
+  useEffect(() => {
+    refetchRecords();
+  }, []);
+
+  useEffect(() => {
+    console.log(`records:`, records);
+    console.log(`token:`, accessToken);
+  }, [records, accessToken]);
   return (
     <TableHead>
       <TableRow>
