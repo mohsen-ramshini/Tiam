@@ -101,13 +101,12 @@ function OrderStatus({ status }) {
     </Stack>
   );
 }
-
 export default function OrderTable() {
   const order = 'asc';
   const orderBy = 'tracking_no';
   const [accessToken] = useState(Cookies.get('access_token') || null);
   const { data: apiData = [], isLoading, error } = useFetchRecords(accessToken);
-  console.log(apiData);
+  
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -116,10 +115,9 @@ export default function OrderTable() {
     
     return apiData.map(item => ({
       tracking_no: item.prob || '--',
-      name: item.service || '--',
-      data: item.data || '1',
-      created_at: item.created_at || 0,
-      protein: item.service_type || '--'
+      service: item.service || '--',
+      data: item.data?.[1]?.value || '--', // گرفتن مقدار IP از داده‌ها
+      created_at: item.created_at || '--'
     }));
   }, [apiData]);
 
@@ -153,39 +151,33 @@ export default function OrderTable() {
         }}
       >
         <Table aria-labelledby="tableTitle">
-          <OrderTableHead order={order} orderBy={orderBy} />
+          <TableHead>
+            <TableRow>
+              <TableCell align="right">پراب</TableCell>
+              <TableCell align="right">سرویس</TableCell>
+              <TableCell align="right">داده (IP)</TableCell>
+              <TableCell align="right">تاریخ ایجاد</TableCell>
+            </TableRow>
+          </TableHead>
           <TableBody>
-            {visibleRows.map((row, index) => {
-              const labelId = `enhanced-table-checkbox-${index}`;
-
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  tabIndex={-1}
-                  key={row.tracking_no}
-                >
-                  <TableCell component="th" id={labelId} scope="row">
-                    <Link color="secondary">{row.tracking_no}</Link>
-                  </TableCell>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell align="left">{row.fat}</TableCell>
-                  <TableCell>
-                    <OrderStatus status={row.created_at} />
-                  </TableCell>
-                  <TableCell align="left">
-                    <NumericFormat value={row.protein} displayType="text" thousandSeparator prefix="" />
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+            {visibleRows.map((row, index) => (
+              <TableRow
+                hover
+                key={`${row.tracking_no}-${index}`}
+              >
+                <TableCell align="right">{row.tracking_no}</TableCell>
+                <TableCell align="right">{row.service}</TableCell>
+                <TableCell align="right">{row.data}</TableCell>
+                <TableCell align="right">
+                  {new Date(row.created_at).toLocaleString('fa-IR')}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
       
       <TablePagination
-      
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
         count={apiRows.length}
