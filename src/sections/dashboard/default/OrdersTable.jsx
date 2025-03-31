@@ -116,7 +116,7 @@ export default function OrderTable() {
     return apiData.map(item => ({
       tracking_no: item.prob || '--',
       service: item.service || '--',
-      data: item.data?.[1]?.value || '--', // گرفتن مقدار IP از داده‌ها
+      data: item.data?.[1]?.value || '--', 
       created_at: item.created_at || '--'
     }));
   }, [apiData]);
