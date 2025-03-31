@@ -155,7 +155,7 @@ export default function OrderTable() {
             <TableRow>
               <TableCell align="right">پراب</TableCell>
               <TableCell align="right">سرویس</TableCell>
-              <TableCell align="right">داده (IP)</TableCell>
+              <TableCell align="right">DNS</TableCell>
               <TableCell align="right">تاریخ ایجاد</TableCell>
             </TableRow>
           </TableHead>
