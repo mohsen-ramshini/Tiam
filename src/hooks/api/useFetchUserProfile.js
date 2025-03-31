@@ -4,7 +4,7 @@ import axios from 'axios';
 const fetchUserProfile = async (accessToken) => {
   if (!accessToken) throw new Error('No access token provided');
 
-  const response = await axios.get('/api/users/profile/', {
+  const response = await axios.get('/users/profile/', {
     headers: {
       Authorization: `Bearer ${accessToken}`
     }

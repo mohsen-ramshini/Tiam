@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import  {useLogout}  from '../../../../../hooks/api/useLogout';
 
 // material-ui
 import List from '@mui/material/List';
@@ -16,6 +17,14 @@ import WalletOutlined from '@ant-design/icons/WalletOutlined';
 // ==============================|| HEADER PROFILE - PROFILE TAB ||============================== //
 
 export default function ProfileTab() {
+  const logoutMutation = useLogout();
+
+
+  const handleLogout = () => {
+    logoutMutation.mutate(); 
+  };
+  
+
   return (
     <List component="nav" sx={{ p: 0, '& .MuiListItemIcon-root': { minWidth: 32 } }}>
       <ListItemButton>
@@ -43,11 +52,11 @@ export default function ProfileTab() {
         </ListItemIcon>
         <ListItemText primary="وضعیت و آمار" />
       </ListItemButton>
-      <ListItemButton>
+      <ListItemButton onClick={handleLogout} >
         <ListItemIcon>
           <LogoutOutlined />
         </ListItemIcon>
-        <ListItemText primary="خروج" />
+        <ListItemText primary={"خروج"} />
       </ListItemButton>
     </List>
   );

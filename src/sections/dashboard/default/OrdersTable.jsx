@@ -19,6 +19,7 @@ import Dot from 'components/@extended/Dot';
 import { useFetchRecords } from '/src/hooks/api/useFetchRecords';
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
+import { useFetchUserProfile } from '../../../hooks/api/useFetchUserProfile';
 
 function createData(tracking_no, name, fat, carbs, protein) {
   return { tracking_no, name, fat, carbs, protein };
@@ -102,6 +103,7 @@ const headCells = [
 function OrderTableHead({ order, orderBy }) {
   const [accessToken, setAccessToken] = useState(Cookies.get('access_token') || null);
   const { data: records, refetch: refetchRecords } = useFetchRecords(accessToken);
+  
 
   useEffect(() => {
     refetchRecords();
@@ -109,8 +111,9 @@ function OrderTableHead({ order, orderBy }) {
 
   useEffect(() => {
     console.log(`records:`, records);
-    console.log(`token:`, accessToken);
-  }, [records, accessToken]);
+    console.log(`token:`, accessToken); 
+  }, [records, accessToken
+  ]);
   return (
     <TableHead>
       <TableRow>

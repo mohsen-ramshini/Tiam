@@ -8,9 +8,6 @@ const loginUser = async ({ username, password }) => {
     password
   });
 
-  // ذخیره توکن در لوکال استوریج یا کوکی (بسته به نیاز)
-  localStorage.setItem('token', response.data.token);
-
   return response.data;
 };
 
