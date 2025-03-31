@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // material-ui
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';

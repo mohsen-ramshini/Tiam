@@ -1,4 +1,6 @@
+/* eslint-disable prettier/prettier */
 import useSWR, { mutate } from 'swr';
+// eslint-disable-next-line prettier/prettier
 import { useMemo } from 'react';
 
 const initialState = {

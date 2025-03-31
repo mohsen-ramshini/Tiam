@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import PropTypes from 'prop-types';
 // material-ui
 import Link from '@mui/material/Link';
@@ -25,16 +26,16 @@ function createData(tracking_no, name, fat, carbs, protein) {
 }
 
 const rows = [
-  createData('77','1404/01/01', 'تهران', 4, 2, 40570),
-  createData('98','1404/01/01', 'شیراز', 3, 0, 180139),
-  createData('8','1404/01/01', 'ساری', 5, 1, 90989),
-  createData('56','1404/01/01', 'اهواز', 5, 1, 10239),
-  createData('64','1404/01/01', 'گیلان', 1, 1, 83348),
-  createData('4','1404/01/01', 'بندرعباس', 9, 0, 410780),
-  createData('6','1404/01/01', 'قم', 1, 2, 70999),
-  createData('86','1404/01/01', 'سیستان و بلوچستان', 8, 2, 10570),
-  createData('644','1404/01/01', 'مشهد', 1, 1, 98063),
-  createData('5','1404/01/01', 'تبریز', 3, 0, 14001)
+  createData('77', '1404/01/01', 'تهران', 4, 2, 40570),
+  createData('98', '1404/01/01', 'شیراز', 3, 0, 180139),
+  createData('8', '1404/01/01', 'ساری', 5, 1, 90989),
+  createData('56', '1404/01/01', 'اهواز', 5, 1, 10239),
+  createData('64', '1404/01/01', 'گیلان', 1, 1, 83348),
+  createData('4', '1404/01/01', 'بندرعباس', 9, 0, 410780),
+  createData('6', '1404/01/01', 'قم', 1, 2, 70999),
+  createData('86', '1404/01/01', 'سیستان و بلوچستان', 8, 2, 10570),
+  createData('644', '1404/01/01', 'مشهد', 1, 1, 98063),
+  createData('5', '1404/01/01', 'تبریز', 3, 0, 14001)
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -105,7 +106,7 @@ function OrderTableHead({ order, orderBy }) {
 
   useEffect(() => {
     refetchRecords();
-  }, []);
+  }, [refetchRecords]);
 
   useEffect(() => {
     console.log(`records:`, records);
