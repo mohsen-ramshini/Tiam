@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import PropTypes from 'prop-types';
 // material-ui
 import Chip from '@mui/material/Chip';

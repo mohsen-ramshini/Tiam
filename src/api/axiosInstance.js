@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import axios from 'axios';
 
 const API_BASE_URL = 'http://37.152.183.111:8000';
