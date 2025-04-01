@@ -18,8 +18,6 @@ import { NumericFormat } from 'react-number-format';
 import Cookies from 'js-cookie';
 import Dot from 'components/@extended/Dot';
 import { useFetchRecords } from '/src/hooks/api/useFetchRecords';
-import { useEffect, useState } from 'react';
-import Cookies from 'js-cookie';
 
 
 
