@@ -14,13 +14,13 @@ import AuthLogin from 'sections/auth/AuthLogin';
 export default function Login() {
   return (
     <AuthWrapper>
-      <Grid container spacing={3} sx={{ direction: 'rtl' }}>
+      <Grid container spacing={3} sx={{ direction: 'ltr' }}>
         <Grid item xs={12}>
           <Stack
             direction="row"
             sx={{
               alignItems: 'baseline',
-              justifyContent: 'space-between',
+              justifyContent: 'flex-end',
               mb: { xs: -0.5, sm: 0.5 }
             }}
           >

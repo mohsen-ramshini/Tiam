@@ -37,7 +37,7 @@ export default function AuthLogin({ isDemo = false }) {
   const [accessToken, setAccessToken] = useState(Cookies.get('access_token') || null);
   const loginMutation = useLogin();
 
-  // Fetch user profile only when accessToken is available
+  // دریافت پروفایل کاربر فقط در صورت وجود توکن
   const { data: userProfile, refetch: refetchUserProfile } = useFetchUserProfile(accessToken);
 
   useEffect(() => {
@@ -53,11 +53,11 @@ export default function AuthLogin({ isDemo = false }) {
         Cookies.set('access_token', data.access, { expires: 1, secure: true, sameSite: 'Strict' });
         Cookies.set('refresh_token', data.refresh, { expires: 7, secure: true, sameSite: 'Strict' });
         setAccessToken(data.access);
-        console.log('🔹 Access token received:', data.access);
+        console.log('🔹 توکن دریافت شد:', data.access);
         refetchUserProfile();
       },
       onError: (error) => {
-        setErrors({ submit: error.response?.data?.message || 'Login failed!' });
+        setErrors({ submit: error.response?.data?.message || 'ورود ناموفق بود!' });
       },
       onSettled: () => setSubmitting(false)
     });
@@ -65,13 +65,13 @@ export default function AuthLogin({ isDemo = false }) {
 
   return (
     <Formik
-      initialValues={{ username: 'tiam-front-1', password: 'asdf1234' }}
+    initialValues={{ username: 'tiam-front-1', password: 'asdf1234' }}
       validationSchema={Yup.object().shape({
-        username: Yup.string().required('Username is required'),
+        username: Yup.string().required('نام کاربری الزامی است'),
         password: Yup.string()
-          .required('Password is required')
-          .test('no-leading-trailing-whitespace', 'Password cannot start or end with spaces', (value) => value === value.trim())
-          .max(10, 'Password must be less than 10 characters')
+          .required('گذرواژه الزامی است')
+          .test('no-leading-trailing-whitespace', 'گذرواژه نباید با فاصله شروع یا تمام شود', (value) => value === value.trim())
+          .max(10, 'گذرواژه باید کمتر از ۱۰ کاراکتر باشد')
       })}
       onSubmit={handleLoginSubmit}
     >
@@ -88,7 +88,7 @@ export default function AuthLogin({ isDemo = false }) {
                   name="username"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  placeholder="Enter username"
+                  placeholder="نام کاربری خود را وارد کنید"
                   fullWidth
                   error={Boolean(touched.username && errors.username)}
                 />
@@ -110,7 +110,7 @@ export default function AuthLogin({ isDemo = false }) {
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
-                        aria-label="toggle password visibility"
+                        aria-label="نمایش/مخفی کردن گذرواژه"
                         onClick={() => setShowPassword(!showPassword)}
                         onMouseDown={(event) => event.preventDefault()}
                         edge="end"
@@ -120,7 +120,7 @@ export default function AuthLogin({ isDemo = false }) {
                       </IconButton>
                     </InputAdornment>
                   }
-                  placeholder="Enter password"
+                  placeholder="گذرواژه خود را وارد کنید"
                 />
               </Stack>
               {touched.password && errors.password && <FormHelperText error>{errors.password}</FormHelperText>}
@@ -136,7 +136,7 @@ export default function AuthLogin({ isDemo = false }) {
                   color="primary"
                   disabled={isSubmitting || loginMutation.isLoading}
                 >
-                  {loginMutation.isLoading ? 'Logging in...' : 'Login'}
+                  {loginMutation.isLoading ? 'در حال ورود...' : 'ورود'}
                 </Button>
               </AnimateButton>
             </Grid>
