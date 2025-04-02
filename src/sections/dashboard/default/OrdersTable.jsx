@@ -14,6 +14,7 @@ import {
   Box,
   TablePagination
 } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import { NumericFormat } from 'react-number-format';
 import Cookies from 'js-cookie';
 import Dot from 'components/@extended/Dot';
@@ -135,7 +136,11 @@ export default function OrderTable() {
     [apiRows, page, rowsPerPage]
   );
 
-  if (isLoading) return <div>در حال بارگذاری داده‌ها...</div>;
+  if (isLoading) return (<div>
+    <Box display="flex" justifyContent="center" alignItems="center" height="500px">
+      <CircularProgress size={24} />
+    </Box>
+  </div>);
   if (error) return <div>خطا در دریافت داده‌ها: {error.message}</div>;
 
   return (

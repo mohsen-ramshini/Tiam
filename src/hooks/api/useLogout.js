@@ -30,7 +30,7 @@ export const useLogout = () => {
       queryClient.clear();
       Cookies.remove('refresh_token'); 
       Cookies.remove('access_token'); 
-      window.location.href = '/free/login';
+      window.location.href = '/login';
     },
     onError: (error) => {
       console.error('Logout failed:', error.response?.data || error);

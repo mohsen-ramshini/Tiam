@@ -11,21 +11,14 @@ export default function AuthFooter() {
     <Container maxWidth="xl">
       <Stack
         direction={{ xs: 'column', sm: 'row' }}
-        sx={{ gap: 2, justifyContent: { xs: 'center', sm: 'space-between', textAlign: { xs: 'center', sm: 'inherit' } } }}
+        sx={{ gap: 2, justifyContent: { xs: 'center', sm: 'space-between' }, textAlign: { xs: 'center', sm: 'inherit' } }}
       >
-        <Typography variant="subtitle2" color="secondary">
-          © Made with love by Team{' '}
-          <Link href="#" target="_blank" underline="hover">
-            Tiam
-          </Link>
-        </Typography>
-
         <Stack direction={{ xs: 'column', sm: 'row' }} sx={{ gap: { xs: 1, sm: 3 }, textAlign: { xs: 'center', sm: 'inherit' } }}>
           <Typography
             variant="subtitle2"
             color="secondary"
             component={Link}
-            href="https://mui.com/store/terms/"
+            href="#"
             target="_blank"
             underline="hover"
           >
@@ -35,13 +28,20 @@ export default function AuthFooter() {
             variant="subtitle2"
             color="secondary"
             component={Link}
-            href="https://mui.com/legal/privacy/"
+            href="#"
             target="_blank"
             underline="hover"
           >
             Privacy Policy
           </Typography>
         </Stack>
+        <Typography variant="subtitle2" color="secondary" sx={{ textAlign: 'center' }}>
+          © Made with love by Team{' '}
+          <Link href="#" target="_blank" underline="hover">
+            Tiam
+          </Link>
+        </Typography>
+
       </Stack>
     </Container>
   );
