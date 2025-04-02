@@ -15,8 +15,8 @@ const getRefreshToken = () => Cookies.get('refresh_token');
 
 // ذخیره کردن توکن‌ها در کوکی
 const saveTokens = (accessToken, refreshToken) => {
-  Cookies.set('access_token', accessToken, { secure: true, sameSite: 'None' });
-  Cookies.set('refresh_token', refreshToken, { secure: true, sameSite: 'None' });
+  Cookies.set('access_token', accessToken, {  sameSite: 'None' });
+  Cookies.set('refresh_token', refreshToken, {  sameSite: 'None' });
 };
 
 // Interceptor برای هندل کردن 401 و ریفرش توکن
