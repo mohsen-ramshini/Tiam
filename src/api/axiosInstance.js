@@ -15,9 +15,24 @@ const getRefreshToken = () => Cookies.get('refresh_token');
 
 // ذخیره کردن توکن‌ها در کوکی
 const saveTokens = (accessToken, refreshToken) => {
-  Cookies.set('access_token', accessToken, {  sameSite: 'None' });
-  Cookies.set('refresh_token', refreshToken, {  sameSite: 'None' });
+  Cookies.set('access_token', accessToken, { expires: 1, secure: false, sameSite: 'Lax' });
+  Cookies.set('refresh_token', refreshToken, { expires: 7, secure: false, sameSite: 'Lax' });
 };
+
+axiosInstance.interceptors.request.use(
+  (config) => {
+    // Retrieve the token from localStorage (or another storage mechanism)
+    const token = Cookies.get('access_token'); // Replace with your token retrieval logic
+
+    if (token) {
+      // Set the Authorization header with the Bearer token
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return config;
+  }
+);
+  
 
 // Interceptor برای هندل کردن 401 و ریفرش توکن
 axiosInstance.interceptors.response.use(

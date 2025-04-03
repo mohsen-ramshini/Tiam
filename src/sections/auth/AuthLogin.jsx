@@ -50,8 +50,8 @@ export default function AuthLogin({ isDemo = false }) {
   const handleLoginSubmit = (values, { setSubmitting, setErrors }) => {
     loginMutation.mutate(values, {
       onSuccess: (data) => {
-        Cookies.set('access_token', data.access, { expires: 1, secure: true, sameSite: 'Strict' });
-        Cookies.set('refresh_token', data.refresh, { expires: 7, secure: true, sameSite: 'Strict' });
+        Cookies.set('access_token', data.access, { expires: 1, secure: false, sameSite: 'Lax' });
+        Cookies.set('refresh_token', data.refresh, { expires: 7, secure: false, sameSite: 'Lax' });
         setAccessToken(data.access);
         console.log('🔹 توکن دریافت شد:', data.access);
         refetchUserProfile();
@@ -65,7 +65,7 @@ export default function AuthLogin({ isDemo = false }) {
 
   return (
     <Formik
-    initialValues={{ username: 'tiam-front-1', password: 'asdf1234' }}
+      initialValues={{ username: 'tiam-front-1', password: 'asdf1234' }}
       validationSchema={Yup.object().shape({
         username: Yup.string().required('نام کاربری الزامی است'),
         password: Yup.string()
