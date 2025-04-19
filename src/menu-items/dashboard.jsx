@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // assets
 import { DashboardOutlined } from '@ant-design/icons';
 
