@@ -23,6 +23,7 @@ const pages = {
       icon: icons.LoginOutlined,
       target: true // برای login مشکلی نیست چون معمولاً صفحه جداست
     }
+    
   ]
 };
 
