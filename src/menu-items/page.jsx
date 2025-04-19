@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // assets
 import { LoginOutlined, ProfileOutlined } from '@ant-design/icons';
 
@@ -11,7 +12,7 @@ const icons = {
 
 const pages = {
   id: 'authentication',
-  title: 'ورود',
+  title: '',
   type: 'group',
   children: [
     {
@@ -20,17 +21,25 @@ const pages = {
       type: 'item',
       url: '/login',
       icon: icons.LoginOutlined,
-      target: true
+      target: true // برای login مشکلی نیست چون معمولاً صفحه جداست
     },
-    // {
-    //   id: 'register1',
-    //   title: 'ساخت حساب کاربری',
-    //   type: 'item',
-    //   url: '/register',
-    //   icon: icons.ProfileOutlined,
-    //   target: true
-    // }
+    {
+      id: 'create-probe',
+      title: 'ساخت پراب',
+      type: 'item',
+      url: '/create-probe',
+      icon: icons.ProfileOutlined
+    },
+    {
+      id: 'create-user',
+      title: 'تعریف کاربر',
+      type: 'item',
+      url: '/create-user',
+      icon: icons.ProfileOutlined
+    }
+    
   ]
 };
+
 
 export default pages;

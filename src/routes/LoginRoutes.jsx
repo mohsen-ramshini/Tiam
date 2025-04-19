@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { lazy } from 'react';
 import AuthLayout from 'layout/Auth';
 import Loadable from 'components/Loadable';

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { lazy } from 'react';
 import { Navigate } from 'react-router-dom';
 import Loadable from 'components/Loadable';
@@ -9,6 +10,8 @@ const Color = Loadable(lazy(() => import('pages/component-overview/color')));
 const Typography = Loadable(lazy(() => import('pages/component-overview/typography')));
 const Shadow = Loadable(lazy(() => import('pages/component-overview/shadows')));
 const SamplePage = Loadable(lazy(() => import('pages/extra-pages/sample-page')));
+const CreateProbe = Loadable(lazy(() => import('pages/dashboard/CreateProbe.jsx')));
+const CreateUser = Loadable(lazy(() => import('pages/dashboard/CreateUser.jsx')));
 
 const MainRoutes = {
   path: '/',
@@ -23,7 +26,9 @@ const MainRoutes = {
         { path: 'typography', element: <Typography /> },
         { path: 'color', element: <Color /> },
         { path: 'shadow', element: <Shadow /> },
-        { path: 'sample-page', element: <SamplePage /> }
+        { path: 'sample-page', element: <SamplePage /> },
+        { path: 'create-probe', element: <CreateProbe /> },
+        { path: 'create-user', element: <CreateUser /> }
       ]
     }
   ]
