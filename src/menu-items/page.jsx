@@ -22,22 +22,7 @@ const pages = {
       url: '/login',
       icon: icons.LoginOutlined,
       target: true // برای login مشکلی نیست چون معمولاً صفحه جداست
-    },
-    {
-      id: 'create-probe',
-      title: 'ساخت پراب',
-      type: 'item',
-      url: '/create-probe',
-      icon: icons.ProfileOutlined
-    },
-    {
-      id: 'create-user',
-      title: 'تعریف کاربر',
-      type: 'item',
-      url: '/create-user',
-      icon: icons.ProfileOutlined
     }
-    
   ]
 };
 
