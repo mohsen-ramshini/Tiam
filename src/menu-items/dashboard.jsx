@@ -24,16 +24,23 @@ const dashboard = {
     },
     {
       id: 'create-probe',
-      title: 'ساخت پراب',
+      title: ' پراب ها',
       type: 'item',
       url: '/create-probe',
       icon: icons.ProfileOutlined
     },
     {
       id: 'create-user',
-      title: 'تعریف کاربر',
+      title: ' کاربرها',
       type: 'item',
       url: '/create-user',
+      icon: icons.ProfileOutlined
+    },
+    {
+      id: 'create-task',
+      title: ' تسک ها',
+      type: 'item',
+      url: '/create-task',
       icon: icons.ProfileOutlined
     }
   ]

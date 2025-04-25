@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // material-ui
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
@@ -38,7 +39,7 @@ export default function AuthFooter() {
         <Typography variant="subtitle2" color="secondary" sx={{ textAlign: 'center' }}>
           © Made with love by Team{' '}
           <Link href="#" target="_blank" underline="hover">
-            Tiam
+            UniTeam
           </Link>
         </Typography>
 

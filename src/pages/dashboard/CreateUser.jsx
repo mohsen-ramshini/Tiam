@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,9 +14,17 @@ import {
   MenuItem,
   Select,
   InputLabel,
-  FormControl
+  FormControl,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  IconButton,
+  Typography
 } from '@mui/material';
 import MainCard from 'components/MainCard';
+import { Delete, Edit } from '@mui/icons-material';
 
 // اسکیما اعتبارسنجی Zod
 const userSchema = z.object({
@@ -31,6 +39,9 @@ const userSchema = z.object({
 });
 
 const CreateUser = () => {
+  const [users, setUsers] = useState([]);
+  const [loadingUsers, setLoadingUsers] = useState(false);
+
   const {
     control,
     handleSubmit,
@@ -51,16 +62,28 @@ const CreateUser = () => {
     }
   });
 
+  const fetchUsers = async () => {
+    setLoadingUsers(true);
+    try {
+      const response = await axiosInstance.get('/users/users/');
+      setUsers(response.data);
+    } catch (error) {
+      console.error('خطا در دریافت کاربران:', error);
+    } finally {
+      setLoadingUsers(false);
+    }
+  };
+
   const onSubmit = async (data) => {
     try {
       await axiosInstance.post('/users/users/', data);
       alert('کاربر با موفقیت اضافه شد!');
       reset();
+      fetchUsers();
     } catch (err) {
       if (err.response?.status === 400) {
         const backendErrors = err.response.data;
 
-        // نمایش خطای تکراری بودن نام کاربری
         if (backendErrors.username?.[0]?.includes('already exists')) {
           setError('username', {
             type: 'manual',
@@ -68,7 +91,6 @@ const CreateUser = () => {
           });
         }
 
-        // نمایش سایر ارورها
         Object.entries(backendErrors).forEach(([field, messages]) => {
           if (field !== 'username') {
             setError(field, {
@@ -82,6 +104,21 @@ const CreateUser = () => {
       }
     }
   };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('آیا از حذف این کاربر مطمئن هستید؟')) {
+      try {
+        await axiosInstance.delete(`/users/users/${id}/`);
+        fetchUsers();
+      } catch (error) {
+        alert('خطا در حذف کاربر');
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   return (
     <MainCard title="افزودن کاربر">
@@ -165,6 +202,43 @@ const CreateUser = () => {
           </Button>
         </Stack>
       </form>
+
+      <Typography variant="h6" sx={{ mt: 4 }}>لیست کاربران</Typography>
+      {loadingUsers ? (
+        <CircularProgress />
+      ) : (
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>نام کاربری</TableCell>
+              <TableCell>نام</TableCell>
+              <TableCell>نام خانوادگی</TableCell>
+              <TableCell>ایمیل</TableCell>
+              <TableCell>وضعیت</TableCell>
+              <TableCell align="center">عملیات</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>{user.username}</TableCell>
+                <TableCell>{user.first_name}</TableCell>
+                <TableCell>{user.last_name}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>{user.is_active ? 'فعال' : 'غیرفعال'}</TableCell>
+                <TableCell align="center">
+                  <IconButton color="primary" onClick={() => alert('ویرایش در دست توسعه است')}>
+                    <Edit />
+                  </IconButton>
+                  <IconButton color="error" onClick={() => handleDelete(user.id)}>
+                    <Delete />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </MainCard>
   );
 };

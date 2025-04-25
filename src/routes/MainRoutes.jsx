@@ -12,6 +12,7 @@ const Shadow = Loadable(lazy(() => import('pages/component-overview/shadows')));
 const SamplePage = Loadable(lazy(() => import('pages/extra-pages/sample-page')));
 const CreateProbe = Loadable(lazy(() => import('pages/dashboard/CreateProbe.jsx')));
 const CreateUser = Loadable(lazy(() => import('pages/dashboard/CreateUser.jsx')));
+const CreateTask = Loadable(lazy(() => import('pages/dashboard/CreateTask.jsx')));
 
 const MainRoutes = {
   path: '/',
@@ -28,7 +29,9 @@ const MainRoutes = {
         { path: 'shadow', element: <Shadow /> },
         { path: 'sample-page', element: <SamplePage /> },
         { path: 'create-probe', element: <CreateProbe /> },
-        { path: 'create-user', element: <CreateUser /> }
+        { path: 'create-user', element: <CreateUser /> },
+        { path: 'create-task', element: <CreateTask /> }
+
       ]
     }
   ]
