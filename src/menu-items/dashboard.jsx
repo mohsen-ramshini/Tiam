@@ -42,6 +42,13 @@ const dashboard = {
       type: 'item',
       url: '/create-task',
       icon: icons.ProfileOutlined
+    },
+    {
+      id: 'create-task',
+      title: ' سرویس ها',
+      type: 'item',
+      url: '/create-service',
+      icon: icons.ProfileOutlined
     }
   ]
 };

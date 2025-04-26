@@ -13,6 +13,7 @@ const SamplePage = Loadable(lazy(() => import('pages/extra-pages/sample-page')))
 const CreateProbe = Loadable(lazy(() => import('pages/dashboard/CreateProbe.jsx')));
 const CreateUser = Loadable(lazy(() => import('pages/dashboard/CreateUser.jsx')));
 const CreateTask = Loadable(lazy(() => import('pages/dashboard/CreateTask.jsx')));
+const CreateService = Loadable(lazy(() => import('pages/dashboard/CreateService.jsx')));
 
 const MainRoutes = {
   path: '/',
@@ -31,6 +32,8 @@ const MainRoutes = {
         { path: 'create-probe', element: <CreateProbe /> },
         { path: 'create-user', element: <CreateUser /> },
         { path: 'create-task', element: <CreateTask /> }
+        ,        { path: 'create-service', element: <CreateService /> }
+
 
       ]
     }
