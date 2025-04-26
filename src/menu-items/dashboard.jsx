@@ -1,10 +1,22 @@
 /* eslint-disable prettier/prettier */
 // assets
-import { DashboardOutlined } from '@ant-design/icons';
+import { 
+  DashboardOutlined,
+  UserOutlined, 
+  ClusterOutlined, 
+  FileDoneOutlined, 
+  AppstoreAddOutlined, 
+  DeploymentUnitOutlined
+} from '@ant-design/icons';
 
 // icons
 const icons = {
-  DashboardOutlined
+  DashboardOutlined,
+  UserOutlined,
+  ClusterOutlined,
+  FileDoneOutlined,
+  AppstoreAddOutlined,
+  DeploymentUnitOutlined
 };
 
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
@@ -24,31 +36,38 @@ const dashboard = {
     },
     {
       id: 'create-probe',
-      title: ' پراب ها',
+      title: 'پراب ها',
       type: 'item',
       url: '/create-probe',
-      icon: icons.ProfileOutlined
+      icon: icons.ClusterOutlined // برای پراب (چون مربوط به سرور/سیستم‌هاست)
     },
     {
       id: 'create-user',
-      title: ' کاربرها',
+      title: 'کاربرها',
       type: 'item',
       url: '/create-user',
-      icon: icons.ProfileOutlined
+      icon: icons.UserOutlined // برای یوزرها
     },
     {
       id: 'create-task',
-      title: ' تسک ها',
+      title: 'تسک ها',
       type: 'item',
       url: '/create-task',
-      icon: icons.ProfileOutlined
+      icon: icons.FileDoneOutlined // برای تسک (مثل یه لیست انجام شده)
     },
     {
-      id: 'create-task',
-      title: ' سرویس ها',
+      id: 'create-service',
+      title: 'سرویس ها',
       type: 'item',
       url: '/create-service',
-      icon: icons.ProfileOutlined
+      icon: icons.AppstoreAddOutlined // برای سرویس‌ها (اپلیکیشن/سرویس جدید)
+    },
+    {
+      id: 'task-assignment',
+      title: 'تخصیص تسک',
+      type: 'item',
+      url: '/task-assignment',
+      icon: icons.DeploymentUnitOutlined // برای تسک اساینمنت (شبکه یا تخصیص)
     }
   ]
 };
