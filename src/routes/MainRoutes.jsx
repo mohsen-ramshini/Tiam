@@ -31,10 +31,8 @@ const MainRoutes = {
         { path: 'sample-page', element: <SamplePage /> },
         { path: 'create-probe', element: <CreateProbe /> },
         { path: 'create-user', element: <CreateUser /> },
-        { path: 'create-task', element: <CreateTask /> }
-        ,        { path: 'create-service', element: <CreateService /> }
-
-
+        { path: 'create-task', element: <CreateTask /> },
+        { path: 'create-service', element: <CreateService /> }
       ]
     }
   ]

@@ -117,9 +117,15 @@ const CreateProbe = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell><Typography fontWeight="bold">نام</Typography></TableCell>
-              <TableCell><Typography fontWeight="bold">توضیحات</Typography></TableCell>
-              <TableCell align="center"><Typography fontWeight="bold">عملیات</Typography></TableCell>
+              <TableCell>
+                <Typography fontWeight="bold">نام</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography fontWeight="bold">توضیحات</Typography>
+              </TableCell>
+              <TableCell align="center">
+                <Typography fontWeight="bold">عملیات</Typography>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -153,13 +159,7 @@ const CreateProbe = () => {
         <DialogTitle>{editId ? 'ویرایش پراب' : 'افزودن پراب'}</DialogTitle>
         <DialogContent>
           <Stack spacing={2} sx={{ mt: 1 }}>
-            <TextField
-              label="نام پراب"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              fullWidth
-              error={!!error}
-            />
+            <TextField label="نام پراب" value={name} onChange={(e) => setName(e.target.value)} fullWidth error={!!error} />
             <TextField
               label="توضیحات"
               value={description}
@@ -173,13 +173,10 @@ const CreateProbe = () => {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="secondary">انصراف</Button>
-          <Button
-            onClick={handleSubmit}
-            variant="contained"
-            color="primary"
-            disabled={loading}
-          >
+          <Button onClick={handleClose} color="secondary">
+            انصراف
+          </Button>
+          <Button onClick={handleSubmit} variant="contained" color="primary" disabled={loading}>
             {loading ? <CircularProgress size={24} color="inherit" /> : editId ? 'ذخیره تغییرات' : 'افزودن'}
           </Button>
         </DialogActions>
