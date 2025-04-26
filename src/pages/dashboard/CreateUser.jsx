@@ -21,7 +21,9 @@ import {
   TableCell,
   TableBody,
   IconButton,
-  Typography
+  Typography,
+  Tabs,
+  Tab
 } from '@mui/material';
 import MainCard from 'components/MainCard';
 import { Delete, Edit } from '@mui/icons-material';
@@ -41,6 +43,7 @@ const userSchema = z.object({
 const CreateUser = () => {
   const [users, setUsers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
+  const [tabIndex, setTabIndex] = useState(0); // اضافه کردن state برای مدیریت تب‌ها
 
   const {
     control,
@@ -80,6 +83,7 @@ const CreateUser = () => {
       alert('کاربر با موفقیت اضافه شد!');
       reset();
       fetchUsers();
+      setTabIndex(0); // پس از ارسال فرم، به تب لیست کاربران باز می‌گردیم
     } catch (err) {
       if (err.response?.status === 400) {
         const backendErrors = err.response.data;
@@ -121,123 +125,142 @@ const CreateUser = () => {
   }, []);
 
   return (
-    <MainCard title="افزودن کاربر">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing={2}>
-          <Controller
-            name="username"
-            control={control}
-            render={({ field }) => (
-              <TextField {...field} label="نام کاربری" fullWidth error={!!errors.username} helperText={errors.username?.message} />
-            )}
-          />
-          <Controller
-            name="password"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label="رمز عبور"
-                type="password"
-                fullWidth
-                error={!!errors.password}
-                helperText={errors.password?.message}
-              />
-            )}
-          />
-          <Controller
-            name="email"
-            control={control}
-            render={({ field }) => (
-              <TextField {...field} label="ایمیل" fullWidth error={!!errors.email} helperText={errors.email?.message} />
-            )}
-          />
-          <Controller
-            name="first_name"
-            control={control}
-            render={({ field }) => (
-              <TextField {...field} label="نام" fullWidth error={!!errors.first_name} helperText={errors.first_name?.message} />
-            )}
-          />
-          <Controller
-            name="last_name"
-            control={control}
-            render={({ field }) => (
-              <TextField {...field} label="نام خانوادگی" fullWidth error={!!errors.last_name} helperText={errors.last_name?.message} />
-            )}
-          />
-          <Controller
-            name="is_active"
-            control={control}
-            render={({ field }) => <FormControlLabel control={<Checkbox {...field} checked={field.value} />} label="فعال بودن کاربر" />}
-          />
-          <Controller
-            name="groups"
-            control={control}
-            render={({ field }) => (
-              <FormControl fullWidth>
-                <InputLabel>گروه‌ها</InputLabel>
-                <Select {...field} multiple label="گروه‌ها">
-                  <MenuItem value={1}>گروه ۱</MenuItem>
-                  <MenuItem value={2}>گروه ۲</MenuItem>
-                </Select>
-              </FormControl>
-            )}
-          />
-          <Controller
-            name="user_permissions"
-            control={control}
-            render={({ field }) => (
-              <FormControl fullWidth>
-                <InputLabel>مجوزها</InputLabel>
-                <Select {...field} multiple label="مجوزها">
-                  <MenuItem value={36}>مجوز A</MenuItem>
-                  <MenuItem value={37}>مجوز B</MenuItem>
-                </Select>
-              </FormControl>
-            )}
-          />
-          <Button type="submit" variant="contained" disabled={isSubmitting}>
-            {isSubmitting ? <CircularProgress size={24} /> : 'افزودن کاربر'}
-          </Button>
-        </Stack>
-      </form>
+    <MainCard title="مدیریت کاربران">
+      <Tabs value={tabIndex} onChange={(e, newValue) => setTabIndex(newValue)} aria-label="Tabs">
+        <Tab label="لیست کاربران" />
+        <Tab label="افزودن کاربر" />
+      </Tabs>
 
-      <Typography variant="h6" sx={{ mt: 4 }}>لیست کاربران</Typography>
-      {loadingUsers ? (
-        <CircularProgress />
-      ) : (
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>نام کاربری</TableCell>
-              <TableCell>نام</TableCell>
-              <TableCell>نام خانوادگی</TableCell>
-              <TableCell>ایمیل</TableCell>
-              <TableCell>وضعیت</TableCell>
-              <TableCell align="center">عملیات</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {users.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell>{user.username}</TableCell>
-                <TableCell>{user.first_name}</TableCell>
-                <TableCell>{user.last_name}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.is_active ? 'فعال' : 'غیرفعال'}</TableCell>
-                <TableCell align="center">
-                  <IconButton color="primary" onClick={() => alert('ویرایش در دست توسعه است')}>
-                    <Edit />
-                  </IconButton>
-                  <IconButton color="error" onClick={() => handleDelete(user.id)}>
-                    <Delete />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+      {/* نمایش تب لیست کاربران */}
+      {tabIndex === 0 && (
+        <>
+          {loadingUsers ? (
+            <CircularProgress />
+          ) : (
+            <>
+              <Typography variant="h6" sx={{ mt: 4 }}>
+                لیست کاربران
+              </Typography>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>نام کاربری</TableCell>
+                    <TableCell>نام</TableCell>
+                    <TableCell>نام خانوادگی</TableCell>
+                    <TableCell>ایمیل</TableCell>
+                    <TableCell>وضعیت</TableCell>
+                    <TableCell align="center">عملیات</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {users.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell>{user.username}</TableCell>
+                      <TableCell>{user.first_name}</TableCell>
+                      <TableCell>{user.last_name}</TableCell>
+                      <TableCell>{user.email}</TableCell>
+                      <TableCell>{user.is_active ? 'فعال' : 'غیرفعال'}</TableCell>
+                      <TableCell align="center">
+                        <IconButton color="primary" onClick={() => alert('ویرایش در دست توسعه است')}>
+                          <Edit />
+                        </IconButton>
+                        <IconButton color="error" onClick={() => handleDelete(user.id)}>
+                          <Delete />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </>
+          )}
+        </>
+      )}
+
+      {/* نمایش تب افزودن کاربر */}
+      {tabIndex === 1 && (
+        <form onSubmit={handleSubmit(onSubmit)} style={{ marginTop: '20px' }}>
+          {' '}
+          {/* اضافه کردن فاصله از بالای فرم */}
+          <Stack spacing={2}>
+            <Controller
+              name="username"
+              control={control}
+              render={({ field }) => (
+                <TextField {...field} label="نام کاربری" fullWidth error={!!errors.username} helperText={errors.username?.message} />
+              )}
+            />
+            <Controller
+              name="password"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="رمز عبور"
+                  type="password"
+                  fullWidth
+                  error={!!errors.password}
+                  helperText={errors.password?.message}
+                />
+              )}
+            />
+            <Controller
+              name="email"
+              control={control}
+              render={({ field }) => (
+                <TextField {...field} label="ایمیل" fullWidth error={!!errors.email} helperText={errors.email?.message} />
+              )}
+            />
+            <Controller
+              name="first_name"
+              control={control}
+              render={({ field }) => (
+                <TextField {...field} label="نام" fullWidth error={!!errors.first_name} helperText={errors.first_name?.message} />
+              )}
+            />
+            <Controller
+              name="last_name"
+              control={control}
+              render={({ field }) => (
+                <TextField {...field} label="نام خانوادگی" fullWidth error={!!errors.last_name} helperText={errors.last_name?.message} />
+              )}
+            />
+            <Controller
+              name="is_active"
+              control={control}
+              render={({ field }) => <FormControlLabel control={<Checkbox {...field} checked={field.value} />} label="فعال بودن کاربر" />}
+            />
+            <Controller
+              name="groups"
+              control={control}
+              render={({ field }) => (
+                <FormControl fullWidth>
+                  <InputLabel>گروه‌ها</InputLabel>
+                  <Select {...field} multiple label="گروه‌ها">
+                    <MenuItem value={1}>گروه ۱</MenuItem>
+                    <MenuItem value={2}>گروه ۲</MenuItem>
+                  </Select>
+                </FormControl>
+              )}
+            />
+            <Controller
+              name="user_permissions"
+              control={control}
+              render={({ field }) => (
+                <FormControl fullWidth>
+                  <InputLabel>مجوزها</InputLabel>
+                  <Select {...field} multiple label="مجوزها">
+                    <MenuItem value={36}>مجوز A</MenuItem>
+                    <MenuItem value={37}>مجوز B</MenuItem>
+                  </Select>
+                </FormControl>
+              )}
+            />
+            <Button type="submit" variant="contained" disabled={isSubmitting}>
+              {isSubmitting ? <CircularProgress size={24} /> : 'افزودن کاربر'}
+            </Button>
+          </Stack>
+        </form>
       )}
     </MainCard>
   );

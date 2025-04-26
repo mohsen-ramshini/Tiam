@@ -13,9 +13,14 @@ import {
   TableHead,
   TableRow,
   Paper,
-  IconButton
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Typography
 } from '@mui/material';
-import { Edit, Delete } from '@mui/icons-material';
+import { Edit, Delete, Add } from '@mui/icons-material';
 import axiosInstance from 'api/axiosInstance';
 
 const CreateProbe = () => {
@@ -25,8 +30,8 @@ const CreateProbe = () => {
   const [error, setError] = useState(null);
   const [probes, setProbes] = useState([]);
   const [editId, setEditId] = useState(null);
+  const [open, setOpen] = useState(false);
 
-  // گرفتن لیست پراب‌ها
   const fetchProbes = async () => {
     try {
       const res = await axiosInstance.get('/users/probs/');
@@ -40,9 +45,20 @@ const CreateProbe = () => {
     fetchProbes();
   }, []);
 
+  const handleOpen = () => {
+    setName('');
+    setDescription('');
+    setEditId(null);
+    setError(null);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!name || !description) {
       setError('لطفاً تمامی فیلدها را پر کنید');
       return;
@@ -59,10 +75,8 @@ const CreateProbe = () => {
         await axiosInstance.post('/users/probs/', { name, description });
         alert('پراب با موفقیت اضافه شد!');
       }
-      setName('');
-      setDescription('');
-      setEditId(null);
       fetchProbes();
+      handleClose();
     } catch (err) {
       console.error('خطا:', err);
       setError('خطا در ذخیره‌سازی پراب');
@@ -75,6 +89,8 @@ const CreateProbe = () => {
     setName(probe.name);
     setDescription(probe.description);
     setEditId(probe.id);
+    setError(null);
+    setOpen(true);
   };
 
   const handleDelete = async (id) => {
@@ -91,39 +107,19 @@ const CreateProbe = () => {
 
   return (
     <MainCard title="مدیریت پراب‌ها">
-      <form onSubmit={handleSubmit}>
-        <Stack spacing={2}>
-          <TextField
-            label="نام پراب"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            fullWidth
-            error={!!error}
-            helperText={error}
-          />
-          <TextField
-            label="توضیحات"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            fullWidth
-            multiline
-            rows={3}
-            error={!!error}
-            helperText={error}
-          />
-          <Button type="submit" variant="contained" color="primary" disabled={loading}>
-            {loading ? <CircularProgress size={24} color="inherit" /> : editId ? 'ویرایش پراب' : 'افزودن پراب'}
-          </Button>
-        </Stack>
-      </form>
+      <Stack direction="row" justifyContent="flex-end" sx={{ mb: 2 }}>
+        <Button variant="contained" startIcon={<Add />} onClick={handleOpen}>
+          افزودن پراب
+        </Button>
+      </Stack>
 
-      <TableContainer component={Paper} sx={{ mt: 4 }}>
+      <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>نام</TableCell>
-              <TableCell>توضیحات</TableCell>
-              <TableCell align="center">عملیات</TableCell>
+              <TableCell><Typography fontWeight="bold">نام</Typography></TableCell>
+              <TableCell><Typography fontWeight="bold">توضیحات</Typography></TableCell>
+              <TableCell align="center"><Typography fontWeight="bold">عملیات</Typography></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -151,6 +147,43 @@ const CreateProbe = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* فرم ساخت/ویرایش داخل دیالوگ */}
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+        <DialogTitle>{editId ? 'ویرایش پراب' : 'افزودن پراب'}</DialogTitle>
+        <DialogContent>
+          <Stack spacing={2} sx={{ mt: 1 }}>
+            <TextField
+              label="نام پراب"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              fullWidth
+              error={!!error}
+            />
+            <TextField
+              label="توضیحات"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              fullWidth
+              multiline
+              rows={3}
+              error={!!error}
+            />
+            {error && <Typography color="error">{error}</Typography>}
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="secondary">انصراف</Button>
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            color="primary"
+            disabled={loading}
+          >
+            {loading ? <CircularProgress size={24} color="inherit" /> : editId ? 'ذخیره تغییرات' : 'افزودن'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </MainCard>
   );
 };
