@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+// components/your/path/PageLoadTimeChart.jsx
+
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -21,80 +23,102 @@ import {
   Box,
   Typography,
 } from '@mui/material';
+import useFetchHistoricalData from '../../../hooks/api/useFetchHistoricalData'; // مسیر درست کن
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, zoomPlugin);
+// ثبت پلاگین‌های ChartJS
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  zoomPlugin
+);
 
 const PageLoadTimeChart = () => {
   const [mode, setMode] = useState('realtime'); // realtime یا historical
-  const [filter, setFilter] = useState('day');
-  const [dataPoints, setDataPoints] = useState([]);
-  const [historicalData, setHistoricalData] = useState([]);
+  const [filter, setFilter] = useState('day'); // day, week, month
+  const [probs] = useState('1,2');
+  const [groupBy] = useState('hour');
+  const [func] = useState('avg');
   const [zoomLevel, setZoomLevel] = useState(100);
 
   const chartRef = useRef(null);
+  const now = useMemo(() => new Date(), []);
 
-  // شبیه‌سازی داده‌های تاریخی
-  const fetchHistoricalData = async (filter) => {
-    const now = Date.now();
-    const hours =
-      filter === 'day' ? 24 : filter === 'week' ? 7 * 24 : 30 * 24;
-    const result = [];
-
-    for (let i = 0; i < hours; i++) {
-      result.push({
-        samplingRate: now - i * 60 * 60 * 1000, // هر ساعت
-        pageLoadTime: Math.random() * 3000,
-      });
+  // محاسبه بازه زمانی بر اساس فیلتر
+  const { start, end } = useMemo(() => {
+    let startDate;
+    if (filter === 'day') {
+      startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    } else if (filter === 'week') {
+      startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    } else {
+      startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
     }
+    return {
+      start: startDate.toISOString().split('T')[0],
+      end: now.toISOString().split('T')[0],
+    };
+  }, [filter, now]);
 
-    return result.reverse();
-  };
+  // دریافت داده‌های historical
+  const { data: historicalData = { data: [] }, isLoading, error } = useFetchHistoricalData({
+    start: '2024-01-01',
+    end: '2025-04-26',
+    probs: '8',
+    group_by: 'day',
+    func: 'avg',
+  });
+  
 
-  // دریافت داده‌های realtime
+  // مدیریت داده‌های realtime
+  const [realtimeData, setRealtimeData] = useState([]);
+
   useEffect(() => {
     if (mode !== 'realtime') return;
 
     const intervalId = setInterval(() => {
       const newDataPoint = {
         samplingRate: Date.now(),
-        pageLoadTime: Math.random() * 3000,
+        pageLoadTime: Math.random() * 3000, // دیتای فیک
       };
 
-      setDataPoints((prevDataPoints) => {
-        if (prevDataPoints.length >= 100) {
-          return [...prevDataPoints.slice(1), newDataPoint];
+      setRealtimeData((prev) => {
+        if (prev.length >= 100) {
+          return [...prev.slice(1), newDataPoint];
         }
-        return [...prevDataPoints, newDataPoint];
+        return [...prev, newDataPoint];
       });
     }, 5000);
 
     return () => clearInterval(intervalId);
   }, [mode]);
 
-  // بارگذاری داده‌های تاریخی
-  useEffect(() => {
-    if (mode === 'historical') {
-      fetchHistoricalData(filter).then((data) => setHistoricalData(data));
-    }
-  }, [mode, filter]);
+  // آماده‌سازی داده‌ها برای چارت
+  const chartData = useMemo(() => {
+    const sourceData = mode === 'realtime' ? realtimeData : historicalData.data;
+  
+    return {
+      labels: sourceData.map((point) =>
+        new Date(point.samplingRate || point.timestamp || point.time).toLocaleTimeString()
+      ),
+      datasets: [
+        {
+          label: 'Page Load Time (ms)',
+          data: sourceData.map((point) => point.pageLoadTime || point.value || point.result),
+          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          fill: true,
+        },
+      ],
+    };
+  }, [mode, realtimeData, historicalData]);
+  
 
-  const chartData = mode === 'realtime' ? dataPoints : historicalData;
-
-  const data = {
-    labels: chartData.map((point) =>
-      new Date(point.samplingRate).toLocaleTimeString()
-    ),
-    datasets: [
-      {
-        label: 'Page Load Time (ms)',
-        data: chartData.map((point) => point.pageLoadTime),
-        borderColor: 'rgba(75, 192, 192, 1)',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        fill: true,
-      },
-    ],
-  };
-
+  // تنظیمات چارت
   const options = {
     responsive: true,
     scales: {
@@ -128,6 +152,9 @@ const PageLoadTimeChart = () => {
       },
     },
   };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error fetching data</div>;
 
   return (
     <Box p={3}>
@@ -174,7 +201,7 @@ const PageLoadTimeChart = () => {
         </Button>
       </Box>
 
-      <Line ref={chartRef} data={data} options={options} />
+      <Line ref={chartRef} data={chartData} options={options} />
     </Box>
   );
 };

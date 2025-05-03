@@ -67,8 +67,7 @@ export default function OrderTable() {
 
   const apiRows = useMemo(() => {
     if (!apiData || apiData.length === 0) return [];
-
-    return apiData.map(item => ({
+    return apiData.results.map(item => ({
       id: item.id ?? '--',
       prob_name: item.task_assignment?.prob?.name ?? '--',
       task_name: item.task_assignment?.task?.name ?? '--',

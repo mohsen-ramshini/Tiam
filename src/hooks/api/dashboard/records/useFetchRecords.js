@@ -4,7 +4,7 @@ import axiosInstance from '../../../../api/axiosInstance'; // مسیر رو در
 
 const fetchRecords = async () => {
   console.log('Fetching records...');
-  const response = await axiosInstance.get('/repo/task-results/');
+  const response = await axiosInstance.get('/repo/task-results?limit=100');
   return response.data;
 };
 
