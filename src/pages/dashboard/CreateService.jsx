@@ -1,5 +1,4 @@
-/* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import MainCard from 'components/MainCard';
 import {
   TextField,
@@ -21,30 +20,40 @@ import {
   Typography
 } from '@mui/material';
 import { Edit, Delete, Add } from '@mui/icons-material';
-import axiosInstance from 'api/axiosInstance';
+import { useCreateService } from "../../hooks/api/dashboard/service/useCreateService";
+import { useUpdateService } from "../../hooks/api/dashboard/service/useUpdateService";
+import { useDeleteService } from "../../hooks/api/dashboard/service/useDeleteService";
+import { useFetchServices } from '../../hooks/api/dashboard/service/useFetchService';
 
 const CreateService = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [host, setHost] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [services, setServices] = useState([]);
   const [editId, setEditId] = useState(null);
+  const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
 
-  const fetchServices = async () => {
-    try {
-      const res = await axiosInstance.get('/repo/services/');
-      setServices(res.data);
-    } catch (err) {
-      console.error('خطا در دریافت سرویس‌ها:', err);
-    }
-  };
+  const { data: services = [], isLoading: isFetching, refetch } = useFetchServices();
 
-  useEffect(() => {
-    fetchServices();
-  }, []);
+  const createMutation = useCreateService({
+    onSuccessCallback: () => {
+      refetch();
+      handleClose();
+    },
+    onErrorCallback: () => setError('خطا در افزودن سرویس')
+  });
+
+  const updateMutation = useUpdateService({
+    onSuccessCallback: () => {
+      refetch();
+      handleClose();
+    },
+    onErrorCallback: () => setError('خطا در ویرایش سرویس')
+  });
+
+  const deleteMutation = useDeleteService({
+    onSuccessCallback: () => refetch()
+  });
 
   const handleOpen = () => {
     setName('');
@@ -59,37 +68,23 @@ const CreateService = () => {
     setOpen(false);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!name || !description || !host) {
       setError('لطفاً تمامی فیلدها را پر کنید');
       return;
     }
 
-    setLoading(true);
-    setError(null);
+    const payload = {
+      name,
+      description,
+      properties: { host }
+    };
 
-    try {
-      const payload = {
-        name,
-        description,
-        properties: { host }
-      };
-
-      if (editId) {
-        await axiosInstance.put(`/repo/services/${editId}/`, payload);
-        alert('سرویس با موفقیت ویرایش شد!');
-      } else {
-        await axiosInstance.post('/repo/services/', payload);
-        alert('سرویس با موفقیت اضافه شد!');
-      }
-      fetchServices();
-      handleClose();
-    } catch (err) {
-      console.error('خطا:', err);
-      setError('خطا در ذخیره‌سازی سرویس');
-    } finally {
-      setLoading(false);
+    if (editId) {
+      updateMutation.mutate({ id: editId, data: payload });
+    } else {
+      createMutation.mutate(payload);
     }
   };
 
@@ -102,17 +97,13 @@ const CreateService = () => {
     setOpen(true);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = (id) => {
     if (window.confirm('آیا از حذف این سرویس مطمئن هستید؟')) {
-      try {
-        await axiosInstance.delete(`/repo/services/${id}/`);
-        fetchServices();
-        alert('سرویس حذف شد!');
-      } catch (err) {
-        console.error('خطا در حذف سرویس:', err);
-      }
+      deleteMutation.mutate(id);
     }
   };
+
+  const isSubmitting = createMutation.isPending || updateMutation.isPending;
 
   return (
     <MainCard title="مدیریت سرویس‌ها">
@@ -133,22 +124,29 @@ const CreateService = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {services.map((service) => (
-              <TableRow key={service.id}>
-                <TableCell>{service.name}</TableCell>
-                <TableCell>{service.description}</TableCell>
-                <TableCell>{service.properties?.host}</TableCell>
-                <TableCell align="center">
-                  <IconButton color="primary" onClick={() => handleEdit(service)}>
-                    <Edit />
-                  </IconButton>
-                  <IconButton color="error" onClick={() => handleDelete(service.id)}>
-                    <Delete />
-                  </IconButton>
+            {isFetching ? (
+              <TableRow>
+                <TableCell colSpan={4} align="center">
+                  <CircularProgress />
                 </TableCell>
               </TableRow>
-            ))}
-            {services.length === 0 && (
+            ) : services.length > 0 ? (
+              services.map((service) => (
+                <TableRow key={service.id}>
+                  <TableCell>{service.name}</TableCell>
+                  <TableCell>{service.description}</TableCell>
+                  <TableCell>{service.properties?.host}</TableCell>
+                  <TableCell align="center">
+                    <IconButton color="primary" onClick={() => handleEdit(service)}>
+                      <Edit />
+                    </IconButton>
+                    <IconButton color="error" onClick={() => handleDelete(service.id)}>
+                      <Delete />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
               <TableRow>
                 <TableCell colSpan={4} align="center">
                   هیچ سرویسی یافت نشد.
@@ -159,7 +157,7 @@ const CreateService = () => {
         </Table>
       </TableContainer>
 
-      {/* فرم ساخت/ویرایش داخل دیالوگ */}
+      {/* Dialog */}
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle>{editId ? 'ویرایش سرویس' : 'افزودن سرویس'}</DialogTitle>
         <DialogContent>
@@ -196,9 +194,9 @@ const CreateService = () => {
             onClick={handleSubmit}
             variant="contained"
             color="primary"
-            disabled={loading}
+            disabled={isSubmitting}
           >
-            {loading ? <CircularProgress size={24} color="inherit" /> : editId ? 'ذخیره تغییرات' : 'افزودن'}
+            {isSubmitting ? <CircularProgress size={24} color="inherit" /> : editId ? 'ذخیره تغییرات' : 'افزودن'}
           </Button>
         </DialogActions>
       </Dialog>

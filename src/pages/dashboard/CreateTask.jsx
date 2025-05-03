@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
 import MainCard from 'components/MainCard';
 import {
@@ -21,7 +20,12 @@ import {
   Typography
 } from '@mui/material';
 import { Edit, Delete, Add } from '@mui/icons-material';
-import axiosInstance from 'api/axiosInstance';
+
+import useFetchTasks from '../../hooks/api/dashboard/tasks/useFetchTasks';
+import useCreateTask from '../../hooks/api/dashboard/tasks/useCreateTask';
+import useUpdateTask from '../../hooks/api/dashboard/tasks/useUpdateTask';
+import useDeleteTask from '../../hooks/api/dashboard/tasks/useDeleteTask';
+import { useQueryClient } from '@tanstack/react-query';
 
 const CreateTask = () => {
   const [name, setName] = useState('');
@@ -30,24 +34,45 @@ const CreateTask = () => {
   const [entrypoint, setEntrypoint] = useState('');
   const [metric, setMetric] = useState('');
   const [isActive, setIsActive] = useState(true);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [tasks, setTasks] = useState([]);
   const [editId, setEditId] = useState(null);
   const [open, setOpen] = useState(false);
 
-  const fetchTasks = async () => {
-    try {
-      const res = await axiosInstance.get('/repo/tasks/');
-      setTasks(res.data);
-    } catch (err) {
-      console.error('خطا در دریافت تسک‌ها:', err);
-    }
-  };
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    fetchTasks();
-  }, []);
+  const { data: tasks = [], isLoading } = useFetchTasks();
+
+  const createTaskMutation = useCreateTask({
+    onSuccessCallback: () => {
+      queryClient.invalidateQueries(['tasks']);
+      handleClose();
+      alert('تسک با موفقیت اضافه شد!');
+    },
+    onErrorCallback: () => {
+      setError('خطا در ایجاد تسک');
+    }
+  });
+
+  const updateTaskMutation = useUpdateTask({
+    onSuccessCallback: () => {
+      queryClient.invalidateQueries(['tasks']);
+      handleClose();
+      alert('تسک با موفقیت ویرایش شد!');
+    },
+    onErrorCallback: () => {
+      setError('خطا در ویرایش تسک');
+    }
+  });
+
+  const deleteTaskMutation = useDeleteTask({
+    onSuccessCallback: () => {
+      queryClient.invalidateQueries(['tasks']);
+      alert('تسک حذف شد!');
+    },
+    onErrorCallback: () => {
+      alert('خطا در حذف تسک');
+    }
+  });
 
   const handleOpen = () => {
     setName('');
@@ -65,8 +90,9 @@ const CreateTask = () => {
     setOpen(false);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+
     if (!name || !description || !gitRepo || !entrypoint || !metric) {
       setError('لطفاً همه فیلدها را پر کنید');
       return;
@@ -74,24 +100,12 @@ const CreateTask = () => {
 
     const payload = { name, description, git_repo: gitRepo, entrypoint, metric, is_active: isActive };
 
-    setLoading(true);
     setError(null);
 
-    try {
-      if (editId) {
-        await axiosInstance.put(`/repo/tasks/${editId}/`, payload);
-        alert('تسک با موفقیت ویرایش شد!');
-      } else {
-        await axiosInstance.post('/repo/tasks/', payload);
-        alert('تسک با موفقیت اضافه شد!');
-      }
-      fetchTasks();
-      handleClose();
-    } catch (err) {
-      console.error('خطا:', err);
-      setError('خطا در ذخیره‌سازی تسک');
-    } finally {
-      setLoading(false);
+    if (editId) {
+      updateTaskMutation.mutate({ id: editId, data: payload });
+    } else {
+      createTaskMutation.mutate(payload);
     }
   };
 
@@ -107,15 +121,9 @@ const CreateTask = () => {
     setOpen(true);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = (id) => {
     if (window.confirm('آیا از حذف این تسک مطمئن هستید؟')) {
-      try {
-        await axiosInstance.delete(`/repo/tasks/${id}/`);
-        fetchTasks();
-        alert('تسک حذف شد!');
-      } catch (err) {
-        console.error('خطا در حذف تسک:', err);
-      }
+      deleteTaskMutation.mutate(id);
     }
   };
 
@@ -138,33 +146,39 @@ const CreateTask = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {tasks.map((task) => (
-              <TableRow key={task.id}>
-                <TableCell>{task.name}</TableCell>
-                <TableCell>{task.description}</TableCell>
-                <TableCell>{task.metric}</TableCell>
-                <TableCell align="center">
-                  <IconButton color="primary" onClick={() => handleEdit(task)}>
-                    <Edit />
-                  </IconButton>
-                  <IconButton color="error" onClick={() => handleDelete(task.id)}>
-                    <Delete />
-                  </IconButton>
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={4} align="center">
+                  <CircularProgress />
                 </TableCell>
               </TableRow>
-            ))}
-            {tasks.length === 0 && (
+            ) : tasks.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={4} align="center">
                   هیچ تسکی یافت نشد.
                 </TableCell>
               </TableRow>
+            ) : (
+              tasks.map((task) => (
+                <TableRow key={task.id}>
+                  <TableCell>{task.name}</TableCell>
+                  <TableCell>{task.description}</TableCell>
+                  <TableCell>{task.metric}</TableCell>
+                  <TableCell align="center">
+                    <IconButton color="primary" onClick={() => handleEdit(task)}>
+                      <Edit />
+                    </IconButton>
+                    <IconButton color="error" onClick={() => handleDelete(task.id)}>
+                      <Delete />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))
             )}
           </TableBody>
         </Table>
       </TableContainer>
 
-      {/* فرم ساخت/ویرایش داخل دیالوگ */}
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle>{editId ? 'ویرایش تسک' : 'افزودن تسک'}</DialogTitle>
         <DialogContent>
@@ -178,11 +192,16 @@ const CreateTask = () => {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="secondary">
-            انصراف
-          </Button>
-          <Button onClick={handleSubmit} variant="contained" color="primary" disabled={loading}>
-            {loading ? <CircularProgress size={24} color="inherit" /> : editId ? 'ذخیره تغییرات' : 'افزودن'}
+          <Button onClick={handleClose} color="secondary">انصراف</Button>
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            color="primary"
+            disabled={createTaskMutation.isLoading || updateTaskMutation.isLoading}
+          >
+            {(createTaskMutation.isLoading || updateTaskMutation.isLoading)
+              ? <CircularProgress size={24} color="inherit" />
+              : editId ? 'ذخیره تغییرات' : 'افزودن'}
           </Button>
         </DialogActions>
       </Dialog>
