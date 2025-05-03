@@ -29,7 +29,7 @@ import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
 import SettingOutlined from '@ant-design/icons/SettingOutlined';
 import UserOutlined from '@ant-design/icons/UserOutlined';
 import avatar1 from 'assets/images/users/avatar-1.png';
-import { useLogout } from '../../../../../hooks/api/useLogout';
+import { useLogout } from '../../../../../hooks/api/auth/useLogout';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {

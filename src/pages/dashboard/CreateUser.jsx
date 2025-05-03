@@ -32,11 +32,13 @@ import {
 import MainCard from 'components/MainCard';
 import { Delete, Edit, Add } from '@mui/icons-material';
 import { useFetchUsers } from '../../hooks/api/dashboard/user/useFetchUsers';
+import { useCreateUser } from '../../hooks/api/dashboard/user/useCreateUser';
+import { useDeleteUser } from '../../hooks/api/dashboard/user/useDeleteUser';
+import { useUpdateUser } from '../../hooks/api/dashboard/user/useUpdateUser';
 
-// اسکیما اعتبارسنجی Zod
 const userSchema = z.object({
   username: z.string().min(3, 'نام کاربری حداقل باید ۳ کاراکتر باشد'),
-  password: z.string().min(6, 'رمز عبور باید حداقل ۶ کاراکتر باشد'),
+  password: z.string().min(6, 'رمز عبور باید حداقل ۶ کاراکتر باشد').optional(),
   email: z.string().email('ایمیل معتبر نیست').optional().or(z.literal('')),
   first_name: z.string().min(1, 'نام الزامی است'),
   last_name: z.string().min(1, 'نام خانوادگی الزامی است'),
@@ -46,9 +48,10 @@ const userSchema = z.object({
 });
 
 const CreateUser = () => {
-  // const [users, setUsers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [open, setOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const isEditMode = Boolean(selectedUser);
 
   const {
     control,
@@ -71,66 +74,37 @@ const CreateUser = () => {
   });
 
   const { data: users, isLoading, isError } = useFetchUsers();
+  const { mutate: createUser } = useCreateUser({ setError, reset, setOpen });
+  const { mutate: deleteUser } = useDeleteUser();
+  const { mutate: updateUser } = useUpdateUser({ setError, setOpen });
 
-
-  // const fetchUsers = async () => {
-  //   setLoadingUsers(true);
-  //   try {
-  //     const response = await axiosInstance.get('/users/users/');
-  //     setUsers(response.data);
-  //   } catch (error) {
-  //     console.error('خطا در دریافت کاربران:', error);
-  //   } finally {
-  //     setLoadingUsers(false);
-  //   }
-  // };
-
-  const onSubmit = async (data) => {
-    try {
-      await axiosInstance.post('/users/users/', data);
-      alert('کاربر با موفقیت اضافه شد!');
-      reset();
-      fetchUsers();
-      setOpen(false);
-    } catch (err) {
-      if (err.response?.status === 400) {
-        const backendErrors = err.response.data;
-        if (backendErrors.username?.[0]?.includes('already exists')) {
-          setError('username', { type: 'manual', message: 'این نام کاربری قبلاً ثبت شده است.' });
-        }
-        Object.entries(backendErrors).forEach(([field, messages]) => {
-          if (field !== 'username') {
-            setError(field, { type: 'manual', message: messages[0] });
-          }
-        });
-      } else {
-        alert('خطایی رخ داد. لطفاً دوباره تلاش کنید.');
-      }
+  const onSubmit = (data) => {
+    if (isEditMode) {
+      updateUser({ id: selectedUser.id, data });
+    } else {
+      createUser(data);
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('آیا از حذف این کاربر مطمئن هستید؟')) {
-      try {
-        await axiosInstance.delete(`/users/users/${id}/`);
-        fetchUsers();
-      } catch (error) {
-        alert('خطا در حذف کاربر');
-      }
-    }
+  const handleDelete = (id) => {
+    deleteUser(id);
   };
 
-  // useEffect(() => {
-  //   fetchUsers();
-  // }, []);
+  const handleEdit = (user) => {
+    setSelectedUser(user);
+    reset({ ...user, password: '' });
+    setOpen(true);
+  };
 
   const handleOpen = () => {
+    setSelectedUser(null);
     reset();
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setSelectedUser(null);
   };
 
   return (
@@ -157,27 +131,28 @@ const CreateUser = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {users.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell>{user.username}</TableCell>
-                  <TableCell>{user.first_name}</TableCell>
-                  <TableCell>{user.last_name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.is_active ? 'فعال' : 'غیرفعال'}</TableCell>
-                  <TableCell align="center">
-                    <IconButton color="primary" onClick={() => alert('ویرایش در دست توسعه است')}>
-                      <Edit />
-                    </IconButton>
-                    <IconButton color="error" onClick={() => handleDelete(user.id)}>
-                      <Delete />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-              {users.length === 0 && (
+              {Array.isArray(users) ? (
+                users.map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell>{user.username}</TableCell>
+                    <TableCell>{user.first_name}</TableCell>
+                    <TableCell>{user.last_name}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.is_active ? 'فعال' : 'غیرفعال'}</TableCell>
+                    <TableCell align="center">
+                      <IconButton color="primary" onClick={() => handleEdit(user)}>
+                        <Edit />
+                      </IconButton>
+                      <IconButton color="error" onClick={() => handleDelete(user.id)}>
+                        <Delete />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
                 <TableRow>
                   <TableCell colSpan={6} align="center">
-                    هیچ کاربری یافت نشد.
+                    {isError ? 'خطا در دریافت کاربران' : 'در حال بارگذاری...'}
                   </TableCell>
                 </TableRow>
               )}
@@ -186,9 +161,8 @@ const CreateUser = () => {
         </TableContainer>
       )}
 
-      {/* دیالوگ افزودن کاربر */}
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-        <DialogTitle>افزودن کاربر جدید</DialogTitle>
+        <DialogTitle>{isEditMode ? 'ویرایش کاربر' : 'افزودن کاربر جدید'}</DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={2} sx={{ mt: 1 }}>
@@ -266,7 +240,7 @@ const CreateUser = () => {
             انصراف
           </Button>
           <Button onClick={handleSubmit(onSubmit)} variant="contained" color="primary" disabled={isSubmitting}>
-            {isSubmitting ? <CircularProgress size={24} color="inherit" /> : 'افزودن'}
+            {isSubmitting ? <CircularProgress size={24} color="inherit" /> : isEditMode ? 'ذخیره تغییرات' : 'افزودن'}
           </Button>
         </DialogActions>
       </Dialog>

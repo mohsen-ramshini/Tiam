@@ -13,7 +13,7 @@ import {
   TableRow
 } from '@mui/material';
 import Cookies from 'js-cookie';
-import { useFetchRecords } from '/src/hooks/api/useFetchRecords';
+import { useFetchRecords } from '../../../hooks/api/dashboard/records/useFetchRecords';
 import SearchBar from '/src/components/SearchBar';
 
 const headCells = [

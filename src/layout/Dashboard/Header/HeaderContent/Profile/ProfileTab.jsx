@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import  {useLogout}  from '../../../../../hooks/api/useLogout';
+import  {useLogout}  from '../../../../../hooks/api/auth/useLogout';
 
 // material-ui
 import List from '@mui/material/List';

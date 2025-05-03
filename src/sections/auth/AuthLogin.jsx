@@ -22,8 +22,8 @@ import IconButton from 'components/@extended/IconButton';
 import AnimateButton from 'components/@extended/AnimateButton';
 
 // hooks
-import { useLogin } from 'hooks/api/useLogin';
-import { useFetchUserProfile } from 'hooks/api/useFetchUserProfile';
+import { useLogin } from '../../hooks/api/auth/useLogin';
+import { useFetchUserProfile } from '../../hooks/api/auth/useFetchUserProfile';
 import { useUser } from 'contexts/UserContext';
 
 // assets

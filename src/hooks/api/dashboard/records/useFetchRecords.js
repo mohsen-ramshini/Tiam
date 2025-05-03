@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { useQuery } from '@tanstack/react-query';
-import axiosInstance from '../../api/axiosInstance'; // مسیر رو درست کن
+import axiosInstance from '../../../../api/axiosInstance'; // مسیر رو درست کن
 
 const fetchRecords = async () => {
   console.log('Fetching records...');
