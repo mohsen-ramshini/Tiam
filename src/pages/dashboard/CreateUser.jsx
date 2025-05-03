@@ -31,6 +31,7 @@ import {
 } from '@mui/material';
 import MainCard from 'components/MainCard';
 import { Delete, Edit, Add } from '@mui/icons-material';
+import { useFetchUsers } from '../../hooks/api/dashboard/user/useFetchUsers';
 
 // اسکیما اعتبارسنجی Zod
 const userSchema = z.object({
@@ -45,7 +46,7 @@ const userSchema = z.object({
 });
 
 const CreateUser = () => {
-  const [users, setUsers] = useState([]);
+  // const [users, setUsers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -69,17 +70,20 @@ const CreateUser = () => {
     }
   });
 
-  const fetchUsers = async () => {
-    setLoadingUsers(true);
-    try {
-      const response = await axiosInstance.get('/users/users/');
-      setUsers(response.data);
-    } catch (error) {
-      console.error('خطا در دریافت کاربران:', error);
-    } finally {
-      setLoadingUsers(false);
-    }
-  };
+  const { data: users, isLoading, isError } = useFetchUsers();
+
+
+  // const fetchUsers = async () => {
+  //   setLoadingUsers(true);
+  //   try {
+  //     const response = await axiosInstance.get('/users/users/');
+  //     setUsers(response.data);
+  //   } catch (error) {
+  //     console.error('خطا در دریافت کاربران:', error);
+  //   } finally {
+  //     setLoadingUsers(false);
+  //   }
+  // };
 
   const onSubmit = async (data) => {
     try {
@@ -116,9 +120,9 @@ const CreateUser = () => {
     }
   };
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  // useEffect(() => {
+  //   fetchUsers();
+  // }, []);
 
   const handleOpen = () => {
     reset();
