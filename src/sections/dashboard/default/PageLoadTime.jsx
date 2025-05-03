@@ -69,7 +69,7 @@ const PageLoadTimeChart = () => {
     start: '2024-01-01',
     end: '2025-04-26',
     probs: '8',
-    group_by: 'hour',
+    group_by: 'day',
     func: 'avg',
   });
   
