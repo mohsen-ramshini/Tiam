@@ -1,5 +1,6 @@
+/* eslint-disable prettier/prettier */
 import PropTypes from 'prop-types';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -30,6 +31,39 @@ import SettingOutlined from '@ant-design/icons/SettingOutlined';
 import UserOutlined from '@ant-design/icons/UserOutlined';
 import avatar1 from 'assets/images/users/avatar-1.png';
 import { useLogout } from '../../../../../hooks/api/useLogout';
+import axiosInstance from 'api/axiosInstance';
+
+// Hook for fetching user profile
+const useUserProfile = () => {
+  const [userProfile, setUserProfile] = useState({
+    first_name: '',
+    last_name: '',
+    username: '',
+    email: '',
+    permissions: [],
+    groups: []
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get('/users/profile/');
+        setUserProfile(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError(err);
+        setLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
+  return { userProfile, loading, error };
+};
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -50,8 +84,9 @@ function a11yProps(index) {
 // ==============================|| HEADER CONTENT - PROFILE ||============================== //
 
 export default function Profile() {
-  const logoutMutation = useLogout()
+  const logoutMutation = useLogout();
   const theme = useTheme();
+  const { userProfile, loading } = useUserProfile();
 
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
@@ -59,9 +94,9 @@ export default function Profile() {
     setOpen((prevOpen) => !prevOpen);
   };
 
-  const handleLogout = ()=>{
+  const handleLogout = () => {
     logoutMutation.mutate();
-  }
+  };
 
   const handleClose = (event) => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
@@ -75,6 +110,14 @@ export default function Profile() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  // Get full name from user profile
+  const fullName = loading 
+    ? 'درحال بارگذاری...' 
+    : `${userProfile.first_name} ${userProfile.last_name}`;
+  
+  // Get first name for profile card
+  const firstName = loading ? '' : userProfile.first_name;
 
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
@@ -96,7 +139,7 @@ export default function Profile() {
         <Stack direction="row" sx={{ gap: 1.25, alignItems: 'center', p: 0.5 }}>
           <Avatar alt="profile user" src={avatar1} size="sm" />
           <Typography variant="subtitle1" sx={{ textTransform: 'capitalize' }}>
-            سیاوش رحیم خانی
+            {fullName}
           </Typography>
         </Stack>
       </ButtonBase>
@@ -129,9 +172,9 @@ export default function Profile() {
                         <Stack direction="row" sx={{ gap: 1.25, alignItems: 'center' }}>
                           <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
                           <Stack>
-                            <Typography variant="h6">سیاوش</Typography>
+                            <Typography variant="h6">{firstName}</Typography>
                             <Typography variant="body2" color="text.secondary">
-                              مدیر پروژه
+                              {loading ? '' : userProfile.username}
                             </Typography>
                           </Stack>
                         </Stack>
@@ -183,7 +226,7 @@ export default function Profile() {
                     </Tabs>
                   </Box>
                   <TabPanel value={value} index={0} dir={theme.direction}>
-                    <ProfileTab />
+                    <ProfileTab userProfile={userProfile} loading={loading} />
                   </TabPanel>
                   <TabPanel value={value} index={1} dir={theme.direction}>
                     <SettingTab />
