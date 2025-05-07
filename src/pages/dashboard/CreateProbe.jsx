@@ -42,7 +42,8 @@ const CreateProbe = () => {
     defaultValues: { name: '', description: '' }
   });
 
-  const { data: probes = [] } = useFetchProbes();
+  const { data: { results: probes } = { results: [] } } = useFetchProbes();
+
   const { mutate: createProbe } = useCreateProbe({ setError, reset, setOpen });
   const { mutate: updateProbe } = useUpdateProbe({ setError, setOpen });
   const { mutate: deleteProbe } = useDeleteProbe();

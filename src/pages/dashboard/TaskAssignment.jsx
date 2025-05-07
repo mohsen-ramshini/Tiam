@@ -56,8 +56,8 @@ const TaskAssignment = () => {
       ]);
 
       // تنظیم Stateها با داده‌های دریافتی
-      setProbes(probeRes.data || []);
-      setTasks(taskRes.data || []);
+      setProbes(probeRes.data.results || []);
+      setTasks(taskRes.data.results || []);
 
       // مدیریت پاسخ سرویس‌ها (ممکن است صفحه‌بندی شده باشد)
       const serviceData = serviceRes.data;
@@ -95,6 +95,8 @@ const TaskAssignment = () => {
   // دریافت داده‌ها هنگام بارگذاری اولیه کامپوننت
   useEffect(() => {
     fetchData();
+    console.log(probes);
+    
   }, []);
 
   // باز کردن دیالوگ فرم (برای ایجاد یا ویرایش)
