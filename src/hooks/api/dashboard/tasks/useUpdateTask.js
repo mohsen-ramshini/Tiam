@@ -1,14 +1,22 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import axiosInstance from 'api/axiosInstance';
 
-const useUpdateTask = ({ onSuccessCallback, onErrorCallback }) => {
+const useUpdateTask = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async ({ id, data }) => {
       const res = await axiosInstance.put(`/repo/tasks/${id}/`, data);
       return res.data;
     },
-    onSuccess: onSuccessCallback,
-    onError: onErrorCallback
+    onSuccess: () => {
+      toast.success('تسک با موفقیت ویرایش شد!');
+      queryClient.invalidateQueries(['tasks']);
+    },
+    onError: () => {
+      toast.error('خطا در ویرایش تسک');
+    }
   });
 };
 

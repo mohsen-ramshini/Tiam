@@ -25,6 +25,7 @@ import AnimateButton from 'components/@extended/AnimateButton';
 import { useLogin } from '../../hooks/api/auth/useLogin';
 import { useFetchUserProfile } from '../../hooks/api/auth/useFetchUserProfile'; 
 import { useUser } from 'contexts/UserContext';
+import { toast } from 'sonner';
 
 // assets
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
@@ -49,17 +50,9 @@ export default function AuthLogin({ isDemo = false }) {
 
   const handleLoginSubmit = (values, { setSubmitting, setErrors }) => {
     loginMutation.mutate(values, {
-      onSuccess: (data) => {
-        Cookies.set('access_token', data.access, { expires: 1, secure: false, sameSite: 'Lax' });
-        Cookies.set('refresh_token', data.refresh, { expires: 7, secure: false, sameSite: 'Lax' });
-        setAccessToken(data.access);
-        console.log('🔹 توکن دریافت شد:', data.access);
-        refetchUserProfile();
-      },
-      onError: (error) => {
-        setErrors({ submit: error.response?.data?.message || 'ورود ناموفق بود!' });
-      },
-      onSettled: () => setSubmitting(false)
+      onSettled: () => {
+        setSubmitting(false);
+      }
     });
   };
 
