@@ -8,7 +8,7 @@ export const useFetchTaskAssignment = () => {
     queryKey: TASK_ASSIGNMENTS_QUERY_KEY,
     queryFn: async () => {
       const { data } = await axiosInstance.get('/repo/task-assignments/');
-      return data;
+      return data.results;
     }
   });
 };

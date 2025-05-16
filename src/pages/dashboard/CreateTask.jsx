@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import MainCard from 'components/MainCard';
 import {
   TextField,
@@ -25,7 +25,8 @@ import useFetchTasks from '../../hooks/api/dashboard/tasks/useFetchTasks';
 import useCreateTask from '../../hooks/api/dashboard/tasks/useCreateTask';
 import useUpdateTask from '../../hooks/api/dashboard/tasks/useUpdateTask';
 import useDeleteTask from '../../hooks/api/dashboard/tasks/useDeleteTask';
-import { useQueryClient } from '@tanstack/react-query';
+
+import { toast } from 'sonner';
 
 const CreateTask = () => {
   const [name, setName] = useState('');
@@ -38,41 +39,12 @@ const CreateTask = () => {
   const [editId, setEditId] = useState(null);
   const [open, setOpen] = useState(false);
 
-  const queryClient = useQueryClient();
-
   const { data: tasks = [], isLoading } = useFetchTasks();
 
-  const createTaskMutation = useCreateTask({
-    onSuccessCallback: () => {
-      queryClient.invalidateQueries(['tasks']);
-      handleClose();
-      alert('تسک با موفقیت اضافه شد!');
-    },
-    onErrorCallback: () => {
-      setError('خطا در ایجاد تسک');
-    }
-  });
-
-  const updateTaskMutation = useUpdateTask({
-    onSuccessCallback: () => {
-      queryClient.invalidateQueries(['tasks']);
-      handleClose();
-      alert('تسک با موفقیت ویرایش شد!');
-    },
-    onErrorCallback: () => {
-      setError('خطا در ویرایش تسک');
-    }
-  });
-
-  const deleteTaskMutation = useDeleteTask({
-    onSuccessCallback: () => {
-      queryClient.invalidateQueries(['tasks']);
-      alert('تسک حذف شد!');
-    },
-    onErrorCallback: () => {
-      alert('خطا در حذف تسک');
-    }
-  });
+  // هوک‌ها بدون پارامتر، چون داخل هوک‌ها toast و هندلینگ است
+  const createTaskMutation = useCreateTask();
+  const updateTaskMutation = useUpdateTask();
+  const deleteTaskMutation = useDeleteTask();
 
   const handleOpen = () => {
     setName('');
@@ -88,6 +60,7 @@ const CreateTask = () => {
 
   const handleClose = () => {
     setOpen(false);
+    setError(null);
   };
 
   const handleSubmit = (e) => {
@@ -95,6 +68,7 @@ const CreateTask = () => {
 
     if (!name || !description || !gitRepo || !entrypoint || !metric) {
       setError('لطفاً همه فیلدها را پر کنید');
+      toast.error('لطفاً همه فیلدها را پر کنید');
       return;
     }
 
@@ -107,6 +81,8 @@ const CreateTask = () => {
     } else {
       createTaskMutation.mutate(payload);
     }
+
+    setOpen(false);
   };
 
   const handleEdit = (task) => {
@@ -183,11 +159,43 @@ const CreateTask = () => {
         <DialogTitle>{editId ? 'ویرایش تسک' : 'افزودن تسک'}</DialogTitle>
         <DialogContent>
           <Stack spacing={2} sx={{ mt: 1 }}>
-            <TextField label="نام تسک" value={name} onChange={(e) => setName(e.target.value)} fullWidth error={!!error} />
-            <TextField label="توضیحات" value={description} onChange={(e) => setDescription(e.target.value)} fullWidth multiline rows={2} error={!!error} />
-            <TextField label="گیت ریپو" value={gitRepo} onChange={(e) => setGitRepo(e.target.value)} fullWidth error={!!error} />
-            <TextField label="ورودی (entrypoint)" value={entrypoint} onChange={(e) => setEntrypoint(e.target.value)} fullWidth error={!!error} />
-            <TextField label="مترک (metric)" value={metric} onChange={(e) => setMetric(e.target.value)} fullWidth error={!!error} />
+            <TextField
+              label="نام تسک"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              fullWidth
+              error={!!error && !name}
+            />
+            <TextField
+              label="توضیحات"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              fullWidth
+              multiline
+              rows={2}
+              error={!!error && !description}
+            />
+            <TextField
+              label="گیت ریپو"
+              value={gitRepo}
+              onChange={(e) => setGitRepo(e.target.value)}
+              fullWidth
+              error={!!error && !gitRepo}
+            />
+            <TextField
+              label="ورودی (entrypoint)"
+              value={entrypoint}
+              onChange={(e) => setEntrypoint(e.target.value)}
+              fullWidth
+              error={!!error && !entrypoint}
+            />
+            <TextField
+              label="مترک (metric)"
+              value={metric}
+              onChange={(e) => setMetric(e.target.value)}
+              fullWidth
+              error={!!error && !metric}
+            />
             {error && <Typography color="error">{error}</Typography>}
           </Stack>
         </DialogContent>
@@ -199,9 +207,11 @@ const CreateTask = () => {
             color="primary"
             disabled={createTaskMutation.isLoading || updateTaskMutation.isLoading}
           >
-            {(createTaskMutation.isLoading || updateTaskMutation.isLoading)
-              ? <CircularProgress size={24} color="inherit" />
-              : editId ? 'ذخیره تغییرات' : 'افزودن'}
+            {(createTaskMutation.isLoading || updateTaskMutation.isLoading) ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              editId ? 'ذخیره تغییرات' : 'افزودن'
+            )}
           </Button>
         </DialogActions>
       </Dialog>

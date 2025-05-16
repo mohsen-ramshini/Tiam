@@ -6,7 +6,7 @@ const useFetchTasks = () => {
     queryKey: ['tasks'],
     queryFn: async () => {
       const { data } = await axiosInstance.get('/repo/tasks/');
-      return data;
+      return data.results;
     }
   });
 };
