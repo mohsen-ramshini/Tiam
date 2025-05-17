@@ -41,23 +41,27 @@ const TaskAssignment = () => {
   const [editId, setEditId] = useState(null);
   const [open, setOpen] = useState(false);
 
+  // این دو تا برای فیلتر
+  const [ordering, setOrdering] = useState('created_at'); // مقدار پیش‌فرض
+  const [limit, setLimit] = useState(5); // مقدار پیش‌فرض
+
   const taskAssignmentBaseUrl = '/repo/task-assignments/';
 
-  const fetchData = async () => {
+  const fetchData = async (orderingParam = ordering, limitParam = limit) => {
     setLoading(true);
     try {
       const [probeRes, taskRes, serviceRes, assignmentRes] = await Promise.all([
         axiosInstance.get('/users/probs/'),
         axiosInstance.get('/repo/tasks/'),
         axiosInstance.get('/repo/services/'),
-        axiosInstance.get(taskAssignmentBaseUrl)
+        axiosInstance.get(`${taskAssignmentBaseUrl}?ordering=${orderingParam}&limit=${limitParam}`) // اضافه کردن پارامترها به URL
       ]);
 
       setProbes(probeRes.data.results || []);
       setTasks(taskRes.data.results || []);
       const serviceData = serviceRes.data;
       setServices(Array.isArray(serviceData) ? serviceData : serviceData?.results || []);
-      setAssignments(assignmentRes.data || []);
+      setAssignments(assignmentRes.data.results || []); // توجه به structure داده
       setError(null);
     } catch (err) {
       console.error('خطا در دریافت داده‌ها:', err);
@@ -83,6 +87,11 @@ const TaskAssignment = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  // هر بار ordering یا limit تغییر کنه، داده‌ها رو دوباره بگیر
+  useEffect(() => {
+    fetchData(ordering, limit);
+  }, [ordering, limit]);
 
   const handleOpen = (assignment = null) => {
     if (assignment) {
@@ -130,7 +139,7 @@ const TaskAssignment = () => {
         await axiosInstance.post(taskAssignmentBaseUrl, payload);
         toast.success('تخصیص جدید با موفقیت اضافه شد!');
       }
-      fetchData();
+      fetchData(ordering, limit);
       handleClose();
     } catch (err) {
       const errorMsg = err.response?.data ? JSON.stringify(err.response.data) : 'خطا در ارتباط با سرور یا داده‌های نامعتبر';
@@ -148,7 +157,7 @@ const TaskAssignment = () => {
       try {
         await axiosInstance.delete(`${taskAssignmentBaseUrl}${id}/`);
         toast.success('تخصیص حذف شد!');
-        fetchData();
+        fetchData(ordering, limit);
       } catch (err) {
         const errorMsg = err.response?.data ? JSON.stringify(err.response.data) : 'خطا در ارتباط با سرور';
         toast.error(`خطا در حذف: ${errorMsg}`);
@@ -167,7 +176,46 @@ const TaskAssignment = () => {
 
   return (
     <MainCard title="مدیریت تخصیص تسک‌ها">
-      {error && !open && <Typography color="error" sx={{ mb: 2 }}>{error}</Typography>}
+      {/* فیلترها */}
+      <Stack direction="row" spacing={2} sx={{ mb: 2 }} justifyContent="flex-start" flexWrap="wrap">
+        <FormControl sx={{ minWidth: 150 }}>
+          <InputLabel id="ordering-select-label">مرتب‌سازی</InputLabel>
+          <Select
+            labelId="ordering-select-label"
+            value={ordering}
+            label="مرتب‌سازی"
+            onChange={(e) => setOrdering(e.target.value)}
+          >
+            <MenuItem value="created_at">تاریخ ایجاد</MenuItem>
+            <MenuItem value="-created_at">تاریخ ایجاد نزولی</MenuItem>
+            <MenuItem value="prob">پراب</MenuItem>
+            <MenuItem value="task">تسک</MenuItem>
+            <MenuItem value="service">سرویس</MenuItem>
+          </Select>
+        </FormControl>
+
+        <FormControl sx={{ minWidth: 100 }}>
+          <InputLabel id="limit-select-label">تعداد</InputLabel>
+          <Select
+            labelId="limit-select-label"
+            value={limit}
+            label="تعداد"
+            onChange={(e) => setLimit(e.target.value)}
+          >
+            {[2, 5, 10, 20, 50].map((num) => (
+              <MenuItem key={num} value={num}>
+                {num}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Stack>
+
+      {error && !open && (
+        <Typography color="error" sx={{ mb: 2 }}>
+          {error}
+        </Typography>
+      )}
 
       <Stack direction="row" justifyContent="flex-end" sx={{ mb: 2 }}>
         <Button variant="contained" startIcon={<Add />} onClick={() => handleOpen()} disabled={loading}>
@@ -179,10 +227,18 @@ const TaskAssignment = () => {
         <Table sx={{ minWidth: 650 }} aria-label="جدول تخصیص تسک‌ها">
           <TableHead>
             <TableRow>
-              <TableCell><Typography fontWeight="bold">پراب</Typography></TableCell>
-              <TableCell><Typography fontWeight="bold">تسک</Typography></TableCell>
-              <TableCell><Typography fontWeight="bold">سرویس</Typography></TableCell>
-              <TableCell align="center"><Typography fontWeight="bold">عملیات</Typography></TableCell>
+              <TableCell>
+                <Typography fontWeight="bold">پراب</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography fontWeight="bold">تسک</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography fontWeight="bold">سرویس</Typography>
+              </TableCell>
+              <TableCell align="center">
+                <Typography fontWeight="bold">عملیات</Typography>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -199,81 +255,92 @@ const TaskAssignment = () => {
                   <TableCell>{findNameById(tasks, assignment.task)}</TableCell>
                   <TableCell>{findNameById(services, assignment.service)}</TableCell>
                   <TableCell align="center">
-                    <IconButton onClick={() => handleOpen(assignment)} disabled={loading}><Edit /></IconButton>
-                    <IconButton onClick={() => handleDelete(assignment.id)} disabled={loading}><Delete /></IconButton>
+                    <IconButton onClick={() => handleOpen(assignment)} disabled={loading}>
+                      <Edit />
+                    </IconButton>
+                    <IconButton onClick={() => handleDelete(assignment.id)} disabled={loading}>
+                      <Delete />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={4} align="center">هیچ تخصیصی موجود نیست</TableCell>
+                <TableCell colSpan={4} align="center">
+                  داده‌ای برای نمایش وجود ندارد.
+                </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </TableContainer>
 
-      <Dialog open={open} onClose={handleClose} fullWidth>
-        <DialogTitle>{editId ? 'ویرایش تخصیص' : 'افزودن تخصیص جدید'}</DialogTitle>
-        <DialogContent>
-          <form onSubmit={handleSubmit}>
-            <Stack spacing={2} sx={{ mt: 1 }}>
-              <FormControl fullWidth>
-                <InputLabel id="probe-select-label">پراب</InputLabel>
-                <Select
-                  labelId="probe-select-label"
-                  value={selectedProbe}
-                  onChange={(e) => setSelectedProbe(e.target.value)}
-                  required
-                >
-                  {probes.map((probe) => (
-                    <MenuItem key={probe.id} value={probe.id}>
-                      {probe.name || `ID: ${probe.id}`}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+      {/* مودال افزودن / ویرایش */}
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+        <DialogTitle>{editId ? 'ویرایش تخصیص تسک' : 'افزودن تخصیص تسک جدید'}</DialogTitle>
+        <DialogContent dividers>
+          <Stack spacing={2} sx={{ mt: 1 }}>
+            <FormControl fullWidth>
+              <InputLabel id="probe-select-label">انتخاب پراب</InputLabel>
+              <Select
+                labelId="probe-select-label"
+                value={selectedProbe}
+                label="انتخاب پراب"
+                onChange={(e) => setSelectedProbe(e.target.value)}
+              >
+                {probes.map((probe) => (
+                  <MenuItem key={probe.id} value={probe.id}>
+                    {probe.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-              <FormControl fullWidth>
-                <InputLabel id="task-select-label">تسک</InputLabel>
-                <Select
-                  labelId="task-select-label"
-                  value={selectedTask}
-                  onChange={(e) => setSelectedTask(e.target.value)}
-                  required
-                >
-                  {tasks.map((task) => (
-                    <MenuItem key={task.id} value={task.id}>
-                      {task.name || `ID: ${task.id}`}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+            <FormControl fullWidth>
+              <InputLabel id="task-select-label">انتخاب تسک</InputLabel>
+              <Select
+                labelId="task-select-label"
+                value={selectedTask}
+                label="انتخاب تسک"
+                onChange={(e) => setSelectedTask(e.target.value)}
+              >
+                {tasks.map((task) => (
+                  <MenuItem key={task.id} value={task.id}>
+                    {task.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-              <FormControl fullWidth>
-                <InputLabel id="service-select-label">سرویس</InputLabel>
-                <Select
-                  labelId="service-select-label"
-                  value={selectedService}
-                  onChange={(e) => setSelectedService(e.target.value)}
-                  required
-                >
-                  {services.map((service) => (
-                    <MenuItem key={service.id} value={service.id}>
-                      {service.name || `ID: ${service.id}`}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+            <FormControl fullWidth>
+              <InputLabel id="service-select-label">انتخاب سرویس</InputLabel>
+              <Select
+                labelId="service-select-label"
+                value={selectedService}
+                label="انتخاب سرویس"
+                onChange={(e) => setSelectedService(e.target.value)}
+              >
+                {services.map((service) => (
+                  <MenuItem key={service.id} value={service.id}>
+                    {service.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-              {error && <Typography color="error">{error}</Typography>}
-            </Stack>
-          </form>
+            {error && (
+              <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+                {error}
+              </Typography>
+            )}
+          </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} disabled={loading}>لغو</Button>
+          <Button onClick={handleClose} disabled={loading}>
+            لغو
+          </Button>
           <Button onClick={handleSubmit} variant="contained" disabled={loading}>
-            {editId ? 'ذخیره تغییرات' : 'افزودن'}
+            {editId ? 'ویرایش' : 'افزودن'}
           </Button>
         </DialogActions>
       </Dialog>
