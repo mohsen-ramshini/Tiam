@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // components/your/path/PageLoadTimeChart.jsx
 
 import React, { useState, useMemo, useRef, useEffect } from 'react';

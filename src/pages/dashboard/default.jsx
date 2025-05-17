@@ -214,7 +214,7 @@ export default function DashboardDefault() {
             </ListItem>
           </List>
         </MainCard>
-        <MainCard sx={{ mt: 2 }}>
+        {/* <MainCard sx={{ mt: 2 }}>
           <Stack sx={{ gap: 3 }}>
             <Grid container justifyContent="space-between" alignItems="center">
               <Grid>
@@ -240,7 +240,7 @@ export default function DashboardDefault() {
               Need Help?
             </Button>
           </Stack>
-        </MainCard>
+        </MainCard> */}
       </Grid>
     </Grid>
   );
