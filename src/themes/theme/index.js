@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // ==============================|| PRESET THEME - DEFAULT ||============================== //
 
 export default function Default(colors) {

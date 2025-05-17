@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // material-ui
 import { createTheme } from '@mui/material/styles';
 

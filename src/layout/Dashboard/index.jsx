@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 

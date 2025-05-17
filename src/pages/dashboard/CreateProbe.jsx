@@ -10,7 +10,7 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,  
+  TableHead,
   TableRow,
   Paper,
   IconButton,
@@ -18,18 +18,23 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Typography
+  Typography,
+  Tooltip
 } from '@mui/material';
-import { Edit, Delete, Add } from '@mui/icons-material';
+import { Edit, Delete, Add, ContentCopy } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import { useFetchProbes } from '../../hooks/api/dashboard/prob/useFetchProbs';
 import { useCreateProbe } from '../../hooks/api/dashboard/prob/useCreateProbs';
 import { useUpdateProbe } from '../../hooks/api/dashboard/prob/useUpdateProb';
 import { useDeleteProbe } from '../../hooks/api/dashboard/prob/useDeleteProb';
+import { useChangeProbToken } from '../../hooks/api/dashboard/prob/useChangeProbToken';
+import { toast } from 'sonner';
 
 const CreateProbe = () => {
   const [open, setOpen] = useState(false);
   const [selectedProbe, setSelectedProbe] = useState(null);
+  const [tokenDialogOpen, setTokenDialogOpen] = useState(false);
+  const [tokenValue, setTokenValue] = useState('');
   const isEditMode = Boolean(selectedProbe);
 
   const {
@@ -47,6 +52,16 @@ const CreateProbe = () => {
   const { mutate: createProbe } = useCreateProbe({ setError, reset, setOpen });
   const { mutate: updateProbe } = useUpdateProbe({ setError, setOpen });
   const { mutate: deleteProbe } = useDeleteProbe();
+
+  const { mutate: changeToken } = useChangeProbToken({
+    setError,
+    reset,
+    setOpen,
+    onSuccessCallback: (token) => {
+      setTokenValue(token);
+      setTokenDialogOpen(true);
+    }
+  });
 
   const onSubmit = (data) => {
     if (isEditMode) {
@@ -79,6 +94,15 @@ const CreateProbe = () => {
     setSelectedProbe(null);
   };
 
+  const handleCopyToken = async () => {
+    try {
+      await navigator.clipboard.writeText(tokenValue);
+      toast.success('توکن کپی شد');
+    } catch (err) {
+      toast.error('خطا در کپی توکن');
+    }
+  };
+
   return (
     <MainCard title="مدیریت پراب‌ها">
       <Stack direction="row" justifyContent="flex-end" sx={{ mb: 2 }}>
@@ -102,12 +126,21 @@ const CreateProbe = () => {
                 <TableCell>{probe.name}</TableCell>
                 <TableCell>{probe.description}</TableCell>
                 <TableCell align="center">
-                  <IconButton color="primary" onClick={() => handleEdit(probe)}>
-                    <Edit />
-                  </IconButton>
-                  <IconButton color="error" onClick={() => handleDelete(probe.id)}>
-                    <Delete />
-                  </IconButton>
+                  <Stack direction="row" spacing={1} justifyContent="center">
+                    <IconButton color="primary" onClick={() => handleEdit(probe)}>
+                      <Edit />
+                    </IconButton>
+                    <IconButton color="error" onClick={() => handleDelete(probe.id)}>
+                      <Delete />
+                    </IconButton>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => changeToken({ id: probe.id })}
+                    >
+                      دریافت توکن
+                    </Button>
+                  </Stack>
                 </TableCell>
               </TableRow>
             ))}
@@ -122,6 +155,7 @@ const CreateProbe = () => {
         </Table>
       </TableContainer>
 
+      {/* دیالوگ ساخت / ویرایش پراب */}
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle>{isEditMode ? 'ویرایش پراب' : 'افزودن پراب'}</DialogTitle>
         <DialogContent>
@@ -151,6 +185,36 @@ const CreateProbe = () => {
           <Button onClick={handleClose} color="secondary">انصراف</Button>
           <Button onClick={handleSubmit(onSubmit)} variant="contained" color="primary" disabled={isSubmitting}>
             {isSubmitting ? <CircularProgress size={24} color="inherit" /> : isEditMode ? 'ذخیره تغییرات' : 'افزودن'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* دیالوگ نمایش توکن */}
+      <Dialog open={tokenDialogOpen} onClose={() => setTokenDialogOpen(false)} fullWidth maxWidth="sm">
+        <DialogTitle>توکن جدید</DialogTitle>
+        <DialogContent>
+          <Typography>توکن با موفقیت دریافت شد:</Typography>
+          <Stack direction="row" alignItems="center" spacing={1} sx={{ mt: 2 }}>
+            <Typography
+              sx={{
+                wordBreak: 'break-all',
+                fontWeight: 'bold',
+                color: 'primary.main',
+                flexGrow: 1
+              }}
+            >
+              {tokenValue}
+            </Typography>
+            <Tooltip title="کپی توکن">
+              <IconButton onClick={handleCopyToken} color="primary">
+                <ContentCopy />
+              </IconButton>
+            </Tooltip>
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setTokenDialogOpen(false)} color="primary">
+            بستن
           </Button>
         </DialogActions>
       </Dialog>
