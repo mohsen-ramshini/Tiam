@@ -61,7 +61,7 @@ const TaskAssignment = () => {
       setTasks(taskRes.data.results || []);
       const serviceData = serviceRes.data;
       setServices(Array.isArray(serviceData) ? serviceData : serviceData?.results || []);
-      setAssignments(assignmentRes.data.results || []); 
+      setAssignments(assignmentRes.data.results || []);
       setError(null);
     } catch (err) {
       console.error('خطا در دریافت داده‌ها:', err);
@@ -171,7 +171,7 @@ const TaskAssignment = () => {
   const findNameById = (items, id) => {
     const targetId = typeof id === 'object' && id !== null ? id.id : id;
     const item = items.find((i) => i.id === targetId);
-    return item ? (item.name || `ID: ${item.id}`) : `ID: ${targetId}`;
+    return item ? item.name || `ID: ${item.id}` : `ID: ${targetId}`;
   };
 
   return (
@@ -180,12 +180,7 @@ const TaskAssignment = () => {
       <Stack direction="row" spacing={2} sx={{ mb: 2 }} justifyContent="flex-start" flexWrap="wrap">
         <FormControl sx={{ minWidth: 150 }}>
           <InputLabel id="ordering-select-label">مرتب‌سازی</InputLabel>
-          <Select
-            labelId="ordering-select-label"
-            value={ordering}
-            label="مرتب‌سازی"
-            onChange={(e) => setOrdering(e.target.value)}
-          >
+          <Select labelId="ordering-select-label" value={ordering} label="مرتب‌سازی" onChange={(e) => setOrdering(e.target.value)}>
             <MenuItem value="created_at">تاریخ ایجاد</MenuItem>
             <MenuItem value="-created_at">تاریخ ایجاد نزولی</MenuItem>
             <MenuItem value="prob">پراب</MenuItem>
@@ -196,12 +191,7 @@ const TaskAssignment = () => {
 
         <FormControl sx={{ minWidth: 100 }}>
           <InputLabel id="limit-select-label">تعداد</InputLabel>
-          <Select
-            labelId="limit-select-label"
-            value={limit}
-            label="تعداد"
-            onChange={(e) => setLimit(e.target.value)}
-          >
+          <Select labelId="limit-select-label" value={limit} label="تعداد" onChange={(e) => setLimit(e.target.value)}>
             {[2, 5, 10, 20, 50].map((num) => (
               <MenuItem key={num} value={num}>
                 {num}
@@ -255,10 +245,10 @@ const TaskAssignment = () => {
                   <TableCell>{findNameById(tasks, assignment.task)}</TableCell>
                   <TableCell>{findNameById(services, assignment.service)}</TableCell>
                   <TableCell align="center">
-                    <IconButton onClick={() => handleOpen(assignment)} disabled={loading}>
+                    <IconButton onClick={() => handleOpen(assignment)} disabled={loading} color="primary">
                       <Edit />
                     </IconButton>
-                    <IconButton onClick={() => handleDelete(assignment.id)} disabled={loading}>
+                    <IconButton onClick={() => handleDelete(assignment.id)} disabled={loading}  color="error">
                       <Delete />
                     </IconButton>
                   </TableCell>
@@ -298,12 +288,7 @@ const TaskAssignment = () => {
 
             <FormControl fullWidth>
               <InputLabel id="task-select-label">انتخاب تسک</InputLabel>
-              <Select
-                labelId="task-select-label"
-                value={selectedTask}
-                label="انتخاب تسک"
-                onChange={(e) => setSelectedTask(e.target.value)}
-              >
+              <Select labelId="task-select-label" value={selectedTask} label="انتخاب تسک" onChange={(e) => setSelectedTask(e.target.value)}>
                 {tasks.map((task) => (
                   <MenuItem key={task.id} value={task.id}>
                     {task.name}

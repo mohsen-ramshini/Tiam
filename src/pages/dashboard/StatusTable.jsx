@@ -13,7 +13,7 @@ import {
   TableRow
 } from '@mui/material';
 import Cookies from 'js-cookie';
-import { useFetchRecords } from '../../../hooks/api/dashboard/records/useFetchRecords';
+import { useFetchRecords } from '../../hooks/api/dashboard/records/useFetchRecords';
 import SearchBar from '/src/components/SearchBar';
 
 const headCells = [
@@ -27,7 +27,7 @@ const headCells = [
   { id: 'created_at', align: 'left', label: 'تاریخ ایجاد' },
 ];
 
-function OrderTableHead({ order, orderBy }) {
+function StatusTable({ order, orderBy }) {
   return (
     <TableHead>
       <TableRow>
@@ -45,7 +45,7 @@ function OrderTableHead({ order, orderBy }) {
   );
 }
 
-OrderTableHead.propTypes = {
+StatusTable.propTypes = {
   order: PropTypes.oneOf(['asc', 'desc']),
   orderBy: PropTypes.string
 };
@@ -118,13 +118,14 @@ export default function OrderTable() {
   }
 
   return (
+    
     <Box>
       {/* کامپوننت سرچ */}
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       
       <TableContainer sx={{ width: '100%', overflowX: 'auto' }}>
         <Table aria-labelledby="tableTitle">
-          <OrderTableHead order={order} orderBy={orderBy} />
+          <StatusTable order={order} orderBy={orderBy} />
           <TableBody>
             {visibleRows.map((row, index) => (
               <TableRow hover key={`${row.id}-${index}`}>

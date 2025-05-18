@@ -47,7 +47,7 @@ const CreateAssertionRole = () => {
     reset,
     setError,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting }
   } = useForm({
     defaultValues: {
       task_assignment: '',
@@ -72,7 +72,7 @@ const CreateAssertionRole = () => {
         const response = await axiosInstance.get('/repo/task-assignments/', {
           params: {
             limit: 100,
-            ordering: "created_at",
+            ordering: 'created_at'
           }
         });
         setTaskAssignments(response.data.results);
@@ -137,7 +137,7 @@ const CreateAssertionRole = () => {
       reset({
         ...selectedAssertionRole,
         task_assignment: String(selectedAssertionRole.task_assignment),
-        alert_recipients: selectedAssertionRole.alert_recipients.join(','),
+        alert_recipients: selectedAssertionRole.alert_recipients.join(',')
       });
     }
   }, [selectedAssertionRole, reset]);
@@ -154,10 +154,18 @@ const CreateAssertionRole = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell><Typography fontWeight="bold">فیلد</Typography></TableCell>
-              <TableCell><Typography fontWeight="bold">اپراتور</Typography></TableCell>
-              <TableCell><Typography fontWeight="bold">مقدار</Typography></TableCell>
-              <TableCell align="center"><Typography fontWeight="bold">عملیات</Typography></TableCell>
+              <TableCell>
+                <Typography fontWeight="bold">فیلد</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography fontWeight="bold">اپراتور</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography fontWeight="bold">مقدار</Typography>
+              </TableCell>
+              <TableCell align="center">
+                <Typography fontWeight="bold">عملیات</Typography>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -167,10 +175,10 @@ const CreateAssertionRole = () => {
                 <TableCell>{assertionRole.operator}</TableCell>
                 <TableCell>{assertionRole.value}</TableCell>
                 <TableCell align="center">
-                  <IconButton color="primary" onClick={() => handleEdit(assertionRole)}>
+                  <IconButton sx={{ color: 'primary.main' }} onClick={() => handleEdit(assertionRole)}>
                     <Edit />
                   </IconButton>
-                  <IconButton color="error" onClick={() => handleDelete(assertionRole.id)}>
+                  <IconButton sx={{ color: 'error.main' }} onClick={() => handleDelete(assertionRole.id)}>
                     <Delete />
                   </IconButton>
                 </TableCell>
@@ -199,10 +207,7 @@ const CreateAssertionRole = () => {
                   control={control}
                   rules={{ required: 'task_assignment الزامی است' }}
                   render={({ field }) => (
-                    <Select
-                      label="Task Assignment"
-                      {...field}
-                    >
+                    <Select label="Task Assignment" {...field}>
                       {taskAssignments?.map((task) => (
                         <MenuItem key={task.id} value={task.id}>
                           {task.name || `Task #${task.id}`}
@@ -212,15 +217,13 @@ const CreateAssertionRole = () => {
                   )}
                 />
                 {errors.task_assignment && (
-                  <Typography variant="caption" color="error">{errors.task_assignment.message}</Typography>
+                  <Typography variant="caption" color="error">
+                    {errors.task_assignment.message}
+                  </Typography>
                 )}
               </FormControl>
 
-              <TextField
-                label="Field"
-                fullWidth
-                {...register('field')}
-              />
+              <TextField label="Field" fullWidth {...register('field')} />
               <TextField
                 label="Operator"
                 fullWidth
@@ -256,29 +259,21 @@ const CreateAssertionRole = () => {
                 fullWidth
                 {...register('alert_recipients', {
                   required: 'alert_recipients الزامی است',
-                  validate: (value) =>
-                    value
-                      .split(',')
-                      .every((v) => !isNaN(parseInt(v)))
-                    || 'فرمت باید عددهای جداشده با کاما باشد'
+                  validate: (value) => value.split(',').every((v) => !isNaN(parseInt(v))) || 'فرمت باید عددهای جداشده با کاما باشد'
                 })}
                 error={!!errors.alert_recipients}
                 helperText={errors.alert_recipients?.message}
               />
-              <FormControlLabel
-                control={<Switch {...register('is_active')} />}
-                label="فعال بودن"
-              />
-              <FormControlLabel
-                control={<Switch {...register('inverse')} />}
-                label="وارونه"
-              />
+              <FormControlLabel control={<Switch {...register('is_active')} />} label="فعال بودن" />
+              <FormControlLabel control={<Switch {...register('inverse')} />} label="وارونه" />
               {errors.api && <Typography color="error">{errors.api.message}</Typography>}
             </Stack>
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="secondary">انصراف</Button>
+          <Button onClick={handleClose} color="secondary">
+            انصراف
+          </Button>
           <Button onClick={handleSubmit(onSubmit)} variant="contained" color="primary" disabled={isSubmitting}>
             {isSubmitting ? <CircularProgress size={24} color="inherit" /> : isEditMode ? 'ذخیره تغییرات' : 'افزودن'}
           </Button>
