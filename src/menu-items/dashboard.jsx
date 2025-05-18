@@ -6,7 +6,8 @@ import {
   ClusterOutlined, 
   FileDoneOutlined, 
   AppstoreAddOutlined, 
-  DeploymentUnitOutlined
+  DeploymentUnitOutlined,
+  NotificationOutlined
 } from '@ant-design/icons';
 
 // icons
@@ -16,7 +17,8 @@ const icons = {
   ClusterOutlined,
   FileDoneOutlined,
   AppstoreAddOutlined,
-  DeploymentUnitOutlined
+  DeploymentUnitOutlined,
+  NotificationOutlined
 };
 
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
@@ -68,6 +70,13 @@ const dashboard = {
       type: 'item',
       url: '/task-assignment',
       icon: icons.DeploymentUnitOutlined // برای تسک اساینمنت (شبکه یا تخصیص)
+    },
+    {
+      id: 'assertion-role',
+      title: 'نقش اعلان',
+      type: 'item',
+      url: '/assertion-role',
+      icon: icons.NotificationOutlined // برای تسک اساینمنت (شبکه یا تخصیص)
     }
   ]
 };

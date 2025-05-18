@@ -61,7 +61,7 @@ const TaskAssignment = () => {
       setTasks(taskRes.data.results || []);
       const serviceData = serviceRes.data;
       setServices(Array.isArray(serviceData) ? serviceData : serviceData?.results || []);
-      setAssignments(assignmentRes.data.results || []); // توجه به structure داده
+      setAssignments(assignmentRes.data.results || []); 
       setError(null);
     } catch (err) {
       console.error('خطا در دریافت داده‌ها:', err);

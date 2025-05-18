@@ -15,6 +15,7 @@ const CreateUser = Loadable(lazy(() => import('pages/dashboard/CreateUser.jsx'))
 const CreateTask = Loadable(lazy(() => import('pages/dashboard/CreateTask.jsx')));
 const CreateService = Loadable(lazy(() => import('pages/dashboard/CreateService.jsx')));
 const TaskAssignment = Loadable(lazy(() => import('pages/dashboard/TaskAssignment.jsx')));
+const AssertionRole = Loadable(lazy(() => import('pages/dashboard/CreateAssertionRole.jsx')));
 
 
 const MainRoutes = {
@@ -35,9 +36,8 @@ const MainRoutes = {
         { path: 'create-user', element: <CreateUser /> },
         { path: 'create-task', element: <CreateTask /> },
         { path: 'create-service', element: <CreateService /> },
-        { path: 'task-assignment', element: <TaskAssignment /> }
-
-
+        { path: 'task-assignment', element: <TaskAssignment /> },
+        { path: 'assertion-role', element: <AssertionRole /> }
       ]
     }
   ]
