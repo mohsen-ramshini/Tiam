@@ -32,6 +32,7 @@ import avatar2 from 'assets/images/users/avatar-2.png';
 import avatar3 from 'assets/images/users/avatar-3.png';
 import avatar4 from 'assets/images/users/avatar-4.png';
 import PageLoadTimeChart from '../../sections/dashboard/default/PageLoadTime';
+import MapComponent from '../../sections/dashboard/probesMap/map';
 
 // avatar style
 const avatarSX = {
@@ -72,6 +73,21 @@ export default function DashboardDefault() {
         <AnalyticEcommerce title="تعداد پروب های غیر فعال" count="35,078" percentage={27.4} isLoss color="warning" extra="20,395" />
       </Grid>
       <Grid sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} size={{ md: 8 }} />
+      <Grid size={{ xs: 24, md: 10, lg: 8 }}>
+        <Grid container alignItems="center" justifyContent="space-between">
+          <Grid>
+            <Typography variant="h5">پراب ها</Typography>
+          </Grid>
+          <Grid />
+        </Grid>
+        <MainCard sx={{ mt: 2 }} content={false}>
+          <Box sx={{ p: 3, pb: 0 }}>
+            <Stack sx={{ gap: 2 }}>
+              <MapComponent/>
+            </Stack>
+          </Box>
+        </MainCard>
+      </Grid>
       {/* row 2 */}
       <Grid size={{ xs: 24, md: 10, lg: 8 }}>
         <Grid container alignItems="center" justifyContent="space-between">
@@ -89,6 +105,7 @@ export default function DashboardDefault() {
         </MainCard>
       </Grid>
       {/* row 3 */}
+      {/* row 4 */}
       <Grid size={{ xs: 12, md: 7, lg: 8 }}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid>
@@ -125,7 +142,7 @@ export default function DashboardDefault() {
           <ReportAreaChart />
         </MainCard>
       </Grid>
-      {/* row 4 */}
+      {/* row 5 */}
       <Grid size={{ xs: 12, md: 7, lg: 8 }}>
         <SaleReportCard />
       </Grid>
