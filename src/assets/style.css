@@ -1,6 +1,9 @@
 * {
   -webkit-tap-highlight-color: transparent;
 }
+/* App.css */
+@import "leaflet/dist/leaflet.css";
+
 @font-face {
   font-family: 'IRANSans';
   src:
