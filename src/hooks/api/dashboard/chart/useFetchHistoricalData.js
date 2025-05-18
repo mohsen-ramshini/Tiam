@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import axiosInstance from '../../api/axiosInstance';
+import axiosInstance from '../../../../api/axiosInstance';
 
 const fetchHistoricalData = async ({ queryKey }) => {
   const [_key, { start, end, probs, group_by, func }] = queryKey;

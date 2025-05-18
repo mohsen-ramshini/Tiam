@@ -23,7 +23,7 @@ import {
   Box,
   Typography,
 } from '@mui/material';
-import useFetchHistoricalData from '../../../hooks/api/useFetchHistoricalData'; // مسیر درست کن
+import useFetchHistoricalData from '../../../hooks/api/dashboard/chart/useFetchHistoricalData'; // مسیر درست کن
 
 // ثبت پلاگین‌های ChartJS
 ChartJS.register(
