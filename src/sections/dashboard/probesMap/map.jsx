@@ -72,6 +72,7 @@ function MapComponent() {
   const [searchText, setSearchText] = useState('');
   const [mapCenter, setMapCenter] = useState(iranCenter);
   const [mapZoom, setMapZoom] = useState(6);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // 🔸 سایدبار باز یا بسته
 
   const filteredProbes = probes.filter(probe =>
     probe.name.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -142,61 +143,87 @@ function MapComponent() {
   }, [isPaused]);
 
   return (
-    <div style={{ display: 'flex', height: '100vh', width: '100%' }}>
+    <div style={{ display: 'flex', height: '100vh', width: '100%', position: 'relative' }}>
+      
+      {/* 🔘 دکمه‌ی باز و بسته کردن سایدبار */}
+      <button
+        onClick={() => setIsSidebarOpen(prev => !prev)}
+        style={{
+          position: 'absolute',
+          top: 15,
+          right: isSidebarOpen ? '280px' : '10px',
+          zIndex: 1000,
+          backgroundColor: '#007bff',
+          color: '#fff',
+          border: 'none',
+          padding: '6px 10px',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          transition: 'right 0.3s ease'
+        }}
+      >
+        {isSidebarOpen ? '✖' : '☰'}
+      </button>
+
+      {/* 📦 سایدبار */}
       <div style={{
-        width: '280px',
+        width: isSidebarOpen ? '280px' : '0',
         backgroundColor: '#f0f0f0',
-        overflowY: 'auto',
-        padding: '10px',
-        borderRight: '1px solid #ccc',
-        boxSizing: 'border-box'
+        overflow: 'hidden',
+        padding: isSidebarOpen ? '10px' : '0',
+        borderRight: isSidebarOpen ? '1px solid #ccc' : 'none',
+        boxSizing: 'border-box',
+        transition: 'width 0.3s ease, padding 0.3s ease'
       }}>
-        <h3>لیست پراپ‌ها</h3>
-
-        <input
-          type="text"
-          placeholder="جستجو..."
-          value={searchText}
-          onChange={e => setSearchText(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '8px',
-            marginBottom: '10px',
-            boxSizing: 'border-box',
-            borderRadius: '4px',
-            border: '1px solid #ccc',
-          }}
-        />
-
-        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-          {filteredProbes.map(probe => {
-            const originalIndex = probes.findIndex(p => p.id === probe.id);
-            return (
-              <li
-                key={probe.id}
-                onClick={() => {
-                  setIsPaused(true);
-                  setCurrentIndex(originalIndex);
-                  setMapCenter(probe.position);
-                  setMapZoom(10);
-                  openPopup(originalIndex);
-                }}
-                style={{
-                  cursor: 'pointer',
-                  padding: '8px',
-                  marginBottom: '6px',
-                  backgroundColor: currentIndex === originalIndex ? '#d0eaff' : 'transparent',
-                  borderRadius: '4px',
-                  userSelect: 'none',
-                }}
-              >
-                {statusColors[probe.status]} {probe.name} - {probe.location}
-              </li>
-            );
-          })}
-        </ul>
+        {isSidebarOpen && (
+          <>
+            <h3>لیست پراپ‌ها</h3>
+            <input
+              type="text"
+              placeholder="جستجو..."
+              value={searchText}
+              onChange={e => setSearchText(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '8px',
+                marginBottom: '10px',
+                boxSizing: 'border-box',
+                borderRadius: '4px',
+                border: '1px solid #ccc',
+              }}
+            />
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {filteredProbes.map(probe => {
+                const originalIndex = probes.findIndex(p => p.id === probe.id);
+                return (
+                  <li
+                    key={probe.id}
+                    onClick={() => {
+                      setIsPaused(true);
+                      setCurrentIndex(originalIndex);
+                      setMapCenter(probe.position);
+                      setMapZoom(10);
+                      openPopup(originalIndex);
+                    }}
+                    style={{
+                      cursor: 'pointer',
+                      padding: '8px',
+                      marginBottom: '6px',
+                      backgroundColor: currentIndex === originalIndex ? '#d0eaff' : 'transparent',
+                      borderRadius: '4px',
+                      userSelect: 'none',
+                    }}
+                  >
+                    {statusColors[probe.status]} {probe.name} - {probe.location}
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        )}
       </div>
 
+      {/* 🗺 نقشه */}
       <div style={{ flexGrow: 1 }}>
         <MapContainer
           center={mapCenter}
