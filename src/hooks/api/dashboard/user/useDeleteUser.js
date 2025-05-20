@@ -1,44 +1,26 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axiosInstance from '../../../../api/axiosInstance';
-import { toast } from 'sonner';
+// src/hooks/api/dashboard/user/useDeleteUser.js
 
-export const useDeleteUser = () => {
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import axiosInstance from 'api/axiosInstance';
+
+const useDeleteUser = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (id) => {
-      return new Promise((resolve, reject) => {
-        toast.warning('آیا از حذف این کاربر مطمئن هستید؟', {
-          action: {
-            label: 'حذف کن',
-            onClick: async () => {
-              try {
-                await axiosInstance.delete(`/users/users/${id}/`);
-                resolve(); // ادامه‌ی فرآیند حذف
-              } catch (err) {
-                reject(err); // خطا در حذف از سرور
-              }
-            }
-          },
-          cancel: {
-            label: 'لغو',
-            onClick: () => reject(new Error('عملیات حذف لغو شد'))
-          },
-          duration: 8000
-        });
-      });
+      const res = await axiosInstance.delete(`/users/users/${id}/`);
+      return res.data;
     },
-
     onSuccess: () => {
-      queryClient.invalidateQueries(['usersList']);
-      toast.success('کاربر با موفقیت حذف شد');
+      toast.success('کاربر با موفقیت حذف شد!');
+      queryClient.invalidateQueries(['users']); 
     },
-
     onError: (error) => {
-      if (error.message !== 'عملیات حذف لغو شد') {
-        toast.error('خطا در حذف کاربر');
-        console.error(error);
-      }
-    }
+      toast.error('خطا در حذف کاربر');
+      console.error('Delete user error:', error);
+    },
   });
 };
+
+export default useDeleteUser;
