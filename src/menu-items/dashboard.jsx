@@ -7,7 +7,8 @@ import {
   FileDoneOutlined, 
   AppstoreAddOutlined, 
   DeploymentUnitOutlined,
-  NotificationOutlined
+  NotificationOutlined,
+  TableOutlined
 } from '@ant-design/icons';
 
 // icons
@@ -18,7 +19,8 @@ const icons = {
   FileDoneOutlined,
   AppstoreAddOutlined,
   DeploymentUnitOutlined,
-  NotificationOutlined
+  NotificationOutlined,
+  TableOutlined
 };
 
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
@@ -28,6 +30,7 @@ const dashboard = {
   title: 'فهرست',
   type: 'group',
   children: [
+    
     {
       id: 'dashboard',
       title: 'داشبورد',
@@ -35,6 +38,13 @@ const dashboard = {
       url: '/dashboard/default',
       icon: icons.DashboardOutlined,
       breadcrumbs: false
+    },
+    {
+      id: 'status-table',
+      title: 'جدول وضعیت',
+      type: 'item',
+      url: '/status-table',
+      icon: icons.TableOutlined  // برای تسک اساینمنت (شبکه یا تخصیص)
     },
     {
       id: 'create-probe',
@@ -77,7 +87,8 @@ const dashboard = {
       type: 'item',
       url: '/assertion-role',
       icon: icons.NotificationOutlined // برای تسک اساینمنت (شبکه یا تخصیص)
-    }
+    },
+    
   ]
 };
 
