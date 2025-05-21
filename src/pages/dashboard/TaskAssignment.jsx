@@ -63,9 +63,11 @@ const TaskAssignment = () => {
       const serviceData = serviceRes.data;
       setServices(Array.isArray(serviceData) ? serviceData : serviceData?.results || []);
 
+
       setAssignments(assignmentRes.data || []);
 
       setError(null); // پاک کردن خطای قبلی در صورت موفقیت
+
 
     } catch (err) {
       console.error('خطا در دریافت داده‌ها:', err);
@@ -196,11 +198,46 @@ const TaskAssignment = () => {
     }
   };
 
-  // --- رندر کردن کامپوننت ---
+
+  const findNameById = (items, id) => {
+    const targetId = typeof id === 'object' && id !== null ? id.id : id;
+    const item = items.find((i) => i.id === targetId);
+    return item ? item.name || `ID: ${item.id}` : `ID: ${targetId}`;
+  };
+
   return (
     <MainCard title="مدیریت تخصیص تسک‌ها">
-      {/* نمایش خطای کلی (مثلاً خطای دریافت داده‌ها) بالای جدول */}
-      {error && !open && <Typography color="error" sx={{ mb: 2 }}>{error}</Typography>}
+      {/* فیلترها */}
+      <Stack direction="row" spacing={2} sx={{ mb: 2 }} justifyContent="flex-start" flexWrap="wrap">
+        <FormControl sx={{ minWidth: 150 }}>
+          <InputLabel id="ordering-select-label">مرتب‌سازی</InputLabel>
+          <Select labelId="ordering-select-label" value={ordering} label="مرتب‌سازی" onChange={(e) => setOrdering(e.target.value)}>
+            <MenuItem value="created_at">تاریخ ایجاد</MenuItem>
+            <MenuItem value="-created_at">تاریخ ایجاد نزولی</MenuItem>
+            <MenuItem value="prob">پراب</MenuItem>
+            <MenuItem value="task">تسک</MenuItem>
+            <MenuItem value="service">سرویس</MenuItem>
+          </Select>
+        </FormControl>
+
+        <FormControl sx={{ minWidth: 100 }}>
+          <InputLabel id="limit-select-label">تعداد</InputLabel>
+          <Select labelId="limit-select-label" value={limit} label="تعداد" onChange={(e) => setLimit(e.target.value)}>
+            {[2, 5, 10, 20, 50].map((num) => (
+              <MenuItem key={num} value={num}>
+                {num}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Stack>
+
+      {error && !open && (
+        <Typography color="error" sx={{ mb: 2 }}>
+          {error}
+        </Typography>
+      )}
+
 
       {/* دکمه افزودن */}
       <Stack direction="row" justifyContent="flex-end" sx={{ mb: 2 }}>
@@ -315,8 +352,17 @@ const TaskAssignment = () => {
                 </Select>
               </FormControl>
 
-              {/* نمایش خطای مربوط به فرم (مثل خالی بودن فیلدها یا خطای سرور هنگام ثبت) */}
-              {error && <Typography color="error" variant="body2">{error}</Typography>}
+            <FormControl fullWidth>
+              <InputLabel id="task-select-label">انتخاب تسک</InputLabel>
+              <Select labelId="task-select-label" value={selectedTask} label="انتخاب تسک" onChange={(e) => setSelectedTask(e.target.value)}>
+                {tasks.map((task) => (
+                  <MenuItem key={task.id} value={task.id}>
+                    {task.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
 
               {/* در صورت نیاز، فیلدهای schedule و is_active را اینجا به صورت Input اضافه کنید */}
 
