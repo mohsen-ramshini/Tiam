@@ -1,33 +1,78 @@
 import React, { useRef, useState, useEffect } from "react";
 import HeatMap from "react-heatmap-grid";
 
-// داده‌ها
+// لیبل‌های سراسری
 const xLabels = ["tehran", "mashhad", "shiraz", "tabriz"];
-const yLabels = ["10:00", "10:05", "10:10", "10:15", "10:20"];
+const allYLabels = ["10:00", "11:00", "12:00", "13:00", "14:00"];
+const hosts = ["host1", "host2", "host3"];
+const timeOptions = [
+  { label: "1 ساعت اخیر", value: 1 },
+  { label: "2 ساعت اخیر", value: 2 },
+  { label: "3 ساعت اخیر", value: 3 },
+  { label: "4 ساعت اخیر", value: 4 },
+  { label: "5 ساعت اخیر", value: 5 },
+];
 
+// داده‌ها
 const metrics = {
-  latency: [
-    [140, 95, 110, 130],
-    [130, 100, 150, 120],
-    [160, 90, 120, 110],
-    [150, 110, 130, 140],
-    [140, 105, 125, 135],
-  ],
-  ping: [
-    [40, 35, 50, 45],
-    [42, 32, 38, 48],
-    [39, 30, 37, 36],
-    [41, 34, 42, 40],
-    [43, 36, 39, 41],
-  ],
+  latency: {
+    host1: [
+      [140, 95, 110, 130],
+      [130, 100, 150, 120],
+      [160, 90, 120, 110],
+      [150, 110, 130, 140],
+      [140, 105, 125, 135],
+    ],
+    host2: [
+      [120, 80, 100, 115],
+      [125, 95, 140, 110],
+      [150, 85, 110, 105],
+      [145, 100, 120, 130],
+      [135, 100, 120, 125],
+    ],
+    host3: [
+      [100, 70, 90, 105],
+      [115, 85, 130, 100],
+      [140, 75, 100, 95],
+      [135, 90, 110, 120],
+      [125, 95, 115, 115],
+    ],
+  },
+  ping: {
+    host1: [
+      [40, 35, 50, 45],
+      [42, 32, 38, 48],
+      [39, 30, 37, 36],
+      [41, 34, 42, 40],
+      [43, 36, 39, 41],
+    ],
+    host2: [
+      [38, 34, 47, 44],
+      [40, 30, 35, 46],
+      [36, 28, 33, 34],
+      [39, 31, 40, 38],
+      [41, 34, 37, 39],
+    ],
+    host3: [
+      [36, 32, 45, 42],
+      [38, 28, 32, 44],
+      [34, 26, 30, 32],
+      [37, 29, 38, 36],
+      [39, 32, 35, 37],
+    ],
+  },
 };
 
 export default function WrappedHeatmap() {
   const containerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const [metric, setMetric] = useState("latency"); // متریک انتخاب‌شده
+  const [metric, setMetric] = useState("latency");
+  const [host, setHost] = useState("host1");
+  const [timeRange, setTimeRange] = useState(5); // پیش‌فرض: 5 بازه زمانی اخیر
 
-  const data = metrics[metric];
+  const fullData = metrics[metric][host];
+  const data = fullData.slice(-timeRange);
+  const yLabels = allYLabels.slice(-timeRange);
   const maxVal = Math.max(...data.flat());
 
   const getColor = (value) => {
@@ -81,25 +126,70 @@ export default function WrappedHeatmap() {
           flexDirection: "column",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: 20,
+            gap: 16,
+            flexWrap: "wrap",
+          }}
+        >
           <h2 style={{ margin: 0, color: "#333" }}>
-            {metric === "latency" ? "Latency Heatmap (ms)" : "Ping Heatmap (ms)"}
+            {metric === "latency" ? "Latency Heatmap (ms)" : "Ping Heatmap (ms)"} - {host}
           </h2>
-          <select
-            value={metric}
-            onChange={(e) => setMetric(e.target.value)}
-            style={{
-              padding: "6px 12px",
-              fontSize: 14,
-              borderRadius: 6,
-              border: "1px solid #ccc",
-              background: "#fff",
-              fontFamily: "'Roboto Condensed', sans-serif",
-            }}
-          >
-            <option value="latency">Latency</option>
-            <option value="ping">Ping</option>
-          </select>
+
+          <div style={{ display: "flex", gap: 10 }}>
+            <select
+              value={metric}
+              onChange={(e) => setMetric(e.target.value)}
+              style={{
+                padding: "6px 12px",
+                fontSize: 14,
+                borderRadius: 6,
+                border: "1px solid #ccc",
+                background: "#fff",
+              }}
+            >
+              <option value="latency">Latency</option>
+              <option value="ping">Ping</option>
+            </select>
+            <select
+              value={host}
+              onChange={(e) => setHost(e.target.value)}
+              style={{
+                padding: "6px 12px",
+                fontSize: 14,
+                borderRadius: 6,
+                border: "1px solid #ccc",
+                background: "#fff",
+              }}
+            >
+              {hosts.map((h) => (
+                <option key={h} value={h}>
+                  {h}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div style={{ marginBottom: 20 }}>
+          <label style={{ marginRight: 10, fontWeight: "bold", color: "#333" }}>
+            بازه زمانی:
+          </label>
+          <input
+            type="range"
+            min={1}
+            max={5}
+            value={timeRange}
+            onChange={(e) => setTimeRange(Number(e.target.value))}
+            style={{ width: 200 }}
+          />
+          <span style={{ marginRight: 12 }}>
+            {timeOptions.find((t) => t.value === timeRange)?.label}
+          </span>
         </div>
 
         <div style={{ flexGrow: 1, overflow: "auto" }}>

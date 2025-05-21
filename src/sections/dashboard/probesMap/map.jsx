@@ -35,11 +35,12 @@ function getAnimatedIcon(status, isSelected) {
 const iranCenter = [32.4279, 53.688];
 
 const probes = [
-  { id: 1, name: "Probe Tehran", location: "Tehran", position: [35.6892, 51.3890], status: "ok" },
-  { id: 2, name: "Probe Mashhad", location: "Mashhad", position: [36.2605, 59.6168], status: "fail" },
-  { id: 3, name: "Probe Shiraz", location: "Shiraz", position: [29.5918, 52.5837], status: "slow" },
-  { id: 4, name: "Probe Rasht", location: "Rasht", position: [37.2808, 49.5832], status: "ok" },
+  { id: 1, name: "Probe Tehran", location: "Tehran", position: [35.6892, 51.3890], status: "ok", ip: "192.168.1.1" },
+  { id: 2, name: "Probe Mashhad", location: "Mashhad", position: [36.2605, 59.6168], status: "fail", ip: "192.168.1.2" },
+  { id: 3, name: "Probe Shiraz", location: "Shiraz", position: [29.5918, 52.5837], status: "slow", ip: "192.168.1.3" },
+  { id: 4, name: "Probe Rasht", location: "Rasht", position: [37.2808, 49.5832], status: "ok", ip: "192.168.1.4" },
 ];
+
 
 const statusColors = {
   ok: '🟢',
@@ -71,7 +72,7 @@ function MapComponent() {
   const [isPaused, setIsPaused] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [mapCenter, setMapCenter] = useState(iranCenter);
-  const [mapZoom, setMapZoom] = useState(6);
+  const [mapZoom, setMapZoom] = useState(5);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // 🔸 سایدبار باز یا بسته
 
   const filteredProbes = probes.filter(probe =>
@@ -249,6 +250,7 @@ function MapComponent() {
               <Popup eventHandlers={{ close: handlePopupClose }}>
                 <strong>{statusColors[probe.status]} {probe.name}</strong><br />
                 موقعیت: {probe.location}<br />
+                IP: {probe.ip}<br />
                 وضعیت: {probe.status}
               </Popup>
             </Marker>

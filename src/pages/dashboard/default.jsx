@@ -36,6 +36,7 @@ import MapComponent from '../../sections/dashboard/probesMap/map';
 import Heatmap from '../../sections/dashboard/chart/HeatMap';
 import DNSProbePieChart from '../../sections/dashboard/chart/PieChart';
 import NetworkChart from '../../sections/dashboard/chart/Barchart';
+import MultiHostLineChartWithMUI from '../../sections/dashboard/chart/MultiLineChart';
 
 const avatarSX = {
   width: 36,
@@ -108,7 +109,7 @@ export default function DashboardDefault() {
       <Grid item xs={12} md={6} lg={6}>
         <MainCard title="نمودار شبکه" sx={{ mt: 2 }} content={false}>
           <Box sx={{ p: 3, pb: 0 }}>
-            <NetworkChart />
+            <MultiHostLineChartWithMUI />
           </Box>
         </MainCard>
       </Grid>
