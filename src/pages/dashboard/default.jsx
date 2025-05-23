@@ -3,7 +3,7 @@
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
@@ -33,15 +33,17 @@ import avatar3 from 'assets/images/users/avatar-3.png';
 import avatar4 from 'assets/images/users/avatar-4.png';
 import PageLoadTimeChart from '../../sections/dashboard/default/PageLoadTime';
 import MapComponent from '../../sections/dashboard/probesMap/map';
+import Heatmap from '../../sections/dashboard/chart/HeatMap';
+import DNSProbePieChart from '../../sections/dashboard/chart/PieChart';
+import NetworkChart from '../../sections/dashboard/chart/Barchart';
+import MultiHostLineChartWithMUI from '../../sections/dashboard/chart/MultiLineChart';
 
-// avatar style
 const avatarSX = {
   width: 36,
   height: 36,
   fontSize: '1rem'
 };
 
-// action style
 const actionSX = {
   mt: 0.75,
   ml: 1,
@@ -51,213 +53,83 @@ const actionSX = {
   transform: 'none'
 };
 
-// ==============================|| DASHBOARD - DEFAULT ||============================== //
-
 export default function DashboardDefault() {
   return (
-    <Grid container rowSpacing={4.5} columnSpacing={2.75}>
-      {/* row 1 */}
-      <Grid sx={{ mb: -2.25 }} size={12}>
+    <Grid container spacing={2.75} >
+      {/* Title */}
+      <Grid item xs={12}>
         <Typography variant="h5">داشبورد</Typography>
       </Grid>
-      <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+
+      {/* Stat Cards */}
+      <Grid item xs={12} sm={6} md={4} lg={3}>
         <AnalyticEcommerce title="تعداد پروب های فعال" count="4,42,236" percentage={59.3} extra="35,000" />
       </Grid>
-      <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+      <Grid item xs={12} sm={6} md={4} lg={3}>
         <AnalyticEcommerce title="تعداد تست ها در یکروز گذشته " count="78,250" percentage={70.5} extra="8,900" />
       </Grid>
-      <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+      <Grid item xs={12} sm={6} md={4} lg={3}>
         <AnalyticEcommerce title="تعداد هشدارهای اخیر" count="18,800" percentage={27.4} isLoss color="warning" extra="1,943" />
       </Grid>
-      <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+      <Grid item xs={12} sm={6} md={4} lg={3}>
         <AnalyticEcommerce title="تعداد پروب های غیر فعال" count="35,078" percentage={27.4} isLoss color="warning" extra="20,395" />
       </Grid>
-      <Grid sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} size={{ md: 8 }} />
-      <Grid size={{ xs: 24, md: 10, lg: 8 }}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid>
-            <Typography variant="h5">پراب ها</Typography>
-          </Grid>
-          <Grid />
+
+      {/* Map + Heatmap & DNS side by side */}
+      <Grid item container xs={12} spacing={2}>
+        {/* Map: نصف عرض */}
+        <Grid item xs={12} md={6}>
+          <MainCard title="نقشه پراب ها" sx={{ mt: 2 }} content={false}>
+            <Box sx={{ p: 3, pb: 0 }}>
+              <MapComponent />
+            </Box>
+          </MainCard>
         </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
+
+        {/* Heatmap و DNS stacked vertically */}
+        <Grid item xs={12} md={6} container direction="column" spacing={2}>
+          <Grid item>
+            <MainCard title="نقشه حرارتی" content={false}>
+              <Box sx={{ p: 3, pb: 0 }}>
+                <Heatmap />
+              </Box>
+            </MainCard>
+          </Grid>
+          <Grid item sx={{ mt: 2 }}>
+            <MainCard title="توزیع DNS" content={false}>
+              <Box sx={{ p: 3, pb: 0 }}>
+                <DNSProbePieChart />
+              </Box>
+            </MainCard>
+          </Grid>
+        </Grid>
+      </Grid>
+
+      {/* Network Chart */}
+      <Grid item xs={12} md={6} lg={6}>
+        <MainCard title="نمودار شبکه" sx={{ mt: 2 }} content={false}>
           <Box sx={{ p: 3, pb: 0 }}>
-            <Stack sx={{ gap: 2 }}>
-              <MapComponent/>
-            </Stack>
+            <MultiHostLineChartWithMUI />
           </Box>
         </MainCard>
       </Grid>
-      {/* row 2 */}
-      <Grid size={{ xs: 24, md: 10, lg: 8 }}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid>
-            <Typography variant="h5">نمودار</Typography>
-          </Grid>
-          <Grid />
-        </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
+
+      {/* Page Load Time */}
+      <Grid item xs={12} md={6} lg={6}>
+        <MainCard title="نمودار زمان بارگذاری صفحه" sx={{ mt: 2 }} content={false}>
           <Box sx={{ p: 3, pb: 0 }}>
-            <Stack sx={{ gap: 2 }}>
-              <PageLoadTimeChart/>
-            </Stack>
+            <PageLoadTimeChart />
           </Box>
         </MainCard>
       </Grid>
-      {/* row 3 */}
-      {/* row 4 */}
-      {/* <Grid size={{ xs: 12, md: 7, lg: 8 }}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid>
-            <Typography variant="h5">وضعیت</Typography>
-          </Grid>
-          <Grid />
-        </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
+
+
+      {/* Orders Table */}
+      <Grid item xs={12}>
+        <MainCard title="وضعیت تست ها" sx={{ mt: 2 }} content={false}>
           <OrdersTable />
         </MainCard>
-      </Grid> */}
-      <Grid size={{ xs: 12, md: 5, lg: 4 }}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid>
-            <Typography variant="h5">Analytics Report</Typography>
-          </Grid>
-          <Grid />
-        </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
-          <List sx={{ p: 0, '& .MuiListItemButton-root': { py: 2 } }}>
-            <ListItemButton divider>
-              <ListItemText primary="Company Finance Growth" />
-              <Typography variant="h5">+45.14%</Typography>
-            </ListItemButton>
-            <ListItemButton divider>
-              <ListItemText primary="Company Expenses Ratio" />
-              <Typography variant="h5">0.58%</Typography>
-            </ListItemButton>
-            <ListItemButton>
-              <ListItemText primary="Business Risk Cases" />
-              <Typography variant="h5">Low</Typography>
-            </ListItemButton>
-          </List>
-          <ReportAreaChart />
-        </MainCard>
-      </Grid>
-      {/* row 5 */}
-      <Grid size={{ xs: 12, md: 7, lg: 8 }}>
-        <SaleReportCard />
-      </Grid>
-      <Grid size={{ xs: 12, md: 5, lg: 4 }}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid>
-            <Typography variant="h5">Transaction History</Typography>
-          </Grid>
-          <Grid />
-        </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
-          <List
-            component="nav"
-            sx={{
-              px: 0,
-              py: 0,
-              '& .MuiListItemButton-root': {
-                py: 1.5,
-                px: 2,
-                '& .MuiAvatar-root': avatarSX,
-                '& .MuiListItemSecondaryAction-root': { ...actionSX, position: 'relative' }
-              }
-            }}
-          >
-            <ListItem
-              component={ListItemButton}
-              divider
-              secondaryAction={
-                <Stack sx={{ alignItems: 'flex-end' }}>
-                  <Typography variant="subtitle1" noWrap>
-                    + $1,430
-                  </Typography>
-                  <Typography variant="h6" color="secondary" noWrap>
-                    78%
-                  </Typography>
-                </Stack>
-              }
-            >
-              <ListItemAvatar>
-                <Avatar sx={{ color: 'success.main', bgcolor: 'success.lighter' }}>
-                  <GiftOutlined />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={<Typography variant="subtitle1">Order #002434</Typography>} secondary="Today, 2:00 AM" />
-            </ListItem>
-            <ListItem
-              component={ListItemButton}
-              divider
-              secondaryAction={
-                <Stack sx={{ alignItems: 'flex-end' }}>
-                  <Typography variant="subtitle1" noWrap>
-                    + $302
-                  </Typography>
-                  <Typography variant="h6" color="secondary" noWrap>
-                    8%
-                  </Typography>
-                </Stack>
-              }
-            >
-              <ListItemAvatar>
-                <Avatar sx={{ color: 'primary.main', bgcolor: 'primary.lighter' }}>
-                  <MessageOutlined />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={<Typography variant="subtitle1">Order #984947</Typography>} secondary="5 August, 1:45 PM" />
-            </ListItem>
-            <ListItem
-              component={ListItemButton}
-              secondaryAction={
-                <Stack sx={{ alignItems: 'flex-end' }}>
-                  <Typography variant="subtitle1" noWrap>
-                    + $682
-                  </Typography>
-                  <Typography variant="h6" color="secondary" noWrap>
-                    16%
-                  </Typography>
-                </Stack>
-              }
-            >
-              <ListItemAvatar>
-                <Avatar sx={{ color: 'error.main', bgcolor: 'error.lighter' }}>
-                  <SettingOutlined />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={<Typography variant="subtitle1">Order #988784</Typography>} secondary="7 hours ago" />
-            </ListItem>
-          </List>
-        </MainCard>
-        {/* <MainCard sx={{ mt: 2 }}>
-          <Stack sx={{ gap: 3 }}>
-            <Grid container justifyContent="space-between" alignItems="center">
-              <Grid>
-                <Stack>
-                  <Typography variant="h5" noWrap>
-                    Help & Support Chat
-                  </Typography>
-                  <Typography variant="caption" color="secondary" noWrap>
-                    Typical replay within 5 min
-                  </Typography>
-                </Stack>
-              </Grid>
-              <Grid>
-                <AvatarGroup sx={{ '& .MuiAvatar-root': { width: 32, height: 32 } }}>
-                  <Avatar alt="Remy Sharp" src={avatar1} />
-                  <Avatar alt="Travis Howard" src={avatar2} />
-                  <Avatar alt="Cindy Baker" src={avatar3} />
-                  <Avatar alt="Agnes Walker" src={avatar4} />
-                </AvatarGroup>
-              </Grid>
-            </Grid>
-            <Button size="small" variant="contained" sx={{ textTransform: 'capitalize' }}>
-              Need Help?
-            </Button>
-          </Stack>
-        </MainCard> */}
+
       </Grid>
     </Grid>
   );

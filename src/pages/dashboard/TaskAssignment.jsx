@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
-import MainCard from 'components/MainCard';
+import MainCard from 'components/MainCard'; // فرض می‌کنیم MainCard در مسیر درستی قرار دارد
 import {
   Button,
   Stack,
@@ -24,8 +24,7 @@ import {
   InputLabel
 } from '@mui/material';
 import { Edit, Delete, Add } from '@mui/icons-material';
-import axiosInstance from 'api/axiosInstance';
-import { toast } from 'sonner';
+import axiosInstance from 'api/axiosInstance'; // مطمئن شوید این instance به درستی تنظیم شده باشد
 
 const TaskAssignment = () => {
   const [assignments, setAssignments] = useState([]);
@@ -38,83 +37,98 @@ const TaskAssignment = () => {
   const [selectedService, setSelectedService] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [editId, setEditId] = useState(null);
-  const [open, setOpen] = useState(false);
+  const [editId, setEditId] = useState(null); // شناسه تخصیص برای ویرایش
+  const [open, setOpen] = useState(false); // وضعیت باز بودن دیالوگ فرم
 
-  // این دو تا برای فیلتر
-  const [ordering, setOrdering] = useState('created_at'); // مقدار پیش‌فرض
-  const [limit, setLimit] = useState(5); // مقدار پیش‌فرض
-
+  // آدرس پایه API برای تخصیص تسک
   const taskAssignmentBaseUrl = '/repo/task-assignments/';
 
-  const fetchData = async (orderingParam = ordering, limitParam = limit) => {
-    setLoading(true);
+  // --- تابع برای دریافت داده‌های اولیه ---
+  const fetchData = async () => {
+    setLoading(true); // نمایش لودینگ هنگام دریافت داده‌ها
     try {
+      // دریافت همزمان همه داده‌های لازم
       const [probeRes, taskRes, serviceRes, assignmentRes] = await Promise.all([
-        axiosInstance.get('/users/probs/'),
-        axiosInstance.get('/repo/tasks/'),
-        axiosInstance.get('/repo/services/'),
-        axiosInstance.get(`${taskAssignmentBaseUrl}?ordering=${orderingParam}&limit=${limitParam}`) // اضافه کردن پارامترها به URL
+        axiosInstance.get('/users/probs/'),      // آدرس دریافت پراب‌ها (مطمئن شوید این آدرس صحیح است)
+        axiosInstance.get('/repo/tasks/'),       // آدرس دریافت تسک‌ها (مطمئن شوید این آدرس صحیح است)
+        axiosInstance.get('/repo/services/'),    // <--- آدرس دریافت سرویس‌ها (اصلاح شده)
+        axiosInstance.get(taskAssignmentBaseUrl) // آدرس دریافت لیست تخصیص‌ها
       ]);
 
+      // تنظیم Stateها با داده‌های دریافتی
       setProbes(probeRes.data.results || []);
       setTasks(taskRes.data.results || []);
+
+      // مدیریت پاسخ سرویس‌ها (ممکن است صفحه‌بندی شده باشد)
       const serviceData = serviceRes.data;
       setServices(Array.isArray(serviceData) ? serviceData : serviceData?.results || []);
-      setAssignments(assignmentRes.data.results || []);
-      setError(null);
+
+
+      setAssignments(assignmentRes.data || []);
+
+      setError(null); // پاک کردن خطای قبلی در صورت موفقیت
+
+
     } catch (err) {
       console.error('خطا در دریافت داده‌ها:', err);
       let errorDetail = 'خطا در بارگذاری اطلاعات اولیه.';
       if (err.response) {
+        console.error('Response data:', err.response.data);
+        console.error('Response status:', err.response.status);
+        // نمایش URL که باعث خطا شده برای دیباگ راحت‌تر
         errorDetail = `خطا در دریافت داده (${err.response.config.url}): ${err.response.status}`;
       } else if (err.request) {
+        console.error('No response received:', err.request);
         errorDetail = 'پاسخی از سرور دریافت نشد.';
       } else {
-        errorDetail = err.message;
+        console.error('Error setting up request:', err.message);
       }
-      setError(errorDetail);
+      setError(errorDetail); // نمایش خطا به کاربر
+      // خالی کردن لیست‌ها در صورت بروز خطا
       setProbes([]);
       setTasks([]);
       setServices([]);
       setAssignments([]);
-      toast.error(errorDetail);
     } finally {
-      setLoading(false);
+        setLoading(false); // پایان لودینگ
     }
   };
 
+  // دریافت داده‌ها هنگام بارگذاری اولیه کامپوننت
   useEffect(() => {
     fetchData();
+    console.log(probes);
+    
   }, []);
 
-  // هر بار ordering یا limit تغییر کنه، داده‌ها رو دوباره بگیر
-  useEffect(() => {
-    fetchData(ordering, limit);
-  }, [ordering, limit]);
-
+  // باز کردن دیالوگ فرم (برای ایجاد یا ویرایش)
   const handleOpen = (assignment = null) => {
     if (assignment) {
-      setSelectedProbe(assignment.prob || '');
+      // حالت ویرایش: پر کردن فرم با داده‌های موجود
+      setSelectedProbe(assignment.prob || ''); // استفاده از prob چون payload با این نام ارسال می‌شود
       setSelectedTask(assignment.task || '');
       setSelectedService(assignment.service || '');
       setEditId(assignment.id);
     } else {
+      // حالت ایجاد: خالی کردن فرم
       setSelectedProbe('');
       setSelectedTask('');
       setSelectedService('');
       setEditId(null);
     }
-    setError(null);
-    setOpen(true);
+    setError(null); // پاک کردن خطاهای قبلی فرم
+    setOpen(true); // باز کردن دیالوگ
   };
 
+  // بستن دیالوگ فرم
   const handleClose = () => {
     setOpen(false);
   };
 
+  // ارسال فرم (ایجاد یا ویرایش تخصیص)
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // جلوگیری از رفرش صفحه
+    // اعتبارسنجی ساده ورودی‌ها
     if (!selectedProbe || !selectedTask || !selectedService) {
       setError('لطفاً همه فیلدها (پراب، تسک، سرویس) را انتخاب کنید');
       return;
@@ -124,49 +138,66 @@ const TaskAssignment = () => {
     setError(null);
 
     try {
+      // Payload مطابق با انتظار بک‌اند
       const payload = {
-        prob: selectedProbe,
+        prob: selectedProbe,       // نام فیلد: prob
         task: selectedTask,
         service: selectedService,
-        schedule: '* * * * *',
-        is_active: true
+        schedule: '* * * * *',   // مقدار پیش‌فرض schedule
+        is_active: true          // مقدار پیش‌فرض is_active
       };
 
       if (editId) {
+        // ویرایش (PUT)
         await axiosInstance.put(`${taskAssignmentBaseUrl}${editId}/`, payload);
-        toast.success('تخصیص با موفقیت ویرایش شد!');
+        alert('تخصیص با موفقیت ویرایش شد!'); // یا استفاده از Snackbar/Toast
       } else {
+        // ایجاد (POST)
         await axiosInstance.post(taskAssignmentBaseUrl, payload);
-        toast.success('تخصیص جدید با موفقیت اضافه شد!');
+        alert('تخصیص جدید با موفقیت اضافه شد!'); // یا استفاده از Snackbar/Toast
       }
-      fetchData(ordering, limit);
-      handleClose();
+      fetchData(); // بارگذاری مجدد لیست تخصیص‌ها
+      handleClose(); // بستن دیالوگ
     } catch (err) {
+      console.error('خطا در ذخیره‌سازی تخصیص:', err);
+      // نمایش خطای دقیق‌تر از سمت سرور در صورت وجود
       const errorMsg = err.response?.data ? JSON.stringify(err.response.data) : 'خطا در ارتباط با سرور یا داده‌های نامعتبر';
-      toast.error(`خطا در ذخیره‌سازی: ${errorMsg}`);
       setError(`خطا در ذخیره‌سازی: ${errorMsg}`);
     } finally {
       setLoading(false);
     }
   };
 
+  // تابع کمکی برای پیدا کردن نام آیتم بر اساس ID
+  const findNameById = (items, id) => {
+    const targetId = typeof id === 'object' && id !== null ? id.id : id;
+    const item = items.find((i) => i.id === targetId);
+    // اگر آیتم نام نداشت یا پیدا نشد، خود ID را نمایش بده
+    return item ? (item.name || `ID: ${item.id}`) : `ID: ${targetId}`;
+  };
+
+  // حذف یک تخصیص
   const handleDelete = async (id) => {
+    // تأیید قبل از حذف
     if (window.confirm('آیا از حذف این تخصیص مطمئن هستید؟')) {
-      setLoading(true);
-      setError(null);
+      setLoading(true); // نمایش لودینگ هنگام حذف
+      setError(null); // پاک کردن خطای قبلی
       try {
+        // حذف (DELETE)
         await axiosInstance.delete(`${taskAssignmentBaseUrl}${id}/`);
-        toast.success('تخصیص حذف شد!');
-        fetchData(ordering, limit);
+        alert('تخصیص حذف شد!'); // یا استفاده از Snackbar/Toast
+        fetchData(); // بارگذاری مجدد لیست
       } catch (err) {
+        console.error('خطا در حذف تخصیص:', err);
         const errorMsg = err.response?.data ? JSON.stringify(err.response.data) : 'خطا در ارتباط با سرور';
-        toast.error(`خطا در حذف: ${errorMsg}`);
-        setError(`خطا در حذف: ${errorMsg}`);
+        setError(`خطا در حذف: ${errorMsg}`); // نمایش خطا
+        // alert(`خطا در حذف تخصیص: ${errorMsg}`); // نمایش خطا با alert در صورت نیاز
       } finally {
-        setLoading(false);
+          setLoading(false); // پایان لودینگ
       }
     }
   };
+
 
   const findNameById = (items, id) => {
     const targetId = typeof id === 'object' && id !== null ? id.id : id;
@@ -207,32 +238,27 @@ const TaskAssignment = () => {
         </Typography>
       )}
 
+
+      {/* دکمه افزودن */}
       <Stack direction="row" justifyContent="flex-end" sx={{ mb: 2 }}>
         <Button variant="contained" startIcon={<Add />} onClick={() => handleOpen()} disabled={loading}>
           افزودن تخصیص
         </Button>
       </Stack>
 
+      {/* جدول نمایش تخصیص‌ها */}
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="جدول تخصیص تسک‌ها">
           <TableHead>
             <TableRow>
-              <TableCell>
-                <Typography fontWeight="bold">پراب</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography fontWeight="bold">تسک</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography fontWeight="bold">سرویس</Typography>
-              </TableCell>
-              <TableCell align="center">
-                <Typography fontWeight="bold">عملیات</Typography>
-              </TableCell>
+              <TableCell><Typography fontWeight="bold">پراب</Typography></TableCell>
+              <TableCell><Typography fontWeight="bold">تسک</Typography></TableCell>
+              <TableCell><Typography fontWeight="bold">سرویس</Typography></TableCell>
+              <TableCell align="center"><Typography fontWeight="bold">عملیات</Typography></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {loading && assignments.length === 0 ? (
+            {loading && assignments.length === 0 ? ( // نمایش لودینگ فقط اگر داده‌ای برای نمایش نیست
               <TableRow>
                 <TableCell colSpan={4} align="center">
                   <CircularProgress />
@@ -241,50 +267,90 @@ const TaskAssignment = () => {
             ) : assignments.length > 0 ? (
               assignments.map((assignment) => (
                 <TableRow key={assignment.id} hover>
-                  <TableCell>{findNameById(probes, assignment.prob)}</TableCell>
+                  <TableCell>{findNameById(probes, assignment.prob)}</TableCell> {/* استفاده از prob */}
                   <TableCell>{findNameById(tasks, assignment.task)}</TableCell>
                   <TableCell>{findNameById(services, assignment.service)}</TableCell>
                   <TableCell align="center">
-                    <IconButton onClick={() => handleOpen(assignment)} disabled={loading} color="primary">
+                    <IconButton color="primary" onClick={() => handleOpen(assignment)} aria-label="ویرایش" disabled={loading}>
                       <Edit />
                     </IconButton>
-                    <IconButton onClick={() => handleDelete(assignment.id)} disabled={loading}  color="error">
+                    <IconButton color="error" onClick={() => handleDelete(assignment.id)} aria-label="حذف" disabled={loading}>
                       <Delete />
                     </IconButton>
                   </TableCell>
                 </TableRow>
               ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={4} align="center">
-                  داده‌ای برای نمایش وجود ندارد.
-                </TableCell>
-              </TableRow>
-            )}
+            ) : !loading ? ( // فقط اگر لودینگ تمام شده و داده‌ای نیست
+                <TableRow>
+                  <TableCell colSpan={4} align="center">
+                    هیچ تخصیصی یافت نشد.
+                  </TableCell>
+                </TableRow>
+             ) : null /* در حین لودینگ داده‌های قبلی، چیزی نشان نده */}
           </TableBody>
         </Table>
       </TableContainer>
 
-      {/* مودال افزودن / ویرایش */}
-      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-        <DialogTitle>{editId ? 'ویرایش تخصیص تسک' : 'افزودن تخصیص تسک جدید'}</DialogTitle>
-        <DialogContent dividers>
-          <Stack spacing={2} sx={{ mt: 1 }}>
-            <FormControl fullWidth>
-              <InputLabel id="probe-select-label">انتخاب پراب</InputLabel>
-              <Select
-                labelId="probe-select-label"
-                value={selectedProbe}
-                label="انتخاب پراب"
-                onChange={(e) => setSelectedProbe(e.target.value)}
-              >
-                {probes.map((probe) => (
-                  <MenuItem key={probe.id} value={probe.id}>
-                    {probe.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+      {/* --- فرم ساخت/ویرایش داخل دیالوگ --- */}
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm" aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">{editId ? 'ویرایش تخصیص' : 'افزودن تخصیص جدید'}</DialogTitle>
+        {/* استفاده از تگ form برای ارسال با Enter */}
+        <form onSubmit={handleSubmit}>
+          <DialogContent>
+            <Stack spacing={3} sx={{ mt: 1 }}>
+              {/* Dropdown پراب */}
+              <FormControl fullWidth required error={!selectedProbe && !!error}>
+                <InputLabel id="probe-select-label">پراب</InputLabel>
+                <Select
+                  labelId="probe-select-label"
+                  value={selectedProbe}
+                  onChange={(e) => setSelectedProbe(e.target.value)}
+                  label="پراب"
+                >
+                  {probes.length === 0 && <MenuItem disabled>در حال بارگذاری یا پرابی یافت نشد...</MenuItem>}
+                  {probes.map((probe) => (
+                    <MenuItem key={probe.id} value={probe.id}>
+                      {probe.name || `پراب ${probe.id}`}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              {/* Dropdown تسک */}
+              <FormControl fullWidth required error={!selectedTask && !!error}>
+                <InputLabel id="task-select-label">تسک</InputLabel>
+                <Select
+                  labelId="task-select-label"
+                  value={selectedTask}
+                  onChange={(e) => setSelectedTask(e.target.value)}
+                  label="تسک"
+                >
+                   {tasks.length === 0 && <MenuItem disabled>در حال بارگذاری یا تسکی یافت نشد...</MenuItem>}
+                  {tasks.map((task) => (
+                    <MenuItem key={task.id} value={task.id}>
+                      {task.name || `تسک ${task.id}`}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              {/* Dropdown سرویس */}
+              <FormControl fullWidth required error={!selectedService && !!error}>
+                <InputLabel id="service-select-label">سرویس</InputLabel>
+                <Select
+                  labelId="service-select-label"
+                  value={selectedService}
+                  onChange={(e) => setSelectedService(e.target.value)}
+                  label="سرویس"
+                >
+                  {services.length === 0 && <MenuItem disabled>در حال بارگذاری یا سرویسی یافت نشد...</MenuItem>}
+                  {services.map((service) => (
+                    <MenuItem key={service.id} value={service.id}>
+                      {service.name || `سرویس ${service.id}`}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
             <FormControl fullWidth>
               <InputLabel id="task-select-label">انتخاب تسک</InputLabel>
@@ -297,37 +363,21 @@ const TaskAssignment = () => {
               </Select>
             </FormControl>
 
-            <FormControl fullWidth>
-              <InputLabel id="service-select-label">انتخاب سرویس</InputLabel>
-              <Select
-                labelId="service-select-label"
-                value={selectedService}
-                label="انتخاب سرویس"
-                onChange={(e) => setSelectedService(e.target.value)}
-              >
-                {services.map((service) => (
-                  <MenuItem key={service.id} value={service.id}>
-                    {service.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
 
-            {error && (
-              <Typography color="error" variant="body2" sx={{ mt: 1 }}>
-                {error}
-              </Typography>
-            )}
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} disabled={loading}>
-            لغو
-          </Button>
-          <Button onClick={handleSubmit} variant="contained" disabled={loading}>
-            {editId ? 'ویرایش' : 'افزودن'}
-          </Button>
-        </DialogActions>
+              {/* در صورت نیاز، فیلدهای schedule و is_active را اینجا به صورت Input اضافه کنید */}
+
+            </Stack>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="secondary" disabled={loading}>
+              انصراف
+            </Button>
+            <Button type="submit" variant="contained" color="primary" disabled={loading}>
+              {/* نمایش لودینگ روی دکمه */}
+              {loading ? <CircularProgress size={24} color="inherit" /> : (editId ? 'ذخیره تغییرات' : 'افزودن تخصیص')}
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </MainCard>
   );
