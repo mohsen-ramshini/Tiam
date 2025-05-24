@@ -29,7 +29,7 @@ export default function ThemeCustomization({ children }) {
 
   const theme = Palette('light', 'default');
 
-  const themeTypography = Typography(`'IRANSans', sans-serif`);
+  const themeTypography = Typography(`'Dana','IRANSans', sans-serif`);
 
   const themeCustomShadows = useMemo(() => CustomShadows(theme), [theme]);
 
