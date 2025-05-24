@@ -39,6 +39,9 @@ const TaskAssignment = () => {
   const [error, setError] = useState(null);
   const [editId, setEditId] = useState(null); // شناسه تخصیص برای ویرایش
   const [open, setOpen] = useState(false); // وضعیت باز بودن دیالوگ فرم
+  const [ordering, setOrdering] = useState('created_at');
+const [limit, setLimit] = useState(10);
+
 
   // آدرس پایه API برای تخصیص تسک
   const taskAssignmentBaseUrl = '/repo/task-assignments/';
