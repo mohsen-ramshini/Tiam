@@ -10,7 +10,7 @@ export const useCreateAssertionRole = ({ setError, reset, setOpen }) => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['assertion-role'] });
-      toast.success('پراب با موفقیت ایجاد شد');
+      toast.success('اعلان با موفقیت ایجاد شد');
       reset();
       setOpen(false);
     },
@@ -19,10 +19,10 @@ export const useCreateAssertionRole = ({ setError, reset, setOpen }) => {
       const message =
         error?.response?.data?.message ||
         error?.response?.data?.detail ||
-        'خطا در ایجاد پراب. لطفاً دوباره تلاش کنید.';
+        'خطا در ایجاد اعلان. لطفاً دوباره تلاش کنید.';
 
       toast.error(message);
-      console.error('خطا در ایجاد پراب:', error);
+      console.error('خطا در ایجاد اعلان:', error);
 
       if (setError) {
         setError('api', { message });
