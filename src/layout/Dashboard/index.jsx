@@ -34,16 +34,25 @@ export default function DashboardLayout() {
       <Header />
       <Drawer />
 
-      <Box component="main" sx={{ width: 'calc(100% - 260px)', flexGrow: 1, p: { xs: 2, sm: 3 } }}>
+      <Box component="main"   sx={{
+    width: 'calc(100% - 260px)',
+    flexGrow: 1,
+    p: { xs: 2, sm: 3 },
+    bgcolor: 'background.default', // فقط در صورتی که ThemeProvider استفاده شده
+    backgroundColor: 'var(--color-bg)', // در حالت عادی
+    color: 'var(--color-text)'
+  }}>
         <Toolbar sx={{ mt: 'inherit' }} />
         <Box
-          sx={{
-            ...{ px: { xs: 0, sm: 2 } },
-            position: 'relative',
-            minHeight: 'calc(100vh - 110px)',
-            display: 'flex',
-            flexDirection: 'column'
-          }}
+  sx={{
+    px: { xs: 0, sm: 2 },
+    position: 'relative',
+    minHeight: 'calc(100vh - 110px)',
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: 'transparent', // یا var(--color-surface) اگر کارت‌طور باشه
+    color: 'var(--color-text)'
+  }}
         >
           {pathname !== '/apps/profiles/account/my-account' && <Breadcrumbs />}
           <Outlet />
