@@ -22,15 +22,18 @@ import UniqueVisitorCard from 'sections/dashboard/default/UniqueVisitorCard';
 import SaleReportCard from 'sections/dashboard/default/SaleReportCard';
 import OrdersTable from 'sections/dashboard/default/OrdersTable';
 
-// assets
+// icons
 import GiftOutlined from '@ant-design/icons/GiftOutlined';
 import MessageOutlined from '@ant-design/icons/MessageOutlined';
 import SettingOutlined from '@ant-design/icons/SettingOutlined';
 
+// avatars
 import avatar1 from 'assets/images/users/avatar-1.png';
 import avatar2 from 'assets/images/users/avatar-2.png';
 import avatar3 from 'assets/images/users/avatar-3.png';
 import avatar4 from 'assets/images/users/avatar-4.png';
+
+// charts and map components
 import PageLoadTimeChart from '../../sections/dashboard/default/PageLoadTime';
 import MapComponent from '../../sections/dashboard/probesMap/map';
 import Heatmap from '../../sections/dashboard/chart/HeatMap';
@@ -41,7 +44,7 @@ import MultiHostLineChartWithMUI from '../../sections/dashboard/chart/MultiLineC
 const avatarSX = {
   width: 36,
   height: 36,
-  fontSize: '1rem'
+  fontSize: '1rem',
 };
 
 const actionSX = {
@@ -50,23 +53,23 @@ const actionSX = {
   top: 'auto',
   right: 'auto',
   alignSelf: 'flex-start',
-  transform: 'none'
+  transform: 'none',
 };
 
 export default function DashboardDefault() {
   return (
-    <Grid container spacing={2.75} >
-      {/* Title */}
+    <Grid container spacing={2.75}>
+      {/* عنوان صفحه */}
       <Grid item xs={12}>
         <Typography variant="h5">داشبورد</Typography>
       </Grid>
 
-      {/* Stat Cards */}
+      {/* کارت‌های آماری */}
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="تعداد پروب های فعال" count="4,42,236" percentage={59.3} extra="35,000" />
+        <AnalyticEcommerce title="تعداد پروب های فعال" count="442,236" percentage={59.3} extra="35,000" />
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="تعداد تست ها در یکروز گذشته " count="78,250" percentage={70.5} extra="8,900" />
+        <AnalyticEcommerce title="تعداد تست ها در یکروز گذشته" count="78,250" percentage={70.5} extra="8,900" />
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
         <AnalyticEcommerce title="تعداد هشدارهای اخیر" count="18,800" percentage={27.4} isLoss color="warning" extra="1,943" />
@@ -75,9 +78,8 @@ export default function DashboardDefault() {
         <AnalyticEcommerce title="تعداد پروب های غیر فعال" count="35,078" percentage={27.4} isLoss color="warning" extra="20,395" />
       </Grid>
 
-      {/* Map + Heatmap & DNS side by side */}
+      {/* بخش نقشه و نمودارهای حرارتی و DNS */}
       <Grid item container xs={12} spacing={2}>
-        {/* Map: نصف عرض */}
         <Grid item xs={12} md={6}>
           <MainCard title="نقشه پراب ها" sx={{ mt: 2 }} content={false}>
             <Box sx={{ p: 3, pb: 0 }}>
@@ -86,7 +88,6 @@ export default function DashboardDefault() {
           </MainCard>
         </Grid>
 
-        {/* Heatmap و DNS stacked vertically */}
         <Grid item xs={12} md={6} container direction="column" spacing={2}>
           <Grid item>
             <MainCard title="نقشه حرارتی" content={false}>
@@ -105,7 +106,7 @@ export default function DashboardDefault() {
         </Grid>
       </Grid>
 
-      {/* Network Chart */}
+      {/* نمودار شبکه */}
       <Grid item xs={12} md={6} lg={6}>
         <MainCard title="نمودار شبکه" sx={{ mt: 2 }} content={false}>
           <Box sx={{ p: 3, pb: 0 }}>
@@ -114,7 +115,7 @@ export default function DashboardDefault() {
         </MainCard>
       </Grid>
 
-      {/* Page Load Time */}
+      {/* نمودار زمان بارگذاری صفحه */}
       <Grid item xs={12} md={6} lg={6}>
         <MainCard title="نمودار زمان بارگذاری صفحه" sx={{ mt: 2 }} content={false}>
           <Box sx={{ p: 3, pb: 0 }}>
@@ -122,7 +123,6 @@ export default function DashboardDefault() {
           </Box>
         </MainCard>
       </Grid>
-
     </Grid>
   );
 }

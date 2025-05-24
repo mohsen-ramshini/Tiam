@@ -168,13 +168,13 @@ const TaskAssignment = () => {
     }
   };
 
-  // تابع کمکی برای پیدا کردن نام آیتم بر اساس ID
-  const findNameById = (items, id) => {
-    const targetId = typeof id === 'object' && id !== null ? id.id : id;
-    const item = items.find((i) => i.id === targetId);
-    // اگر آیتم نام نداشت یا پیدا نشد، خود ID را نمایش بده
-    return item ? (item.name || `ID: ${item.id}`) : `ID: ${targetId}`;
-  };
+  // // تابع کمکی برای پیدا کردن نام آیتم بر اساس ID
+  // const findNameById = (items, id) => {
+  //   const targetId = typeof id === 'object' && id !== null ? id.id : id;
+  //   const item = items.find((i) => i.id === targetId);
+  //   // اگر آیتم نام نداشت یا پیدا نشد، خود ID را نمایش بده
+  //   return item ? (item.name || `ID: ${item.id}`) : `ID: ${targetId}`;
+  // };
 
   // حذف یک تخصیص
   const handleDelete = async (id) => {

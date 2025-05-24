@@ -1,8 +1,9 @@
+/* App.css */
+@import "leaflet/dist/leaflet.css";
+
 * {
   -webkit-tap-highlight-color: transparent;
 }
-/* App.css */
-@import "leaflet/dist/leaflet.css";
 
 @font-face {
   font-family: 'IRANSans';
@@ -22,4 +23,24 @@
     url('/assets/fonts/IRANSans-Bold.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
+}
+
+:root {
+  /* Light Theme */
+  --color-primary: #7C3AED;
+  --color-accent: #38BDF8;
+  --color-bg: #F3F4F6;
+  --color-surface: #E5E7EB;
+  --color-text: #1F2937;
+  --color-info: #A78BFA;
+}
+
+body.dark {
+  /* Dark Theme */
+  --color-primary: #8B5CF6;
+  --color-accent: #60A5FA;
+  --color-bg: #1E1B4B;
+  --color-surface: #312E81;
+  --color-text: #EDE9FE;
+  --color-info: #C4B5FD;
 }

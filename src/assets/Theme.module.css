@@ -1,0 +1,32 @@
+/* Theme.module.css */
+
+.wrapper {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  padding: 1rem;
+}
+
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-primary);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.title {
+  color: var(--color-primary);
+  font-size: 1.25rem;
+}
+
+.highlight {
+  color: var(--color-info);
+}
+
+.button {
+  background-color: var(--color-accent);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
