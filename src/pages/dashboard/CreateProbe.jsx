@@ -44,6 +44,14 @@ const CreateProbe = () => {
   const [tokenDialogOpen, setTokenDialogOpen] = useState(false);
   const [tokenValue, setTokenValue] = useState('');
   const isEditMode = Boolean(selectedProbe);
+  const uniformButtonStyle = {
+    fontSize: '0.75rem',
+    py: 0.5,
+    px: 1.5,
+    minHeight: '30px',
+    minWidth: '64px',
+    textWrap: 'nowrap'
+  };
 
   // Theme and responsive breakpoints
   const theme = useTheme();
@@ -140,19 +148,19 @@ const CreateProbe = () => {
       ) : (
         probes.map((probe) => (
           <Grid item xs={12} key={probe.id}>
-            <Card 
-              variant="outlined" 
-              sx={{ 
-                height: '100%', 
+            <Card
+              variant="outlined"
+              sx={{
+                height: '100%',
                 boxShadow: isXxsScreen ? 0 : 1,
                 border: isXxsScreen ? '1px solid #eee' : 'inherit'
               }}
             >
               <CardContent sx={{ pb: 0, px: isXxsScreen ? 1 : 2, pt: isXxsScreen ? 1 : 2 }}>
-                <Typography 
-                  component="div" 
-                  sx={{ 
-                    fontWeight: 'bold', 
+                <Typography
+                  component="div"
+                  sx={{
+                    fontWeight: 'bold',
                     fontSize: isXxsScreen ? '0.75rem' : '1rem',
                     mb: isXxsScreen ? 0.5 : 1,
                     lineHeight: 1.2
@@ -160,12 +168,12 @@ const CreateProbe = () => {
                 >
                   {probe.name}
                 </Typography>
-                
+
                 {!isXxsScreen && <Divider sx={{ my: 0.5 }} />}
-                
-                <Typography 
-                  color="text.secondary" 
-                  sx={{ 
+
+                <Typography
+                  color="text.secondary"
+                  sx={{
                     mb: isXxsScreen ? 0.5 : 1,
                     fontSize: isXxsScreen ? '0.65rem' : '0.875rem',
                     lineHeight: isXxsScreen ? 1.2 : 1.5,
@@ -178,10 +186,10 @@ const CreateProbe = () => {
                   {probe.description}
                 </Typography>
               </CardContent>
-              
-              <CardActions 
-                sx={{ 
-                  px: isXxsScreen ? 1 : 2, 
+
+              <CardActions
+                sx={{
+                  px: isXxsScreen ? 1 : 2,
                   pt: isXxsScreen ? 0 : 1,
                   pb: isXxsScreen ? 1 : 1,
                   justifyContent: 'space-between',
@@ -191,22 +199,22 @@ const CreateProbe = () => {
                 <Box display="flex" gap={0.5}>
                   {isXxsScreen ? (
                     <>
-                      <IconButton 
-                        size="small" 
-                        color="primary" 
+                      <IconButton
+                        size="small"
+                        color="primary"
                         onClick={() => handleEdit(probe)}
-                        sx={{ 
+                        sx={{
                           padding: '2px',
                           '& svg': { fontSize: '0.85rem' }
                         }}
                       >
                         <Edit fontSize="inherit" />
                       </IconButton>
-                      <IconButton 
-                        size="small" 
-                        color="error" 
+                      <IconButton
+                        size="small"
+                        color="error"
                         onClick={() => handleDelete(probe.id)}
-                        sx={{ 
+                        sx={{
                           padding: '2px',
                           '& svg': { fontSize: '0.85rem' }
                         }}
@@ -216,20 +224,20 @@ const CreateProbe = () => {
                     </>
                   ) : (
                     <>
-                      <Button 
-                        size="small" 
-                        variant="outlined" 
-                        color="primary" 
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        color="primary"
                         startIcon={<Edit fontSize="small" />}
                         onClick={() => handleEdit(probe)}
                         sx={{ fontSize: '0.75rem' }}
                       >
                         ویرایش
                       </Button>
-                      <Button 
-                        size="small" 
-                        variant="outlined" 
-                        color="error" 
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        color="error"
                         startIcon={<Delete fontSize="small" />}
                         onClick={() => handleDelete(probe.id)}
                         sx={{ fontSize: '0.75rem' }}
@@ -239,18 +247,8 @@ const CreateProbe = () => {
                     </>
                   )}
                 </Box>
-                
-                <Button
-                  variant="outlined"
-                  size="small"
-                  onClick={() => changeToken({ id: probe.id })}
-                  sx={{ 
-                    mt: isXxsScreen ? 0.5 : 0,
-                    fontSize: isXxsScreen ? '0.65rem' : '0.75rem',
-                    py: isXxsScreen ? 0 : 0.5,
-                    minHeight: isXxsScreen ? '20px' : '24px'
-                  }}
-                >
+
+                <Button variant="outlined" size="small" onClick={() => changeToken({ id: probe.id })} sx={uniformButtonStyle}>
                   دریافت توکن
                 </Button>
               </CardActions>
@@ -269,7 +267,9 @@ const CreateProbe = () => {
           <TableRow>
             <TableCell sx={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}>نام</TableCell>
             <TableCell sx={{ fontWeight: 'bold', minWidth: isMediumScreen ? 150 : 250 }}>توضیحات</TableCell>
-            <TableCell align="center" sx={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}>عملیات</TableCell>
+            <TableCell align="center" sx={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+              عملیات
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -283,35 +283,29 @@ const CreateProbe = () => {
             probes.map((probe) => (
               <TableRow key={probe.id}>
                 <TableCell sx={{ whiteSpace: 'nowrap' }}>{probe.name}</TableCell>
-                <TableCell sx={{ 
-                  maxWidth: isMediumScreen ? 150 : 250, 
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: isMediumScreen ? 'nowrap' : 'normal'
-                }}>
+                <TableCell
+                  sx={{
+                    maxWidth: isMediumScreen ? 150 : 250,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: isMediumScreen ? 'nowrap' : 'normal'
+                  }}
+                >
                   {probe.description}
                 </TableCell>
                 <TableCell align="center">
                   <Stack direction="row" spacing={1} justifyContent="center" flexWrap="wrap">
-                    <IconButton 
-                      color="primary" 
-                      onClick={() => handleEdit(probe)}
-                      size={isMediumScreen ? 'small' : 'medium'}
-                    >
+                    <IconButton color="primary" onClick={() => handleEdit(probe)} size={isMediumScreen ? 'small' : 'medium'}>
                       <Edit fontSize={isMediumScreen ? 'small' : 'medium'} />
                     </IconButton>
-                    <IconButton 
-                      color="error" 
-                      onClick={() => handleDelete(probe.id)}
-                      size={isMediumScreen ? 'small' : 'medium'}
-                    >
+                    <IconButton color="error" onClick={() => handleDelete(probe.id)} size={isMediumScreen ? 'small' : 'medium'}>
                       <Delete fontSize={isMediumScreen ? 'small' : 'medium'} />
                     </IconButton>
                     <Button
                       variant="outlined"
                       size="small"
                       onClick={() => changeToken({ id: probe.id })}
-                      sx={{ 
+                      sx={{
                         fontSize: isMediumScreen ? '0.7rem' : '0.8rem',
                         py: isMediumScreen ? 0 : 0.5,
                         minHeight: isMediumScreen ? '24px' : '30px'
@@ -330,44 +324,29 @@ const CreateProbe = () => {
   );
 
   return (
-    <MainCard 
+    <MainCard
       title={
-        <Typography 
-          variant={isXxsScreen ? 'body1' : (isSmallScreen ? 'h6' : 'h5')} 
+        <Typography
+          variant={isXxsScreen ? 'body1' : isSmallScreen ? 'h6' : 'h5'}
           component="div"
-          sx={{ 
+          sx={{
             fontWeight: 'bold',
-            fontSize: isXxsScreen ? '0.85rem' : 'inherit' 
+            fontSize: isXxsScreen ? '0.85rem' : 'inherit'
           }}
         >
           مدیریت پراب‌ها
         </Typography>
       }
-      sx={{ 
-        overflow: 'hidden', 
+      sx={{
+        overflow: 'hidden',
         '& .MuiCardContent-root': {
           p: isXxsScreen ? 1 : 2
         }
       }}
     >
       <Box sx={{ width: '100%', mb: isXxsScreen ? 1 : 2 }}>
-        <Stack 
-          direction="row" 
-          justifyContent="flex-end" 
-          sx={{ mb: isXxsScreen ? 1 : (isSmallScreen ? 1.5 : 2) }}
-        >
-          <Button 
-            variant="contained" 
-            onClick={handleOpen}
-            startIcon={!isXxsScreen && <Add />}
-            size={isXxsScreen ? 'small' : (isSmallScreen ? 'small' : 'medium')}
-            sx={{ 
-              fontSize: isXxsScreen ? '0.65rem' : 'inherit',
-              py: isXxsScreen ? 0 : 'inherit',
-              minWidth: isXxsScreen ? '0' : '64px',
-              minHeight: isXxsScreen ? '24px' : 'inherit'
-            }}
-          >
+        <Stack direction="row" justifyContent="flex-end" sx={{ mb: isXxsScreen ? 1 : isSmallScreen ? 1.5 : 2 }}>
+          <Button variant="contained" onClick={handleOpen} startIcon={!isXxsScreen && <Add />} size="small" sx={uniformButtonStyle}>
             {isXxsScreen ? '+' : 'افزودن پراب'}
           </Button>
         </Stack>
@@ -376,15 +355,19 @@ const CreateProbe = () => {
           <Box display="flex" justifyContent="center" alignItems="center" py={isXxsScreen ? 2 : 4}>
             <CircularProgress size={isXxsScreen ? 20 : 40} />
           </Box>
-        ) : isMobileView ? renderMobileView() : renderDesktopView()}
+        ) : isMobileView ? (
+          renderMobileView()
+        ) : (
+          renderDesktopView()
+        )}
       </Box>
 
       {/* دیالوگ ساخت / ویرایش پراب */}
-      <Dialog 
-        open={open} 
-        onClose={handleClose} 
-        fullWidth 
-        maxWidth={isXxsScreen ? "xs" : "sm"}
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        fullWidth
+        maxWidth={isXxsScreen ? 'xs' : 'sm'}
         fullScreen={isXsScreen}
         PaperProps={{
           sx: {
@@ -394,18 +377,18 @@ const CreateProbe = () => {
           }
         }}
       >
-        <DialogTitle 
-          sx={{ 
+        <DialogTitle
+          sx={{
             p: isXxsScreen ? 1 : 2,
-            fontSize: isXxsScreen ? '0.85rem' : (isSmallScreen ? '1.1rem' : '1.25rem')
+            fontSize: isXxsScreen ? '0.85rem' : isSmallScreen ? '1.1rem' : '1.25rem'
           }}
         >
           {isEditMode ? 'ویرایش پراب' : 'افزودن پراب'}
         </DialogTitle>
-        
-        <DialogContent 
-          dividers 
-          sx={{ 
+
+        <DialogContent
+          dividers
+          sx={{
             p: isXxsScreen ? 1 : 2,
             '&.MuiDialogContent-dividers': {
               borderTop: '1px solid rgba(0, 0, 0, 0.12)',
@@ -442,7 +425,7 @@ const CreateProbe = () => {
                 }}
               />
             </Grid>
-            
+
             <Grid item xs={12}>
               <TextField
                 label="توضیحات"
@@ -466,14 +449,14 @@ const CreateProbe = () => {
                 }}
               />
             </Grid>
-            
+
             {errors.api && (
               <Grid item xs={12}>
-                <Typography 
-                  color="error" 
-                  sx={{ 
-                    mt: 0.5, 
-                    fontSize: isXxsScreen ? '0.65rem' : '0.75rem' 
+                <Typography
+                  color="error"
+                  sx={{
+                    mt: 0.5,
+                    fontSize: isXxsScreen ? '0.65rem' : '0.75rem'
                   }}
                 >
                   {errors.api.message}
@@ -482,52 +465,29 @@ const CreateProbe = () => {
             )}
           </Grid>
         </DialogContent>
-        
-        <DialogActions 
-          sx={{ 
+
+        <DialogActions
+          sx={{
             p: isXxsScreen ? 1 : 2,
             justifyContent: 'space-between'
           }}
         >
-          <Button 
-            onClick={handleClose} 
-            color="inherit"
-            size="small"
-            sx={{ 
-              fontSize: isXxsScreen ? '0.65rem' : '0.75rem',
-              minWidth: isXxsScreen ? '60px' : '64px',
-              py: isXxsScreen ? 0.5 : 'inherit'
-            }}
-          >
+          <Button onClick={handleClose} color="inherit" size="small" sx={uniformButtonStyle}>
             انصراف
           </Button>
-          <Button
-            onClick={handleSubmit(onSubmit)}
-            variant="contained"
-            color="primary"
-            disabled={isSubmitting}
-            size="small"
-            sx={{ 
-              fontSize: isXxsScreen ? '0.65rem' : '0.75rem',
-              minWidth: isXxsScreen ? '60px' : '64px',
-              py: isXxsScreen ? 0.5 : 'inherit'
-            }}
-          >
-            {isSubmitting ? (
-              <CircularProgress size={isXxsScreen ? 12 : 16} color="inherit" />
-            ) : (
-              isEditMode ? 'ذخیره' : 'افزودن'
-            )}
+
+          <Button type="submit" variant="contained" color="primary" size="small" disabled={isSubmitting} sx={uniformButtonStyle}>
+            {isEditMode ? 'ذخیره تغییرات' : 'افزودن'}
           </Button>
         </DialogActions>
       </Dialog>
 
       {/* دیالوگ نمایش توکن */}
-      <Dialog 
-        open={tokenDialogOpen} 
-        onClose={() => setTokenDialogOpen(false)} 
-        fullWidth 
-        maxWidth={isXxsScreen ? "xs" : "sm"}
+      <Dialog
+        open={tokenDialogOpen}
+        onClose={() => setTokenDialogOpen(false)}
+        fullWidth
+        maxWidth={isXxsScreen ? 'xs' : 'sm'}
         PaperProps={{
           sx: {
             m: isXxsScreen ? 1 : 2,
@@ -535,18 +495,16 @@ const CreateProbe = () => {
           }
         }}
       >
-        <DialogTitle 
-          sx={{ 
+        <DialogTitle
+          sx={{
             p: isXxsScreen ? 1 : 2,
-            fontSize: isXxsScreen ? '0.85rem' : (isSmallScreen ? '1.1rem' : '1.25rem')
+            fontSize: isXxsScreen ? '0.85rem' : isSmallScreen ? '1.1rem' : '1.25rem'
           }}
         >
           توکن جدید
         </DialogTitle>
         <DialogContent sx={{ p: isXxsScreen ? 1 : 2 }}>
-          <Typography sx={{ fontSize: isXxsScreen ? '0.7rem' : 'inherit' }}>
-            توکن با موفقیت دریافت شد:
-          </Typography>
+          <Typography sx={{ fontSize: isXxsScreen ? '0.7rem' : 'inherit' }}>توکن با موفقیت دریافت شد:</Typography>
           <Stack direction="row" alignItems="center" spacing={1} sx={{ mt: 2 }}>
             <Typography
               sx={{
@@ -560,19 +518,15 @@ const CreateProbe = () => {
               {tokenValue}
             </Typography>
             <Tooltip title="کپی توکن">
-              <IconButton 
-                onClick={handleCopyToken} 
-                color="primary"
-                size={isXxsScreen ? 'small' : 'medium'}
-              >
+              <IconButton onClick={handleCopyToken} color="primary" size={isXxsScreen ? 'small' : 'medium'}>
                 <ContentCopy fontSize={isXxsScreen ? 'small' : 'medium'} />
               </IconButton>
             </Tooltip>
           </Stack>
         </DialogContent>
         <DialogActions sx={{ p: isXxsScreen ? 1 : 2 }}>
-          <Button 
-            onClick={() => setTokenDialogOpen(false)} 
+          <Button
+            onClick={() => setTokenDialogOpen(false)}
             color="primary"
             size={isXxsScreen ? 'small' : 'medium'}
             sx={{ fontSize: isXxsScreen ? '0.7rem' : 'inherit' }}

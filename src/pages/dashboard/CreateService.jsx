@@ -42,6 +42,14 @@ const CreateService = () => {
   const [editId, setEditId] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
+  const uniformButtonStyle = {
+    fontSize: '0.75rem',
+    py: 0.5,
+    px: 1.5,
+    minHeight: '30px',
+    minWidth: '64px',
+    textWrap: 'nowrap'
+  };
 
   const { data: services = [], isLoading: isFetching, refetch } = useFetchServices();
 
@@ -135,17 +143,14 @@ const CreateService = () => {
           <Grid item xs={12} key={service.id}>
             <Card variant="outlined" sx={{ height: '100%' }}>
               <CardContent sx={{ pb: 0 }}>
-                <Typography variant="subtitle2" fontWeight="bold">{service.name}</Typography>
+                <Typography variant="subtitle2" fontWeight="bold">
+                  {service.name}
+                </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ my: 1 }}>
                   {service.description}
                 </Typography>
                 <Tooltip title={service.properties?.host || ''}>
-                  <Chip
-                    label={service.properties?.host}
-                    variant="outlined"
-                    size="small"
-                    color="primary"
-                  />
+                  <Chip label={service.properties?.host} variant="outlined" size="small" color="primary" />
                 </Tooltip>
               </CardContent>
               <CardActions sx={{ justifyContent: 'flex-end' }}>
@@ -168,10 +173,18 @@ const CreateService = () => {
       <Table size={isMediumScreen ? 'small' : 'medium'}>
         <TableHead>
           <TableRow>
-            <TableCell><Typography fontWeight="bold">نام</Typography></TableCell>
-            <TableCell><Typography fontWeight="bold">توضیحات</Typography></TableCell>
-            <TableCell><Typography fontWeight="bold">هاست</Typography></TableCell>
-            <TableCell align="center"><Typography fontWeight="bold">عملیات</Typography></TableCell>
+            <TableCell>
+              <Typography fontWeight="bold">نام</Typography>
+            </TableCell>
+            <TableCell>
+              <Typography fontWeight="bold">توضیحات</Typography>
+            </TableCell>
+            <TableCell>
+              <Typography fontWeight="bold">هاست</Typography>
+            </TableCell>
+            <TableCell align="center">
+              <Typography fontWeight="bold">عملیات</Typography>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -203,7 +216,9 @@ const CreateService = () => {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={4} align="center">هیچ سرویسی یافت نشد.</TableCell>
+              <TableCell colSpan={4} align="center">
+                هیچ سرویسی یافت نشد.
+              </TableCell>
             </TableRow>
           )}
         </TableBody>
@@ -218,7 +233,7 @@ const CreateService = () => {
           variant="contained"
           startIcon={isXxsScreen ? null : <Add />}
           size={isXxsScreen ? 'small' : 'medium'}
-          sx={{ fontSize: isXxsScreen ? '0.7rem' : 'inherit' }}
+          sx={{ ...uniformButtonStyle, fontSize: isXxsScreen ? '0.7rem' : '0.8rem' }}
           onClick={handleOpen}
         >
           {isXxsScreen ? '+' : 'افزودن سرویس'}
@@ -251,10 +266,14 @@ const CreateService = () => {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="secondary">انصراف</Button>
-          <Button onClick={handleSubmit} variant="contained" color="primary" disabled={isSubmitting}>
-            {isSubmitting ? <CircularProgress size={20} color="inherit" /> : editId ? 'ذخیره تغییرات' : 'افزودن'}
-          </Button>
+          <DialogActions>
+            <Button onClick={handleClose} color="secondary" sx={uniformButtonStyle}>
+              انصراف
+            </Button>
+            <Button onClick={handleSubmit} variant="contained" color="primary" disabled={isSubmitting} sx={uniformButtonStyle}>
+              {isSubmitting ? <CircularProgress size={20} color="inherit" /> : editId ? 'ذخیره تغییرات' : 'افزودن'}
+            </Button>
+          </DialogActions>
         </DialogActions>
       </Dialog>
     </MainCard>

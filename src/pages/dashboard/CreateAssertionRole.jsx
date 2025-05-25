@@ -40,6 +40,14 @@ const CreateAssertionRole = () => {
   const [open, setOpen] = useState(false);
   const [selectedAssertionRole, setSelectedAssertionRole] = useState(null);
   const isEditMode = Boolean(selectedAssertionRole);
+  const uniformButtonStyle = {
+    fontSize: '0.75rem',
+    py: 0.5,
+    px: 1.5,
+    minHeight: '30px',
+    minWidth: '64px',
+    textWrap: 'nowrap'
+  };
 
   const {
     register,
@@ -145,8 +153,8 @@ const CreateAssertionRole = () => {
   return (
     <MainCard title="مدیریت پراب‌ها">
       <Stack direction="row" justifyContent="flex-end" sx={{ mb: 2 }}>
-        <Button variant="contained" startIcon={<Add />} onClick={handleOpen}>
-          افزودن پراب
+        <Button variant="contained" startIcon={<Add />} onClick={handleOpen} sx={uniformButtonStyle}>
+          افزودن نقش
         </Button>
       </Stack>
 
@@ -196,7 +204,7 @@ const CreateAssertionRole = () => {
       </TableContainer>
 
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-        <DialogTitle>{isEditMode ? 'ویرایش پراب' : 'افزودن پراب'}</DialogTitle>
+        <DialogTitle>{isEditMode ? 'ویرایش پراب' : 'افزودن نقش'}</DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={2} sx={{ mt: 1 }}>
@@ -271,10 +279,11 @@ const CreateAssertionRole = () => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="secondary">
+          <Button onClick={handleClose} color="secondary" sx={uniformButtonStyle}>
             انصراف
           </Button>
-          <Button onClick={handleSubmit(onSubmit)} variant="contained" color="primary" disabled={isSubmitting}>
+
+          <Button onClick={handleSubmit(onSubmit)} variant="contained" color="primary" disabled={isSubmitting} sx={uniformButtonStyle}>
             {isSubmitting ? <CircularProgress size={24} color="inherit" /> : isEditMode ? 'ذخیره تغییرات' : 'افزودن'}
           </Button>
         </DialogActions>

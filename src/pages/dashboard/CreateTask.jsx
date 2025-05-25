@@ -81,6 +81,12 @@ const CreateTask = () => {
     setError(null);
     setOpen(true);
   };
+  const uniformButtonStyle = {
+    fontSize: '0.8rem',
+    padding: theme.spacing(0.5, 2),
+    borderRadius: '8px',
+    textTransform: 'none'
+  };
 
   const handleClose = () => {
     setOpen(false);
@@ -141,26 +147,26 @@ const CreateTask = () => {
       ) : (
         tasks.map((task) => (
           <Grid item xs={12} key={task.id}>
-            <Card 
-              variant="outlined" 
-              sx={{ 
-                height: '100%', 
+            <Card
+              variant="outlined"
+              sx={{
+                height: '100%',
                 boxShadow: isXxsScreen ? 0 : 1,
                 border: isXxsScreen ? '1px solid #eee' : 'inherit'
               }}
             >
               <CardContent sx={{ pb: 0, px: isXxsScreen ? 1 : 2, pt: isXxsScreen ? 1 : 2 }}>
-                <Box 
-                  display="flex" 
+                <Box
+                  display="flex"
                   flexDirection={isXxsScreen ? 'column' : 'row'}
-                  justifyContent="space-between" 
-                  alignItems={isXxsScreen ? 'flex-start' : 'center'} 
+                  justifyContent="space-between"
+                  alignItems={isXxsScreen ? 'flex-start' : 'center'}
                   mb={isXxsScreen ? 0.5 : 1}
                 >
-                  <Typography 
-                    component="div" 
-                    sx={{ 
-                      fontWeight: 'bold', 
+                  <Typography
+                    component="div"
+                    sx={{
+                      fontWeight: 'bold',
                       fontSize: isXxsScreen ? '0.75rem' : '1rem',
                       mb: isXxsScreen ? 0.5 : 0,
                       lineHeight: 1.2
@@ -168,13 +174,13 @@ const CreateTask = () => {
                   >
                     {task.name}
                   </Typography>
-                  <Chip 
-                    icon={<Assessment sx={{ fontSize: isXxsScreen ? '0.7rem' : '1rem' }} />} 
-                    label={task.metric} 
-                    size="small" 
-                    color="primary" 
+                  <Chip
+                    icon={<Assessment sx={{ fontSize: isXxsScreen ? '0.7rem' : '1rem' }} />}
+                    label={task.metric}
+                    size="small"
+                    color="primary"
                     variant="outlined"
-                    sx={{ 
+                    sx={{
                       fontSize: isXxsScreen ? '0.6rem' : '0.7rem',
                       height: isXxsScreen ? '20px' : '24px',
                       '& .MuiChip-label': {
@@ -183,12 +189,12 @@ const CreateTask = () => {
                     }}
                   />
                 </Box>
-                
+
                 {!isXxsScreen && <Divider sx={{ my: 0.5 }} />}
-                
-                <Typography 
-                  color="text.secondary" 
-                  sx={{ 
+
+                <Typography
+                  color="text.secondary"
+                  sx={{
                     mb: isXxsScreen ? 0.5 : 1,
                     fontSize: isXxsScreen ? '0.65rem' : '0.875rem',
                     lineHeight: isXxsScreen ? 1.2 : 1.5,
@@ -200,14 +206,14 @@ const CreateTask = () => {
                 >
                   {task.description}
                 </Typography>
-                
+
                 {isXxsScreen ? (
                   <Tooltip title={`Git: ${task.git_repo}\nEntrypoint: ${task.entrypoint}`}>
                     <Box display="flex" justifyContent="flex-end">
-                      <Typography 
-                        color="primary" 
-                        sx={{ 
-                          fontSize: '0.6rem', 
+                      <Typography
+                        color="primary"
+                        sx={{
+                          fontSize: '0.6rem',
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center'
@@ -221,34 +227,34 @@ const CreateTask = () => {
                 ) : (
                   <Box display="flex" gap={0.5} flexWrap="wrap">
                     <Tooltip title={task.git_repo}>
-                      <Chip 
-                        icon={<GitHub fontSize="small" />} 
-                        label={task.git_repo.split('/').pop()} 
-                        size="small" 
-                        sx={{ 
+                      <Chip
+                        icon={<GitHub fontSize="small" />}
+                        label={task.git_repo.split('/').pop()}
+                        size="small"
+                        sx={{
                           fontSize: '0.7rem',
                           height: '24px'
-                        }} 
+                        }}
                       />
                     </Tooltip>
                     <Tooltip title={task.entrypoint}>
-                      <Chip 
-                        icon={<Code fontSize="small" />} 
-                        label={task.entrypoint} 
-                        size="small" 
-                        sx={{ 
+                      <Chip
+                        icon={<Code fontSize="small" />}
+                        label={task.entrypoint}
+                        size="small"
+                        sx={{
                           fontSize: '0.7rem',
                           height: '24px'
-                        }} 
+                        }}
                       />
                     </Tooltip>
                   </Box>
                 )}
               </CardContent>
-              
-              <CardActions 
-                sx={{ 
-                  px: isXxsScreen ? 1 : 2, 
+
+              <CardActions
+                sx={{
+                  px: isXxsScreen ? 1 : 2,
                   pt: isXxsScreen ? 0 : 1,
                   pb: isXxsScreen ? 1 : 1,
                   justifyContent: isXxsScreen ? 'flex-end' : 'flex-start'
@@ -256,22 +262,22 @@ const CreateTask = () => {
               >
                 {isXxsScreen ? (
                   <Box display="flex" gap={0.5}>
-                    <IconButton 
-                      size="small" 
-                      color="primary" 
+                    <IconButton
+                      size="small"
+                      color="primary"
                       onClick={() => handleEdit(task)}
-                      sx={{ 
+                      sx={{
                         padding: '2px',
                         '& svg': { fontSize: '0.85rem' }
                       }}
                     >
                       <Edit fontSize="inherit" />
                     </IconButton>
-                    <IconButton 
-                      size="small" 
-                      color="error" 
+                    <IconButton
+                      size="small"
+                      color="error"
                       onClick={() => handleDelete(task.id)}
-                      sx={{ 
+                      sx={{
                         padding: '2px',
                         '& svg': { fontSize: '0.85rem' }
                       }}
@@ -281,23 +287,32 @@ const CreateTask = () => {
                   </Box>
                 ) : (
                   <>
-                    <Button 
-                      size="small" 
-                      variant="outlined" 
-                      color="primary" 
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      color="primary"
                       startIcon={<Edit fontSize="small" />}
                       onClick={() => handleEdit(task)}
-                      sx={{ fontSize: '0.75rem' }}
+                      sx={{
+                        ...uniformButtonStyle,
+                        fontSize: '0.75rem',
+                        padding: theme.spacing(0.25, 1.5)
+                      }}
                     >
                       ویرایش
                     </Button>
-                    <Button 
-                      size="small" 
-                      variant="outlined" 
-                      color="error" 
+
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      color="error"
                       startIcon={<Delete fontSize="small" />}
                       onClick={() => handleDelete(task.id)}
-                      sx={{ fontSize: '0.75rem' }}
+                      sx={{
+                        ...uniformButtonStyle,
+                        fontSize: '0.75rem',
+                        padding: theme.spacing(0.25, 1.5)
+                      }}
                     >
                       حذف
                     </Button>
@@ -326,7 +341,9 @@ const CreateTask = () => {
                 <TableCell sx={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}>ورودی</TableCell>
               </>
             )}
-            <TableCell align="center" sx={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}>عملیات</TableCell>
+            <TableCell align="center" sx={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+              عملیات
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -340,33 +357,39 @@ const CreateTask = () => {
             tasks.map((task) => (
               <TableRow key={task.id}>
                 <TableCell sx={{ whiteSpace: 'nowrap' }}>{task.name}</TableCell>
-                <TableCell sx={{ 
-                  maxWidth: isMediumScreen ? 150 : 250, 
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: isMediumScreen ? 'nowrap' : 'normal'
-                }}>
+                <TableCell
+                  sx={{
+                    maxWidth: isMediumScreen ? 150 : 250,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: isMediumScreen ? 'nowrap' : 'normal'
+                  }}
+                >
                   {task.description}
                 </TableCell>
                 <TableCell sx={{ whiteSpace: 'nowrap' }}>{task.metric}</TableCell>
                 {!isSmallScreen && (
                   <>
-                    <TableCell sx={{ 
-                      maxWidth: 120, 
-                      overflow: 'hidden', 
-                      textOverflow: 'ellipsis', 
-                      whiteSpace: 'nowrap' 
-                    }}>
+                    <TableCell
+                      sx={{
+                        maxWidth: 120,
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
                       <Tooltip title={task.git_repo}>
                         <span>{task.git_repo}</span>
                       </Tooltip>
                     </TableCell>
-                    <TableCell sx={{ 
-                      maxWidth: 120, 
-                      overflow: 'hidden', 
-                      textOverflow: 'ellipsis', 
-                      whiteSpace: 'nowrap' 
-                    }}>
+                    <TableCell
+                      sx={{
+                        maxWidth: 120,
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
                       <Tooltip title={task.entrypoint}>
                         <span>{task.entrypoint}</span>
                       </Tooltip>
@@ -375,18 +398,10 @@ const CreateTask = () => {
                 )}
                 <TableCell align="center">
                   <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
-                    <IconButton 
-                      color="primary" 
-                      onClick={() => handleEdit(task)} 
-                      size={isMediumScreen ? 'small' : 'medium'}
-                    >
+                    <IconButton color="primary" onClick={() => handleEdit(task)} size={isMediumScreen ? 'small' : 'medium'}>
                       <Edit fontSize={isMediumScreen ? 'small' : 'medium'} />
                     </IconButton>
-                    <IconButton 
-                      color="error" 
-                      onClick={() => handleDelete(task.id)} 
-                      size={isMediumScreen ? 'small' : 'medium'}
-                    >
+                    <IconButton color="error" onClick={() => handleDelete(task.id)} size={isMediumScreen ? 'small' : 'medium'}>
                       <Delete fontSize={isMediumScreen ? 'small' : 'medium'} />
                     </IconButton>
                   </Box>
@@ -400,59 +415,68 @@ const CreateTask = () => {
   );
 
   return (
-    <MainCard 
+    <MainCard
       title={
-        <Typography 
-          variant={isXxsScreen ? 'body1' : (isSmallScreen ? 'h6' : 'h5')} 
+        <Typography
+          variant={isXxsScreen ? 'body1' : isSmallScreen ? 'h6' : 'h5'}
           component="div"
-          sx={{ 
+          sx={{
             fontWeight: 'bold',
-            fontSize: isXxsScreen ? '0.85rem' : 'inherit' 
+            fontSize: isXxsScreen ? '0.85rem' : 'inherit'
           }}
         >
           مدیریت تسک‌ها
         </Typography>
       }
-      sx={{ 
-        overflow: 'hidden', 
+      sx={{
+        overflow: 'hidden',
         '& .MuiCardContent-root': {
           p: isXxsScreen ? 1 : 2
         }
       }}
     >
       <Box sx={{ width: '100%', mb: isXxsScreen ? 1 : 2 }}>
-        <Stack 
-          direction="row" 
-          justifyContent="flex-end" 
-          sx={{ mb: isXxsScreen ? 1 : (isSmallScreen ? 1.5 : 2) }}
-        >
-          <Button 
-            variant="contained" 
-            onClick={handleOpen}
-            size={isXxsScreen ? 'small' : (isSmallScreen ? 'small' : 'medium')}
-            sx={{ 
-              fontSize: isXxsScreen ? '0.65rem' : 'inherit',
-              py: isXxsScreen ? 0 : 'inherit',
-              minWidth: isXxsScreen ? '0' : '64px',
-              minHeight: isXxsScreen ? '24px' : 'inherit'
-            }}
-          >
-            {isXxsScreen ? '+' : <><Add /> افزودن تسک</>}
-          </Button>
+        <Stack direction="row" justifyContent="flex-end" sx={{ mb: isXxsScreen ? 1 : isSmallScreen ? 1.5 : 2 }}>
+          <Button
+  variant="contained"
+  onClick={handleOpen}
+  size={isXxsScreen ? 'small' : isSmallScreen ? 'small' : 'medium'}
+  sx={{
+    fontSize: isXxsScreen ? '0.65rem' : '0.8rem',
+    padding: isXxsScreen ? theme.spacing(0.25, 1) : theme.spacing(0.5, 2),
+    borderRadius: '8px',
+    textTransform: 'none',
+    minWidth: isXxsScreen ? '36px' : '64px',
+    minHeight: isXxsScreen ? '28px' : '36px'
+  }}
+>
+  {isXxsScreen ? (
+    '+'
+  ) : (
+    <>
+      <Add fontSize="small" /> افزودن تسک
+    </>
+  )}
+</Button>
+
         </Stack>
 
         {isLoading ? (
           <Box display="flex" justifyContent="center" alignItems="center" py={isXxsScreen ? 2 : 4}>
             <CircularProgress size={isXxsScreen ? 20 : 40} />
           </Box>
-        ) : isMobileView ? renderMobileView() : renderDesktopView()}
+        ) : isMobileView ? (
+          renderMobileView()
+        ) : (
+          renderDesktopView()
+        )}
       </Box>
 
-      <Dialog 
-        open={open} 
-        onClose={handleClose} 
-        fullWidth 
-        maxWidth={isXxsScreen ? "xs" : "sm"}
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        fullWidth
+        maxWidth={isXxsScreen ? 'xs' : 'sm'}
         fullScreen={isXsScreen}
         PaperProps={{
           sx: {
@@ -462,18 +486,18 @@ const CreateTask = () => {
           }
         }}
       >
-        <DialogTitle 
-          sx={{ 
+        <DialogTitle
+          sx={{
             p: isXxsScreen ? 1 : 2,
-            fontSize: isXxsScreen ? '0.85rem' : (isSmallScreen ? '1.1rem' : '1.25rem')
+            fontSize: isXxsScreen ? '0.85rem' : isSmallScreen ? '1.1rem' : '1.25rem'
           }}
         >
           {editId ? 'ویرایش تسک' : 'افزودن تسک'}
         </DialogTitle>
-        
-        <DialogContent 
-          dividers 
-          sx={{ 
+
+        <DialogContent
+          dividers
+          sx={{
             p: isXxsScreen ? 1 : 2,
             '&.MuiDialogContent-dividers': {
               borderTop: '1px solid rgba(0, 0, 0, 0.12)',
@@ -510,7 +534,7 @@ const CreateTask = () => {
                 }}
               />
             </Grid>
-            
+
             <Grid item xs={12}>
               <TextField
                 label="مترک (metric)"
@@ -538,7 +562,7 @@ const CreateTask = () => {
                 }}
               />
             </Grid>
-            
+
             <Grid item xs={12}>
               <TextField
                 label="توضیحات"
@@ -562,7 +586,7 @@ const CreateTask = () => {
                 }}
               />
             </Grid>
-            
+
             <Grid item xs={12}>
               <TextField
                 label="گیت ریپو"
@@ -590,7 +614,7 @@ const CreateTask = () => {
                 }}
               />
             </Grid>
-            
+
             <Grid item xs={12}>
               <TextField
                 label="ورودی (entrypoint)"
@@ -618,14 +642,14 @@ const CreateTask = () => {
                 }}
               />
             </Grid>
-            
+
             {error && (
               <Grid item xs={12}>
-                <Typography 
-                  color="error" 
-                  sx={{ 
-                    mt: 0.5, 
-                    fontSize: isXxsScreen ? '0.65rem' : '0.75rem' 
+                <Typography
+                  color="error"
+                  sx={{
+                    mt: 0.5,
+                    fontSize: isXxsScreen ? '0.65rem' : '0.75rem'
                   }}
                 >
                   {error}
@@ -634,21 +658,22 @@ const CreateTask = () => {
             )}
           </Grid>
         </DialogContent>
-        
-        <DialogActions 
-          sx={{ 
+
+        <DialogActions
+          sx={{
             p: isXxsScreen ? 1 : 2,
             justifyContent: 'space-between'
           }}
         >
-          <Button 
-            onClick={handleClose} 
+          <Button
+            onClick={handleClose}
             color="inherit"
             size="small"
-            sx={{ 
+            sx={{
+              ...uniformButtonStyle,
               fontSize: isXxsScreen ? '0.65rem' : '0.75rem',
               minWidth: isXxsScreen ? '60px' : '64px',
-              py: isXxsScreen ? 0.5 : 'inherit'
+              padding: isXxsScreen ? theme.spacing(0.25, 1.5) : theme.spacing(0.5, 2)
             }}
           >
             انصراف
@@ -659,16 +684,19 @@ const CreateTask = () => {
             color="primary"
             disabled={createTaskMutation.isLoading || updateTaskMutation.isLoading}
             size="small"
-            sx={{ 
+            sx={{
+              ...uniformButtonStyle,
               fontSize: isXxsScreen ? '0.65rem' : '0.75rem',
               minWidth: isXxsScreen ? '60px' : '64px',
-              py: isXxsScreen ? 0.5 : 'inherit'
+              padding: isXxsScreen ? theme.spacing(0.25, 1.5) : theme.spacing(0.5, 2)
             }}
           >
-            {(createTaskMutation.isLoading || updateTaskMutation.isLoading) ? (
+            {createTaskMutation.isLoading || updateTaskMutation.isLoading ? (
               <CircularProgress size={isXxsScreen ? 12 : 16} color="inherit" />
+            ) : editId ? (
+              'ذخیره'
             ) : (
-              editId ? 'ذخیره' : 'افزودن'
+              'افزودن'
             )}
           </Button>
         </DialogActions>
