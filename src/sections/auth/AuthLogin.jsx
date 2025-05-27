@@ -58,7 +58,7 @@ export default function AuthLogin({ isDemo = false }) {
 
   return (
     <Formik
-      initialValues={{ username: 'tiam-front-1', password: 'asdf1234' }}
+      initialValues={{ username: 'admin', password: 'admin' }}
       validationSchema={Yup.object().shape({
         username: Yup.string().required('نام کاربری الزامی است'),
         password: Yup.string()
