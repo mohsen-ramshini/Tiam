@@ -8,7 +8,8 @@ import {
   AppstoreAddOutlined, 
   DeploymentUnitOutlined,
   NotificationOutlined,
-  TableOutlined
+  TableOutlined,
+  WarningOutlined 
 } from '@ant-design/icons';
 
 // icons
@@ -20,7 +21,8 @@ const icons = {
   AppstoreAddOutlined,
   DeploymentUnitOutlined,
   NotificationOutlined,
-  TableOutlined
+  TableOutlined,
+  WarningOutlined 
 };
 
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
@@ -93,7 +95,7 @@ const dashboard = {
       title: 'تنظیم اعلان ها',
       type: 'item',
       url: '/notification',
-      icon: icons.NotificationOutlined // برای تسک اساینمنت (شبکه یا تخصیص)
+      icon: icons.WarningOutlined   // برای تسک اساینمنت (شبکه یا تخصیص)
     },
     
   ]

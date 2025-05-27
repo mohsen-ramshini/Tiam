@@ -37,7 +37,7 @@ export default function AuthFooter() {
           </Typography>
         </Stack>
         <Typography variant="subtitle2" color="secondary" sx={{ textAlign: 'center' }}>
-          © Made with love by Team{' '}
+          © Made with love by{' '}
           <Link href="#" target="_blank" underline="hover">
             UniTeam
           </Link>
