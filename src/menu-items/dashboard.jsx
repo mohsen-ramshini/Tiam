@@ -88,6 +88,13 @@ const dashboard = {
       url: '/assertion-role',
       icon: icons.NotificationOutlined // برای تسک اساینمنت (شبکه یا تخصیص)
     },
+    {
+      id: 'notification',
+      title: 'تنظیم اعلان ها',
+      type: 'item',
+      url: '/notification',
+      icon: icons.NotificationOutlined // برای تسک اساینمنت (شبکه یا تخصیص)
+    },
     
   ]
 };

@@ -16,7 +16,9 @@ const CreateTask = Loadable(lazy(() => import('pages/dashboard/CreateTask.jsx'))
 const CreateService = Loadable(lazy(() => import('pages/dashboard/CreateService.jsx')));
 const TaskAssignment = Loadable(lazy(() => import('pages/dashboard/TaskAssignment.jsx')));
 const AssertionRole = Loadable(lazy(() => import('pages/dashboard/CreateAssertionRole.jsx')));
-const StatusTable = Loadable(lazy(() => import('pages//dashboard/StatusTable.jsx')));
+const StatusTable = Loadable(lazy(() => import('pages/dashboard/StatusTable.jsx')));
+const Notification = Loadable(lazy(() => import('pages/dashboard/Notification.jsx')));
+
 
 const MainRoutes = {
   path: '/',
@@ -38,7 +40,8 @@ const MainRoutes = {
         { path: 'create-service', element: <CreateService /> },
         { path: 'task-assignment', element: <TaskAssignment /> },
         { path: 'assertion-role', element: <AssertionRole /> },
-        { path: 'status-table', element: <StatusTable /> }
+        { path: 'status-table', element: <StatusTable /> },
+        { path: 'notification', element: <Notification /> }
       ]
     }
   ]
