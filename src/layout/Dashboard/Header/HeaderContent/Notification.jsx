@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // material-ui
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -49,7 +50,7 @@ const actionSX = {
 
 export default function Notification() {
   const downMD = useMediaQuery((theme) => theme.breakpoints.down('md'));
-
+  const navigate = useNavigate();
   const anchorRef = useRef(null);
   const [read, setRead] = useState(2);
   const [open, setOpen] = useState(false);
@@ -232,7 +233,7 @@ export default function Notification() {
                         secondary="زمان خاصی در نظر گرفته نشده است."
                       />
                     </ListItem>
-                    <ListItemButton sx={{ textAlign: 'center', py: `${12}px !important` }}>
+                    <ListItemButton sx={{ textAlign: 'center', py: `${12}px !important` }} onClick={()=>navigate('/notification')}>
                       <ListItemText
                         primary={
                           <Typography variant="h6" color="primary">
