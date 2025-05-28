@@ -80,24 +80,24 @@ export default function WrappedHeatmap() {
   };
 
   useEffect(() => {
-    function updateSize() {
-      if (containerRef.current) {
+    if (!containerRef.current) return;
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
         setDimensions({
-          width: containerRef.current.clientWidth,
-          height: containerRef.current.clientHeight,
+          width: entry.contentRect.width,
+          height: entry.contentRect.height,
         });
       }
-    }
-    updateSize();
-    window.addEventListener("resize", updateSize);
-    return () => window.removeEventListener("resize", updateSize);
+    });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
   }, []);
 
   const cellWidth = dimensions.width
-    ? Math.max(dimensions.width / xLabels.length - 10, 50)
+    ? Math.max(Math.min(dimensions.width / xLabels.length - 10, 120), 50)
     : 60;
   const cellHeight = dimensions.height
-    ? Math.max(dimensions.height / yLabels.length - 10, 30)
+    ? Math.max(Math.min(dimensions.height / yLabels.length - 10, 70), 30)
     : 36;
 
   return (
@@ -115,7 +115,7 @@ export default function WrappedHeatmap() {
           color: "#444",
           padding: 20,
           width: "100%",
-          minHeight: 400,
+          height: "100%",
           borderRadius: 10,
           boxShadow: "0 4px 12px rgb(0 0 0 / 0.1)",
           background: "#f8f9fa",
@@ -134,24 +134,12 @@ export default function WrappedHeatmap() {
             flexWrap: "wrap",
           }}
         >
-          <h2 style={{ margin: 0, color: "#333", flexGrow: 1 }}>
+          <h2 style={{ margin: 0, color: "#333" }}>
             {metric === "latency" ? "Latency Heatmap (ms)" : "Ping Heatmap (ms)"} - {host}
           </h2>
 
-          <div
-            style={{
-              display: "flex",
-              gap: 10,
-              flexWrap: "wrap",
-              minWidth: 240,
-              justifyContent: "flex-end",
-            }}
-          >
-            <label htmlFor="metric-select" style={{ display: "none" }}>
-              Metric
-            </label>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
             <select
-              id="metric-select"
               value={metric}
               onChange={(e) => setMetric(e.target.value)}
               style={{
@@ -160,17 +148,12 @@ export default function WrappedHeatmap() {
                 borderRadius: 6,
                 border: "1px solid #ccc",
                 background: "#fff",
-                minWidth: 100,
               }}
             >
               <option value="latency">Latency</option>
               <option value="ping">Ping</option>
             </select>
-            <label htmlFor="host-select" style={{ display: "none" }}>
-              Host
-            </label>
             <select
-              id="host-select"
               value={host}
               onChange={(e) => setHost(e.target.value)}
               style={{
@@ -179,7 +162,6 @@ export default function WrappedHeatmap() {
                 borderRadius: 6,
                 border: "1px solid #ccc",
                 background: "#fff",
-                minWidth: 100,
               }}
             >
               {hosts.map((h) => (
@@ -191,29 +173,17 @@ export default function WrappedHeatmap() {
           </div>
         </div>
 
-        <div
-          style={{
-            marginBottom: 20,
-            display: "flex",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: 8,
-          }}
-        >
-          <label
-            htmlFor="time-range"
-            style={{ marginRight: 10, fontWeight: "bold", color: "#333" }}
-          >
+        <div style={{ marginBottom: 20 }}>
+          <label style={{ marginRight: 10, fontWeight: "bold", color: "#333" }}>
             بازه زمانی:
           </label>
           <input
             type="range"
-            id="time-range"
             min={1}
             max={5}
             value={timeRange}
             onChange={(e) => setTimeRange(Number(e.target.value))}
-            style={{ width: 200, flexShrink: 0 }}
+            style={{ width: 200 }}
           />
           <span style={{ marginRight: 12 }}>
             {timeOptions.find((t) => t.value === timeRange)?.label}
@@ -228,15 +198,35 @@ export default function WrappedHeatmap() {
             squares={false}
             height={cellHeight}
             width={cellWidth}
-            cellStyle={(background, value, min, max, data, x, y) => ({
-              background: getColor(value),
-              fontSize: 14,
-              color: "white",
+            cellStyle={(background, value) => ({
+              backgroundColor: getColor(value),
+              color: value > maxVal / 2 ? "#fff" : "#222",
+              fontWeight: "600",
               borderRadius: 6,
-              cursor: "pointer",
-              transition: "background-color 0.3s ease",
+              boxShadow: "0 0 5px rgba(0,0,0,0.15)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: 14,
+              cursor: "default",
+              transition: "background-color 0.3s",
             })}
-            cellRender={(value) => value && <div>{value}</div>}
+            cellRender={(value) => <span>{value} ms</span>}
+            xLabelsStyle={() => ({
+              color: "#666",
+              fontWeight: "700",
+              fontSize: 14,
+              marginBottom: 8,
+              userSelect: "none",
+            })}
+            yLabelsStyle={() => ({
+              color: "#666",
+              fontWeight: "700",
+              fontSize: 14,
+              marginRight: 10,
+              userSelect: "none",
+            })}
+            style={{ userSelect: "none" }}
           />
         </div>
       </div>
