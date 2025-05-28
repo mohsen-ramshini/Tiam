@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText, OutlinedInput, Box, Typography } from '@mui/material';
+import {
+  LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer
+} from 'recharts';
+import {
+  FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText,
+  OutlinedInput, Box, Typography, useMediaQuery, useTheme
+} from '@mui/material';
 
 const hosts = ['host1', 'host2', 'host3'];
 const metrics = ['latency', 'ping'];
 
-// فرض داده نمونه (می‌تونی با داده واقعی جایگزین کنی)
 const data = [
   { time: '10:00', host1_latency: 20, host1_ping: 5, host2_latency: 30, host2_ping: 8, host3_latency: 15, host3_ping: 3 },
   { time: '10:01', host1_latency: 25, host1_ping: 7, host2_latency: 28, host2_ping: 9, host3_latency: 14, host3_ping: 4 },
@@ -31,6 +35,9 @@ export default function MultiHostLineChartWithMUI() {
   const [selectedHosts, setSelectedHosts] = useState(['host1']);
   const [selectedMetric, setSelectedMetric] = useState('latency');
 
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
   const handleHostsChange = (event) => {
     const { target: { value } } = event;
     setSelectedHosts(typeof value === 'string' ? value.split(',') : value);
@@ -41,11 +48,19 @@ export default function MultiHostLineChartWithMUI() {
   };
 
   return (
-    <Box sx={{ width: '90%', maxWidth: 700, margin: 'auto', mt: 4 }}>
-      <Typography variant="h6" gutterBottom>
+    <Box
+      sx={{
+        width: '100%',
+        maxWidth: 720,
+        mx: 'auto',
+        mt: isSmallScreen ? 2 : 4,
+        px: isSmallScreen ? 1 : 3,
+      }}
+    >
+      <Typography variant={isSmallScreen ? 'subtitle1' : 'h6'} gutterBottom>
         انتخاب هاست‌ها
       </Typography>
-      <FormControl fullWidth>
+      <FormControl fullWidth size={isSmallScreen ? 'small' : 'medium'}>
         <InputLabel id="hosts-multi-select-label">هاست‌ها</InputLabel>
         <Select
           labelId="hosts-multi-select-label"
@@ -65,11 +80,11 @@ export default function MultiHostLineChartWithMUI() {
         </Select>
       </FormControl>
 
-      <Box mt={3}>
-        <Typography variant="h6" gutterBottom>
+      <Box mt={isSmallScreen ? 2 : 3}>
+        <Typography variant={isSmallScreen ? 'subtitle1' : 'h6'} gutterBottom>
           انتخاب متریک
         </Typography>
-        <FormControl fullWidth>
+        <FormControl fullWidth size={isSmallScreen ? 'small' : 'medium'}>
           <InputLabel id="metric-select-label">متریک</InputLabel>
           <Select
             labelId="metric-select-label"
@@ -86,7 +101,7 @@ export default function MultiHostLineChartWithMUI() {
         </FormControl>
       </Box>
 
-      <Box mt={4} height={350}>
+      <Box mt={isSmallScreen ? 3 : 4} height={isSmallScreen ? 300 : 350}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
             <XAxis dataKey="time" />
