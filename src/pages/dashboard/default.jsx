@@ -88,9 +88,9 @@ export default function DashboardDefault() {
               </Box>
             </MainCard>
           </Grid>
-          <Grid item>
+          <Grid item sx={{width:"100%"}}>
             <MainCard title="توزیع DNS" content={false}>
-              <Box sx={{ p: 3 }}>
+              <Box sx={{ p: 3  }}>
                 <DNSProbePieChart />
               </Box>
             </MainCard>
