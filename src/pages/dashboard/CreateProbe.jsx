@@ -377,6 +377,7 @@ const CreateProbe = () => {
           }
         }}
       >
+        <form onSubmit={handleSubmit(onSubmit)}>
         <DialogTitle
           sx={{
             p: isXxsScreen ? 1 : 2,
@@ -480,6 +481,7 @@ const CreateProbe = () => {
             {isEditMode ? 'ذخیره تغییرات' : 'افزودن'}
           </Button>
         </DialogActions>
+      </form>
       </Dialog>
 
       {/* دیالوگ نمایش توکن */}
