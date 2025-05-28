@@ -144,7 +144,7 @@ function MapComponent() {
   }, [isPaused]);
 
   return (
-    <div style={{ display: 'flex', height: '100vh', width: '100%', position: 'relative' }}>
+    <div style={{ display: 'flex', height: '100%', width: '100%', position: 'relative' }}>
       
       {/* 🔘 دکمه‌ی باز و بسته کردن سایدبار */}
       <button
