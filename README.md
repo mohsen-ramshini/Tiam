@@ -32,48 +32,57 @@ Aggregates and processes probe data using scalable NoSQL databases and advanced 
 Web Dashboard
 A clean, responsive UI built with React and modern libraries, offering comprehensive visualization and filtering tools.
 
-⚙️ Getting Started
-Prerequisites
-Node.js (compatible with Yarn 4.6.0)
+## ⚙️ Getting Started
 
-Yarn package manager
+### 🔧 Prerequisites
 
-Installation
-bash
-Copy
-Edit
+- [Node.js](https://nodejs.org/) (توصیه‌شده: نسخه سازگار با Yarn 4.6.0)
+- [Yarn](https://yarnpkg.com/) package manager
+
+### 📦 Install Dependencies
+
+```bash
 yarn install
-Development
-bash
-Copy
-Edit
-yarn start
-Production Build
-bash
-Copy
-Edit
-yarn build
-For staging environment:
+```
 
-bash
-Copy
-Edit
+### 🧪 Start Development Server
+
+```bash
+yarn start
+```
+
+### 🚀 Build for Production
+
+```bash
+yarn build
+```
+
+### 🧪 Build for Staging
+
+```bash
 yarn build-stage
-Preview Production Build
-bash
-Copy
-Edit
+```
+
+### 🔍 Preview Production Build
+
+```bash
 yarn preview
-🛠️ Available Scripts
-Script	Description
-start	Launches the development server
-build	Builds the app for production
-build-stage	Builds the app with staging config
-preview	Previews the production build locally
-lint	Runs ESLint to check code quality
-lint:fix	Fixes linting issues automatically
-prettier	Formats code using Prettier
-knip	Detects unused dependencies
+```
+
+---
+
+### 🛠️ Useful Scripts
+
+| Script        | Description                             |
+| ------------- | --------------------------------------- |
+| `start`       | Start the development server            |
+| `build`       | Build the app for production            |
+| `build-stage` | Build the app using staging config      |
+| `preview`     | Preview the production build locally    |
+| `lint`        | Run ESLint to check code quality        |
+| `lint:fix`    | Auto-fix linting issues                 |
+| `prettier`    | Format code with Prettier               |
+| `knip`        | Detect unused dependencies              |
 
 🧰 Technology Stack
 React 18, Vite 6
