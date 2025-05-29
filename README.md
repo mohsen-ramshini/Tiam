@@ -1,178 +1,102 @@
-# Tiam
-Monitoring system
+🚀 Tiam Project
 
-# Mantis Free React Material UI Dashboard Template [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Get%20Berry%20Angular%20-%20The%20Most%20Beautiful%20Bootstrap%20Designed%20Admin%20Dashboard%20Template%20&url=https://berrydashboard.io/angular/default&via=codedthemes&hashtags=angular,webdev,developers,typescript)
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/codedthemes/mantis-free-react-admin-template/blob/master/LICENSE)
-[![GitHub package version](https://img.shields.io/github/package-json/v/codedthemes/mantis-free-react-admin-template)](https://github.com/codedthemes/mantis-free-react-admin-template/)
-[![Download ZIP](https://img.shields.io/badge/Download-ZIP-blue?style=flat-square&logo=github)](https://codedthemes.com/item/mantis-free-mui-admin-template/)
-[![Join Discord](https://img.shields.io/badge/Join-Discord-5865F2?style=flat-square&logo=discord&logoColor=white)](https://discord.com/invite/p2E2WhCb6s)
+👤 Author: Mohsen Ramshini
+📧 Email: rsmohsen20@gmail.com
 
 
-Mantis is a free and open source React dashboard template made using the Material UI React component library with aim of flexibility and better customizability.
+📋 Overview
+Tiam Project is a robust, distributed monitoring system designed to ensure the availability, reliability, and performance of nationwide data center services. By continuously monitoring DNS resolutions, HTTP(S) endpoints, port statuses, and network routing from multiple geographic locations, Tiam empowers organizations to proactively detect and resolve service disruptions.
 
-### Name Derived From Nature
+In today’s digital world, uninterrupted access to online services is critical. Service outages or network inconsistencies can lead to revenue loss, damage to reputation, and user dissatisfaction. Tiam addresses these challenges, including network filtering and region-specific connectivity issues, to maintain seamless service delivery. 🌍✨
 
-Mantis Logo is inspired from the insect name - 'Mantises' as they have triangular heads with flexible Necks. Also, the name is derived from two popular UI frameworks, Material UI and Ant Design (M-Ant-is).
+⭐ Key Features
+📡 Distributed Probes: Lightweight probes deployed across multiple data centers conduct scheduled tests on DNS, HTTP(S), ports, and routing.
 
-Mantis has Ant Design principal on top of the Material UI React component library.
+🔐 Centralized Data Aggregation: Securely collects and analyzes probe data in real time.
 
+🛣️ TCP Traceroute by Service/Port: Identifies network blocks and unusual routing paths.
 
-✨ Support us! If you like this theme, click the ⭐ (Top right) and let it shine
+🕒 Domain & SSL Monitoring: Tracks domain and SSL certificate expirations with timely alerts.
 
-![mantis-free-react-dashboard-template.jpg](https://mantisdashboard.io/adv-banner-images/og-social-v1.1.0.png)
+📊 Intuitive Web Dashboard: Dynamic charts, maps, and tables for quick insights.
 
-## Table of contents
+🚨 Real-Time Alerts: Instant notifications for DNS failures, service interruptions, or SSL issues.
 
-- [Getting Started](#getting-started)
-- [Download](#download)
-- [Why Mantis?](#why-mantis)
-- [What's included in Premium Version?](#whats-included-in-premium-version)
-- [Documentation](#documentation)
-- [Browser support](#browser-support)
-- [Technology Stack](#technology-stack)
-- [Other Technologies](#other-technologies)
-- 💰[Save more with Big Bundle](#save-more-with-big-bundle)💰
-- [More React Dashboard Templates](#more-react-dashboard-templates)
-- [Issues?](#issues)
-- [License](#license)
-- [Contributor](#contributor)   
-- [Useful Resources](#useful-resources)
-- [Community](#community)
-- [Follow us](#follow-us)
+🏗️ System Architecture
+Probes
+Distributed lightweight servers (physical, virtual, or containerized) deployed across diverse data centers perform network tests and report results via secure RESTful APIs.
 
-## Getting Started
+Central Server
+Aggregates and processes probe data using scalable NoSQL databases and advanced algorithms to detect anomalies and regional inconsistencies.
 
-1. Clone from Github
+Web Dashboard
+A clean, responsive UI built with React and modern libraries, offering comprehensive visualization and filtering tools.
 
-```
-git clone https://github.com/codedthemes/mantis-free-react-admin-template.git
-```
+⚙️ Getting Started
+Prerequisites
+Node.js (compatible with Yarn 4.6.0)
 
-2. Install packages
+Yarn package manager
 
-```
-yarn
-```
+Installation
+bash
+Copy
+Edit
+yarn install
+Development
+bash
+Copy
+Edit
+yarn start
+Production Build
+bash
+Copy
+Edit
+yarn build
+For staging environment:
 
-3. Run project
+bash
+Copy
+Edit
+yarn build-stage
+Preview Production Build
+bash
+Copy
+Edit
+yarn preview
+🛠️ Available Scripts
+Script	Description
+start	Launches the development server
+build	Builds the app for production
+build-stage	Builds the app with staging config
+preview	Previews the production build locally
+lint	Runs ESLint to check code quality
+lint:fix	Fixes linting issues automatically
+prettier	Formats code using Prettier
+knip	Detects unused dependencies
 
-```
-yarn run start
-```
+🧰 Technology Stack
+React 18, Vite 6
 
-## Download
+Ant Design & Material UI components
 
-- Mantis Free 
-    - [Live Preview](https://mantisdashboard.io/free/) 
-    - [Download](https://codedthemes.com/item/mantis-free-mui-admin-template/)
-- Mantis Pro 
-    - [Live Preview](https://mantisdashboard.io/) 
-    - [Download](https://codedthemes.com/item/mantis-mui-react-dashboard-template/)
-      
-## Why Mantis? 
+React Router DOM for routing
 
-Mantis offers everything needed to build an advanced dashboard application. In the initial release, we included following high-end features,
+Axios for HTTP communications
 
-- Support React18.
-- Professional user interface.
-- Material UI React components.
-- Fully responsive, all modern browser supported.
-- Easy to use code structure
-- Flexible & high-Performance code
-- Simple documentation
+React Hook Form & Formik for form handling
 
-## What's included in Premium Version?
-The [Pro version](https://mantisdashboard.io/) of Mantis react template includes features such as TypeScript, apps, authentication methods (i.e. JWT, Auth0, Firebase), advance components, form plugins, layouts, widgets, and more.
+Chart.js & Recharts for data visualization
 
-| [Mantis Free](https://mantisdashboard.io/free/) | [Mantis](https://mantisdashboard.io/) |
-| ----------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **7** Demo pages                                      | **85+** demo pages                                                                                                                                             |
-| -                                                     | ✓ Multi-language                                                                                                                                               |
-| -                                                     | ✓ Dark/Light Mode 🌓                                                                                                                                           |
-| -                                                     | ✓ TypeScript version                                                                                                                                           |
-| -                                                     | ✓ Design files (Figma)                                                                                                                                         |
-| -                                                     | ✓ Multiple color options                                                                               |
-| -                                                     | ✓ RTL                                                                                                                                                          |
-| -                                                     | ✓ JWT authentications                                                                                                                                          |
-| -                                                     | ✓ [More components](https://mantisdashboard.io/components-overview/autocomplete)                                                                                     |
-| ✓ MIT License                                         | ✓ [Pro License](https://mui.com/store/license/)
+Leaflet & React-Leaflet for interactive maps
 
-## Documentation
+SWR & React Query for data fetching and caching
 
-[Mantis documentation](https://codedthemes.gitbook.io/mantis) helps you out in all aspects from Installation to deployment.
+ESLint & Prettier for code quality
 
-## Browser support
-<img src="https://org-public-assets.s3.us-west-2.amazonaws.com/logos/chrome.png" width="45" height="45" > <img src="https://org-public-assets.s3.us-west-2.amazonaws.com/logos/edge.png" width="45" height="45" > <img src="https://org-public-assets.s3.us-west-2.amazonaws.com/logos/safari.png" width="45" height="45" > <img src="https://org-public-assets.s3.us-west-2.amazonaws.com/logos/firefox.png" width="45" height="45" > <img src="https://org-public-assets.s3.us-west-2.amazonaws.com/logos/opera.png" width="45" height="45" >
+📞 Contact
+For more info or support, feel free to reach out! 🙌
 
-## Technology Stack
-
-- Material UI V6
-- Built with React Hooks API.
-- React context API for state management.
-- SWR.
-- React Router for navigation routing.
-- Support for Vite.
-- Code splitting.
-- CSS-in-JS.
-
-## Other Technologies 
-| Technology | Free | Pro |
-|-----------|------|------|
-| <p align="center"><img src="https://org-public-assets.s3.us-west-2.amazonaws.com/logos/Angular.png" width="25" height="25"></p> | [**Free**](https://codedthemes.com/item/mantis-angular-free-admin-template/) | [**Pro**](https://codedthemes.com/item/mantis-angular-admin-template/) |
-| <p align="center"><img src="https://org-public-assets.s3.us-west-2.amazonaws.com/logos/Bootstrap.png" width="30" height="30"></p> | [**Free**](https://codedthemes.com/item/mantis-bootstrap-free-admin-template/) | [**Pro**](https://codedthemes.com/item/mantis-bootstrap-admin-dashboard/) |
-| <p align="center"><img src="https://org-public-assets.s3.us-west-2.amazonaws.com/logos/Vue.png" width="25" height="25"></p> | [**Free**](https://codedthemes.com/item/mantis-free-vuetify-vuejs-admin-template/) | [**Pro**](https://codedthemes.com/item/mantis-vue-admin-template/) |
-
-## Save more with Big Bundle
-
-[![bundle-image](https://org-public-assets.s3.us-west-2.amazonaws.com/Banners/Bundle+banner.png)](https://links.codedthemes.com/jhFBJ)
-
-## More React Dashboard Templates
-
-| Dashboard | FREE | PRO | 
-| ----- | ---- | ---- |
-| <img src="https://org-public-assets.s3.us-west-2.amazonaws.com/logos/Berry%20with%20name.png"  height="30" style="display:inline-block; vertical-align:middle;"> | [**Free**](https://codedthemes.com/item/berry-mui-free-react-admin-template/) | [**Pro**](https://codedthemes.com/item/berry-material-react-admin-template/)</span>|
-| <img src="https://org-public-assets.s3.us-west-2.amazonaws.com/logos/Datta%20with%20name.png" height="30" style="display:inline-block; vertical-align:middle;">  | [**Free**](https://codedthemes.com/item/datta-able-react-free-admin-template/) | [**Pro**](https://codedthemes.com/item/datta-able-react-admin-template/)</span>|
-| <img src="https://org-public-assets.s3.us-west-2.amazonaws.com/logos/Gradient%20with%20name.png" height="30" style="display:inline-block; vertical-align:middle;"> | [**Free**](https://codedthemes.com/item/gradient-able-reactjs-free-admin-template/) | [**Pro**](https://codedthemes.com/item/gradient-able-reactjs-admin-dashboard/)</span>|
-
-## Issues
-
-Please generate a [Github issue](https://github.com/codedthemes/mantis-free-react-admin-template/issues) if you found a bug in any version. We are try our best to resolve the issue.
-
-## License 
-- Licensed under [MIT](https://github.com/codedthemes/mantis-free-react-admin-template/blob/master/LICENSE)
-- Copyright © [CodedThemes](https://codedthemes.com/)
-
-## Contributor
-
-**CodedThemes Team**
-- https://x.com/codedthemes
-- https://github.com/codedthemes
-
-**Rakesh Nakrani** 
-- https://x.com/rakesh_nakrani
-
-**Brijesh Dobariya**
-- https://x.com/dobaria_brijesh
-
-## Useful Resources
-- [More Admin Templates From CodedThemes](https://codedthemes.com/item/category/admin-templates/)
-- [Freebies From CodedThemes](https://codedthemes.com/item/category/free-templates/)
-- [Big Bundles](https://codedthemes.com/item/big-bundle/)
-- [Figma UI Kits](https://codedthemes.com/item/category/templates/figma/)
-- [Affiliate Program](https://codedthemes.com/affiliate/)
-- [Blogs](https://blog.codedthemes.com/)
-
-## Community
-- 👥Follow [@codedthemes](https://x.com/codedthemes)
-- 🔗Join [Discord](https://discord.com/invite/p2E2WhCb6s)
-- 🔔Subscribe to [Codedtheme Blogs](https://blog.codedthemes.com/)
-
-## Follow Us
-- [Twitter](https://twitter.com/codedthemes) 🐦
-- [Dribbble](https://dribbble.com/codedthemes) 🏀
-- [Github](https://github.com/codedthemes) 🐙
-- [LinkedIn](https://www.linkedin.com/company/codedthemes/) 💼
-- [Instagram](https://www.instagram.com/codedthemes/) 📷
-- [Facebook](https://www.facebook.com/codedthemes) 🟦
+Mohsen Ramshini
+📧 rsmohsen20@gmail.com
+🌐 https://mantisdashboard.io/free
